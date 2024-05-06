@@ -1,9 +1,23 @@
+import Header from "@/components/Header";
 import { MSWComponent } from "@/components/MSWComponent";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from 'next/font/local';
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+
+const pretendard = localFont({
+  src: "../public/fonts/PretendardVariable.woff2",
+  display: "swap",
+  weight: "45 920",
+  variable: "--font-pretendard"
+});
+
+const didot = localFont({
+  src: "../public/fonts/Didot.otf",
+  display: "swap",
+  variable: "--font-didot"
+
+})
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,9 +30,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={didot.variable}>
+      <body className={pretendard.className}>
         <MSWComponent>
+          <Header />
           {children}
         </MSWComponent>
       </body>

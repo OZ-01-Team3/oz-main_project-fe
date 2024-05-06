@@ -13,6 +13,10 @@ const config: Config = {
         mainWhite: "#FDFCF7",
         footerOrange:"#FF5634"
       },
+      fontFamily:{
+        didot: ["var(--font-didot)"],
+        pretendard : ["var(--font-pretendard)"]
+      }
     },
   },
   plugins: [require('@tailwindcss/forms')],
