@@ -6,7 +6,7 @@ import { useRef } from "react";
 const signUp = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   return (
-    <div className="w-full  bg-mainBlack flex justify-center items-center flex-col">
+    <div className="w-full mb-40 bg-mainBlack flex justify-center items-center flex-col">
       <div className="w-[460px] flex justify-center flex-col mt-40">
         <p className="font-didot text-3xl text-center mb-7">Sign Up</p>
         <form>

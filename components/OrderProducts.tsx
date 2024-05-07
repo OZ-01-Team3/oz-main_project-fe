@@ -5,7 +5,7 @@ import CommonButton from "./CommonButton"
 
 const OrderProducts = () => {
   return (
-    <ul role="list" className="w-screen divide-y divide-subGray border-b border-t border-subGray ml-20">
+    <ul role="list" className="w-screen divide-y divide-subGray border-b border-t border-subGray ml-20 ">
       {orderProducts.map((product) => (
         <li key={product.id} className="flex py-6">
 
