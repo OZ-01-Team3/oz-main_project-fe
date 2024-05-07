@@ -1,5 +1,5 @@
-
 import SideBar from "@/components/SideNav"
+
 
 export default function MyPageLayout({
   children,
@@ -7,9 +7,9 @@ export default function MyPageLayout({
   children: React.ReactNode
 }) {
   return (
-    <section className="mx-auto max-w-7xl sm:px-6 lg:px-8 p-20">
-      {children}
+    <section className="mx-auto max-w-7xl sm:px-6 lg:px-8 flex" >
       <SideBar />
+      {children}
     </section>
   )
 }

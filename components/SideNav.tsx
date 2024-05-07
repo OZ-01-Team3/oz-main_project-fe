@@ -2,7 +2,7 @@
 
 const SideBar = () => {
   return (
-    <nav className=" w-80 h-[800px] border-r-[1px] border-mainWhite p-5">
+    <nav className=" w-80 h-auto h-min-[300px] border-r-[1px] border-mainWhite p-5">
 
       <ul className="flex justify-end items-end flex-col text-xl">
         <li className="p-2 cursor-pointer">내 옷장</li>

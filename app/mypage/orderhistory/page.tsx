@@ -1,7 +1,12 @@
 'use client'
+
+import OrderProducts from "@/components/OrderProducts"
+
 const orderHistory = () => {
   return (
-    <div></div>
+    <>
+      <OrderProducts />
+    </>
   )
 }
 
