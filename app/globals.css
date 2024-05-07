@@ -2,22 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
-
-
-*{
-  margin:0;
-  padding:0;
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
   background-color: #131213;
-  color: #FDFCF7;
+  color: #fdfcf7;
 }
 body {
-    font-family: "Pretendard Variable", Pretendard, -apple-system,
-    BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
-    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  font-family:
+    "Pretendard Variable",
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    "Helvetica Neue",
+    "Segoe UI",
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
+    "Malgun Gothic",
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    sans-serif;
 }
 
 /* @layer utilities {
@@ -25,3 +33,11 @@ body {
     text-wrap: balance;
   }
 } */
+@layer components {
+  .pageNation {
+    @apply relative block rounded bg-transparent px-3 py-1.5 text-sm  transition duration-300 hover:bg-neutral-100 hover:text-mainBlack hover:cursor-pointer focus:bg-neutral-100 focus:text-mainBlack focus:outline-none active:bg-neutral-100 active:text-mainBlack dark:text-white;
+  }
+  .pageNationIcon {
+    @apply relative block rounded bg-transparent px-3 py-1.5 text-sm  transition duration-300 hover:text-base hover:cursor-pointer;
+  }
+}
