@@ -19,6 +19,9 @@ const config: Config = {
         didot: ["var(--font-didot)"],
         pretendard: ["var(--font-pretendard)"],
       },
+      width: {
+        modalWidth: "475px",
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],
