@@ -11,14 +11,15 @@ const config: Config = {
       colors: {
         mainBlack: "#131213",
         mainWhite: "#FDFCF7",
-        footerOrange:"#FF5634"
+        footerOrange: "#FF5634",
+        subGray: "#6F6F6F",
       },
-      fontFamily:{
+      fontFamily: {
         didot: ["var(--font-didot)"],
-        pretendard : ["var(--font-pretendard)"]
-      }
+        pretendard: ["var(--font-pretendard)"],
+      },
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [require("@tailwindcss/forms")],
 };
 export default config;
