@@ -4,11 +4,11 @@ const SideBar = () => {
   return (
     <nav className=" w-80 h-[800px] border-r-[1px] border-mainWhite p-5">
 
-      <ul className="flex justify-end items-end flex-col text-2xl">
-        <li>내 옷장</li>
-        <li>주문 이력</li>
-        <li>대여 상품</li>
-        <li>회원 정보</li>
+      <ul className="flex justify-end items-end flex-col text-xl">
+        <li className="p-2 cursor-pointer">내 옷장</li>
+        <li className="p-2 cursor-pointer">주문 이력</li>
+        <li className="p-2 cursor-pointer">대여 상품</li>
+        <li className="p-2 cursor-pointer">회원 정보</li>
       </ul>
 
 
