@@ -1,7 +1,7 @@
 "use client";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 import StyleButton from "./StyleButton";
-
 const styles = [
   "캐주얼",
   "페미닌",
@@ -52,21 +52,7 @@ const StyleModal = () => {
             <div className="flex flex-row w-full justify-between">
               <h1 className=" text-3xl font-bold pb-3 ">관심스타일</h1>
               <div className=" flex justify-end cursor-pointer">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                  onClick={handleCloseModal}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18 18 6M6 6l12 12"
-                  />
-                </svg>
+                <XMarkIcon className="w-6 h-6" onClick={handleCloseModal} />
               </div>
             </div>
             <p className=" w-full text-sm">
