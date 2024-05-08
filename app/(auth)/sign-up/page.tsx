@@ -3,6 +3,8 @@
 import AuthInput from "@/components/AuthInput";
 import CommonButton from "@/components/CommonButton";
 import { useRef } from "react";
+
+
 const signUp = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   return (
@@ -30,11 +32,11 @@ const signUp = () => {
               <CommonButton className="w-full h-12 rounded-lg bg-mainWhite px-3.5 py-2.5 mt-6 text-base font-base text-mainBlack shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">확인</CommonButton>
             </div>
           </div>
-          <AuthInput>Password</AuthInput>
-          <AuthInput>Confirm Password</AuthInput>
-          <AuthInput>Nickname</AuthInput>
-          <AuthInput>Nickname</AuthInput>
-          <AuthInput>Phone</AuthInput>
+          <AuthInput type="password">Password</AuthInput>
+          <AuthInput type="password">Confirm Password</AuthInput>
+          <AuthInput type="text">Nickname</AuthInput>
+          <AuthInput type="text">Nickname</AuthInput>
+          <AuthInput type="tel">Phone</AuthInput>
           <CommonButton className=" w-full rounded-lg bg-mainWhite px-3.5 py-2.5 text-lg font-semibold font-didot text-mainBlack shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 mt-6">Sign In</CommonButton>
         </form>
       </div>
