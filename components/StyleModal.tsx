@@ -26,10 +26,15 @@ const StyleModal = () => {
   const [styleModalOpen, setStyleModalOpen] = useState(false);
   // 바깥이랑 x 눌렀을때 모달 닫히도록
   const outerBoxRef = useRef(null);
+  console.log(outerBoxRef);
   //  최초로그인 상태에 따라 모달 열고닫고 할건데, 일단 로그인 상태가 없으니 페이지 새로고침할때마다 열리게 해뒀어요
   useEffect(() => {
     setStyleModalOpen(true);
   }, []);
+  // 모달 닫는 함수
+  const handleCloseModal = () => {
+    setStyleModalOpen(false);
+  };
   //  styleModalOpen 이 true 이면 모달 보여줌
   return (
     styleModalOpen && (
@@ -38,11 +43,11 @@ const StyleModal = () => {
         ref={outerBoxRef}
         onClick={(e) => {
           if (e.target === outerBoxRef.current) {
-            setStyleModalOpen(false);
+            handleCloseModal();
           }
         }}
       >
-        <div className="flex flex-col justify-center pl-10 pr-10  bg-mainWhite h-2/4 w-2/6 pt-10 pb-10 rounded-xl">
+        <div className="flex flex-col justify-center pl-10 pr-10  bg-mainWhite h-96 w-modalWidth pt-10 pb-10 rounded-xl">
           <div className="flex flex-col mb-5">
             <div className="flex flex-row w-full justify-between  bg-mainWhite">
               <h1 className=" bg-mainWhite text-mainBlack text-3xl font-bold pb-3 ">
@@ -53,7 +58,7 @@ const StyleModal = () => {
                   src={closeIcon}
                   alt="닫힘아이콘"
                   className="w-6 h-6 bg-transparent"
-                  ref={outerBoxRef}
+                  onClick={handleCloseModal}
                 />
               </div>
             </div>
@@ -65,7 +70,7 @@ const StyleModal = () => {
             </p>
           </div>
           {/* 각각의 스타일 버튼  - 스타일 맵 돌려서 컴포넌트 children으로 들어가게 */}
-          <div className="bg-transparent w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-2 justify-center items-center overflow-y-scroll ">
+          <div className="bg-transparent w-full grid grid-cols-3 gap-x-5 gap-y-2 justify-center items-center overflow-y-scroll ">
             {styles.map((style) => (
               <StyleButton>{style}</StyleButton>
             ))}

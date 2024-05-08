@@ -6,8 +6,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #131213;
-  color: #fdfcf7;
+  /* background-color: #131213; */
+  /* color: #fdfcf7; */
 }
 body {
   font-family:
@@ -26,6 +26,8 @@ body {
     "Segoe UI Emoji",
     "Segoe UI Symbol",
     sans-serif;
+  background-color: #131213;
+  color: #fdfcf7;
 }
 
 /* @layer utilities {

@@ -1,11 +1,19 @@
+"use client";
 import products from "@/productData";
 import Image from "next/image";
+import { Dispatch, SetStateAction } from "react";
 import wish from "../public/images/wish.png";
-const Products = () => {
+interface ProductsProps {
+  setDetailModalOpen: Dispatch<SetStateAction<boolean>>;
+}
+const Products = ({ setDetailModalOpen }: ProductsProps) => {
   return (
     <>
       {/* 8개 상품 컨테이너*/}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12 w-full pb-10">
+      <div
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12 w-full pb-10"
+        onClick={() => setDetailModalOpen(true)}
+      >
         {/* 각각의 상품 하나하나 */}
         {products.map((product) => (
           <div key={product.id} className="flex flex-col hover:cursor-pointer">
