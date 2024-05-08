@@ -59,7 +59,8 @@ const ChatNotification = ({ isOpen, onClose }: ChatNotificationProps) => {
                       {/* <p className="ml-4 text-sm font-medium text-mainWhite">D-13</p> */}
                     </div>
                     <div className="mt-1 text-sm text-subGray">
-                      {product.content}</div>
+                      {product.content.length > 50 ? `${product.content.substring(0, 50)}...` : product.content}
+                    </div>
                     <div className="mt-1 text-sm text-subGray">
 
                       {product.time}</div>
