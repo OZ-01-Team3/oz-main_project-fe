@@ -31,7 +31,7 @@ const chatData = [
 ];
 const Chat = () => {
   return (
-    <div className="w-3/5  flex flex-col justify-center items-center pl-10  relative">
+    <div className="w-3/5 flex flex-col justify-center items-center pl-10 relative">
       <div className="flex w-full flex-col justify-between h-screen overflow-y-scroll scrollbar-hide ">
         <div className="flex justify-center items-center flex-col">
           <div className="w-24 aspect-[1/1] mr-2 border-mainBlack rounded-full border ">
