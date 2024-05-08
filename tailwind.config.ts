@@ -22,6 +22,9 @@ const config: Config = {
       width: {
         modalWidth: "475px",
       },
+      fontSize: {
+        footerText: "9px",
+      },
     },
   },
   plugins: [require("@tailwindcss/forms"), require("tailwind-scrollbar-hide")],
