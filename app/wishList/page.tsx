@@ -1,5 +1,5 @@
 "use client";
-import ProductDetailModal from "@/components/ProductDetailModal";
+import ProductDetailModal from "@/components/ProductDetail/ProductDetailModal";
 import Products from "@/components/Products";
 import { useState } from "react";
 

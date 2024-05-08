@@ -1,7 +1,5 @@
 "use client";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import closeIcon from "../public/images/closeIcon.png";
 import StyleButton from "./StyleButton";
 
 const styles = [
@@ -38,6 +36,7 @@ const StyleModal = () => {
   //  styleModalOpen 이 true 이면 모달 보여줌
   return (
     styleModalOpen && (
+      // 바깥영역
       <div
         className="flex w-ful h-screen fixed inset-0 z-50 bg-modalBg justify-center items-center "
         ref={outerBoxRef}
@@ -47,30 +46,36 @@ const StyleModal = () => {
           }
         }}
       >
-        <div className="flex flex-col justify-center pl-10 pr-10  bg-mainWhite h-96 w-modalWidth pt-10 pb-10 rounded-xl">
+        {/* 모달 */}
+        <div className="flex flex-col justify-center pl-10 pr-10 bg-mainWhite h-96   text-mainBlack w-modalWidth pt-10 pb-10 rounded-xl">
           <div className="flex flex-col mb-5">
-            <div className="flex flex-row w-full justify-between  bg-mainWhite">
-              <h1 className=" bg-mainWhite text-mainBlack text-3xl font-bold pb-3 ">
-                관심스타일
-              </h1>{" "}
-              <div className=" flex justify-end bg-mainWhite text-mainBlack cursor-pointer">
-                <Image
-                  src={closeIcon}
-                  alt="닫힘아이콘"
-                  className="w-6 h-6 bg-transparent"
+            <div className="flex flex-row w-full justify-between">
+              <h1 className=" text-3xl font-bold pb-3 ">관심스타일</h1>
+              <div className=" flex justify-end cursor-pointer">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
                   onClick={handleCloseModal}
-                />
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18 18 6M6 6l12 12"
+                  />
+                </svg>
               </div>
             </div>
-            <p className=" bg-mainWhite text-mainBlack w-full text-sm">
+            <p className=" w-full text-sm">
               맞춤 스타일 추천을 위해 관심 스타일을 선택해주세요.
             </p>
-            <p className=" bg-mainWhite text-mainBlack w-full text-sm">
-              (최대 5개까지 선택)
-            </p>
+            <p className=" w-full text-sm">(최대 5개까지 선택)</p>
           </div>
           {/* 각각의 스타일 버튼  - 스타일 맵 돌려서 컴포넌트 children으로 들어가게 */}
-          <div className="bg-transparent w-full grid grid-cols-3 gap-x-5 gap-y-2 justify-center items-center overflow-y-scroll ">
+          <div className="w-full grid grid-cols-3 gap-x-5 gap-y-2 justify-center items-center overflow-y-scroll ">
             {styles.map((style) => (
               <StyleButton>{style}</StyleButton>
             ))}
