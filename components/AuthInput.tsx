@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 type InputProps = {
   children?: React.ReactNode;
@@ -13,9 +13,7 @@ const AuthInput = React.forwardRef<HTMLInputElement, InputProps>(
   ({ children, value, onChange, type, placeholder, min }, ref) => {
     return (
       <div className="relative mt-6">
-        <label
-          className="absolute -top-2 left-2 inline-block bg-mainBlack px-1 text-base font-semibold text-mainWite"
-        >
+        <label className="absolute -top-2 left-2 inline-block bg-mainBlack px-1 text-base font-semibold text-mainWite">
           {children}
         </label>
         <input
@@ -29,8 +27,8 @@ const AuthInput = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
         />
       </div>
-    )
+    );
   }
 );
 
-export default AuthInput
+export default AuthInput;
