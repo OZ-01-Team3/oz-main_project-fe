@@ -43,18 +43,6 @@ const signUp = () => {
           Sign in
         </button>
       </div>
-      {/* <div className="flex justify-center items-center mt-10 w-[460px]">
-        <span className=" w-full h-[1px] bg-mainWhite mr-2"></span>
-        <p>or</p>
-        <span className=" w-full h-[1px] bg-mainWhite ml-2"></span>
-      </div>
-      <div className="flex flex-row mt-5">
-        <img src="/images/naver.png" className="w-[39px] h-[39px] mr-3 cursor-pointer" />
-        <div className=" w-[39px] h-[39px] rounded-full overflow-hidden mr-3 cursor-pointer" cursor-pointer>
-          <img src="/images/kakao.png" className="w-full h-full object-cover " />
-        </div>
-        <img src="/images/google.svg" className="cursor-pointer" />
-      </div> */}
     </div>
   )
 }
