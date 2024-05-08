@@ -1,4 +1,4 @@
-const Event = () => {
+const EventBanner = () => {
   return (
     <div className="mb-20">
       <p className="text-2xl mb-4 font-didot">EVENT</p>
@@ -10,4 +10,4 @@ const Event = () => {
   );
 };
 
-export default Event;
+export default EventBanner;

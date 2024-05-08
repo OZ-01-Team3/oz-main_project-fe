@@ -1,8 +1,7 @@
 "use client";
 import Banner from "@/components/Banner";
-import Event from "@/components/Event";
-import Footer from "@/components/Footer";
-import ProductDetailModal from "@/components/ProductDetailModal";
+import EventBanner from "@/components/EventBanner";
+import ProductDetailModal from "@/components/ProductDetail/ProductDetailModal";
 import Products from "@/components/Products";
 import StyleModal from "@/components/StyleModal";
 import { useState } from "react";
@@ -24,8 +23,7 @@ const MainPage = () => {
         <p className="text-2xl mb-4 font-didot">NEW</p>
         <Products setDetailModalOpen={setDetailModalOpen} />
         <hr className=" w-3/4 ml-auto mr-auto mt-10 mb-20 text-mainWhite " />
-        <Event />
-        <Footer />
+        <EventBanner />
       </div>
     </div>
   );

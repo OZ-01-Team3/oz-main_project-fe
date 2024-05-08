@@ -1,9 +1,8 @@
 "use client";
 import Banner from "@/components/Banner";
-import Event from "@/components/Event";
-import Footer from "@/components/Footer";
+import EventBanner from "@/components/EventBanner";
 import PageNation from "@/components/PageNation";
-import ProductDetailModal from "@/components/ProductDetailModal";
+import ProductDetailModal from "@/components/ProductDetail/ProductDetailModal";
 import Products from "@/components/Products";
 import { useState } from "react";
 const category = ["전체", "아우터", "상의", "하의", "잡화", "신발"];
@@ -33,12 +32,11 @@ const totalProductsPage = () => {
         </select>
         <h1 className="text-4xl mb-20 font-didot text-center">ALL</h1>
         <Products setDetailModalOpen={setDetailModalOpen} />
-        <Event />
+        <EventBanner />
         <Products setDetailModalOpen={setDetailModalOpen} />
         <Products setDetailModalOpen={setDetailModalOpen} />
         {/* 페이지네이션 */}
         <PageNation />
-        <Footer />
       </div>
     </>
   );

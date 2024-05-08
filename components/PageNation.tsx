@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-
 const PageNation = () => {
-  // 현제 어느 페이지인지 생타
+  // 현제 어느 페이지인지 상태
   const [currentPage, setCurrentPage] = useState<number>(1);
   //  현재 페이지랑 페이지넘버랑 같으면 활성화시킴
   const isActive = (pageNumber: number) =>
