@@ -22,8 +22,8 @@ const ChatNotification = ({ isOpen, onClose }: ChatNotificationProps) => {
 
   if (!isOpen) return null;
   return (
-    <div className="relative">
-      <div className="fixed top-0 right-0 z-50 w-[400px] h-screen h-min-100vh bg-white p-4 overflow-auto">
+    <div className="relative ">
+      <div className="fixed top-0 right-0 z-50 w-[400px] md:w-full sm:w-full h-screen h-min-100vh bg-white p-4 overflow-auto">
         <div className="flex flex-col border-b-[1px] border-mainBlack pb-1">
           <XMarkIcon className=" w-6 text-mainBlack cursor-pointer" onClick={onClose} />
           <p className="text-mainBlack text-xl font-semibold mt-4">알림</p>
