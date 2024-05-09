@@ -12,16 +12,13 @@ interface MenuItem {
 }
 const Header = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false); // pc 상태
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);// 모바일 상태 
+
 
   //pc 알림
   const handleToggleNotification = () => {
     setIsNotificationOpen(!isNotificationOpen);
   };
-  // 모바일 알림
-  const handleToggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+
 
   const mainMenuItems: MenuItem[] = [
     { label: "알림", onClick: handleToggleNotification },
