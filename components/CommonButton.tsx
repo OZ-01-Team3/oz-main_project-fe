@@ -4,17 +4,14 @@ type ButtonProps = {
   className: string;
   onClick?: () => void;
   children?: ReactNode;
-}
+};
 
 const CommonButton = ({ className, onClick, children }: ButtonProps) => {
   return (
-    <button
-      className={className}
-      onClick={onClick}
-    >
+    <button className={className} onClick={onClick}>
       {children}
     </button>
-  )
-}
+  );
+};
 
-export default CommonButton
+export default CommonButton;
