@@ -5,7 +5,7 @@ import CommonButton from "./CommonButton"
 
 const OrderProducts = () => {
   return (
-    <ul role="list" className="w-screen divide-y divide-subGray border-b border-t border-subGray ml-20 ">
+    <ul role="list" className="w-screen divide-y divide-subGray border-b border-t border-subGray ml-20 sm:ml-6">
       {orderProducts.map((product) => (
         <li key={product.id} className="flex py-6">
 
@@ -13,7 +13,7 @@ const OrderProducts = () => {
             <img
               src={product.image}
               // alt={product.imageAlt}
-              className="h-32 w-32 rounded-md object-cover object-center sm:h-24 sm:w-24"
+              className="h-32 w-32 rounded-md object-cover object-center sm:h-32 sm:w-32"
             />
           </div>
           <div className="ml-4 flex flex-1 flex-col sm:ml-6">
