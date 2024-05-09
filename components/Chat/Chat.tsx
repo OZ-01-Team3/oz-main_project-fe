@@ -22,6 +22,12 @@ const chatData = [
     img: "https://i.pinimg.com/474x/40/c3/98/40c398cf13f290e3bb364b7a7358524b.jpg",
   },
   {
+    subject: "other",
+    content: "채팅테스트",
+    time: "오후 10:02",
+    img: "https://i.pinimg.com/474x/40/c3/98/40c398cf13f290e3bb364b7a7358524b.jpg",
+  },
+  {
     subject: "me",
     content:
       "어어어어어어어어어어어엄청나게 긴 메시지~~ 입니다 ~~~~~~~~~~~~~라라어어어어어어어어어어어엄청나게 긴 메시지~~ 입니다 ~~~~~~~~~~~~~라라어어어어어어어어어어어엄청나게 긴 메시지~~ 입니다 ~~~~~~~~~~~~~라라라라ㅏㅏㅏㅏ라ㅏㄹ라라ㅏ 엄청 긴 메시지 엄청 나게 길 다",
@@ -42,14 +48,33 @@ const chatData = [
     content: "재밌고만!!",
     time: "오후 10:02",
   },
+  {
+    subject: "other",
+    content: "채팅테스트",
+    time: "오후 10:02",
+    img: "https://i.pinimg.com/474x/40/c3/98/40c398cf13f290e3bb364b7a7358524b.jpg",
+  },
+  {
+    subject: "other",
+    content: "테테테테텥스스스스ㅡ트트ㅡ트",
+    time: "오후 10:02",
+    img: "https://i.pinimg.com/474x/40/c3/98/40c398cf13f290e3bb364b7a7358524b.jpg",
+  },
+  {
+    subject: "other",
+    content: "온세상을 뒤집어",
+    time: "오후 10:02",
+    img: "https://i.pinimg.com/474x/40/c3/98/40c398cf13f290e3bb364b7a7358524b.jpg",
+  },
 ];
+const userResCss = "flex justify-center items-center flex-row ";
 const Chat = () => {
   return (
-    <div className="w-3/5 flex flex-col justify-center items-center pl-10 relative">
+    <div className="flex flex-col justify-center items-center pl-10 relative w-full  ">
       <div className="flex w-full flex-col justify-between h-screen overflow-y-scroll scrollbar-hide ">
         <div className="flex flex-col">
           {/* 사용자 정보 */}
-          <div className="flex justify-center items-center flex-row">
+          <div className={`sm:hidden ${userResCss}`}>
             <div className="w-10 aspect-[1/1] mr-2 border-mainBlack rounded-full border ">
               <img
                 src="https://i.pinimg.com/564x/2a/58/e3/2a58e3d012bb65932a7c38d7381f29ee.jpg"
@@ -74,13 +99,12 @@ const Chat = () => {
                 />
               </div>
               {/* 상품상세정보 */}
-              <div className="flex flex-col justify-center w-1/3 ml-3 h-14">
+              <div className="flex flex-col justify-center w-1/3 ml-3 h-14 sm:w-full md:w-full">
                 <p className="text-[11px] font-semibold">{item.title}</p>
 
                 <p className="text-[10px] font-thin">
-                  {" "}
-                  {item.description.length > 50
-                    ? `${item.description.substring(0, 50)}...`
+                  {item.description.length > 40
+                    ? `${item.description.substring(0, 40)}...`
                     : item.description}
                 </p>
                 <p className="text-[10px]">대여비 {item.price}</p>
