@@ -13,7 +13,7 @@ const OrderProducts = () => {
             <img
               src={product.image}
               // alt={product.imageAlt}
-              className="h-24 w-24 rounded-md object-cover object-center sm:h-32 sm:w-32"
+              className="h-32 w-32 rounded-md object-cover object-center sm:h-24 sm:w-24"
             />
           </div>
           <div className="ml-4 flex flex-1 flex-col sm:ml-6">

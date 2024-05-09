@@ -26,6 +26,12 @@ const config: Config = {
       fontSize: {
         footerText: "9px",
       },
+      screens: {
+        sm: { max: "640px" },
+        md: { min: "641px", max: "768px" },
+        lg: { min: "769px", max: "1280px" },
+        xl: { min: "1281px" },
+      },
     },
   },
   plugins: [require("@tailwindcss/forms"), require("tailwind-scrollbar-hide")],
