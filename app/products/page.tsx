@@ -1,20 +1,18 @@
-"use client";
-import Banner from "@/components/Banner";
-import EventBanner from "@/components/EventBanner";
-import PageNation from "@/components/PageNation";
-import ProductDetailModal from "@/components/ProductDetail/ProductDetailModal";
-import Products from "@/components/Products";
-import { useState } from "react";
-const category = ["전체", "아우터", "상의", "하의", "잡화", "신발"];
-const sort = ["전체", "대여많은순", "최신순", "가격낮은순", "가격높은순"];
+'use client';
+import Banner from '@/components/Banner';
+import EventBanner from '@/components/EventBanner';
+import Footer from '@/components/Footer';
+import PageNation from '@/components/PageNation';
+import ProductDetailModal from '@/components/ProductDetail/ProductDetailModal';
+import Products from '@/components/Products';
+import { useState } from 'react';
+const category = ['전체', '아우터', '상의', '하의', '잡화', '신발'];
+const sort = ['전체', '대여많은순', '최신순', '가격낮은순', '가격높은순'];
 const totalProductsPage = () => {
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   return (
     <>
-      <ProductDetailModal
-        detailModalOpen={detailModalOpen}
-        setDetailModalOpen={setDetailModalOpen}
-      />
+      <ProductDetailModal detailModalOpen={detailModalOpen} setDetailModalOpen={setDetailModalOpen} />
       <Banner />
       {/* 페이지 레이아웃 */}
       <div className="pt-32 w-2/3 ml-auto mr-auto ">
@@ -38,6 +36,7 @@ const totalProductsPage = () => {
         {/* 페이지네이션 */}
         <PageNation />
       </div>
+      <Footer />
     </>
   );
 };
