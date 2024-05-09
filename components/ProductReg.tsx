@@ -3,36 +3,155 @@ import React from "react";
 const ProductReg = () => {
     
   return (
+
+    <form className="  px-36">
+        <br></br>
+        <p className="text-left text-3xl ">상품 정보</p>
+        <hr className=" w-12/12 ml-auto mr-auto mt-10 mb-20 text-mainWhite " />
     <div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">상품명</label>
-        <input
-          className="shadow appearance-none border rounded w-96 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="text"
-          placeholder="상품명을 입력하세요"
-        />
+        <div className="flex items-center">
+          <span className=" w-48 flex-shrink-0 text-left mr-1">상품명 </span>
+          <input
+            className="shadow appearance-none border rounded  w-7/12 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
+            type="text"
+            placeholder="상품명을 입력하세요"
+          />
+          <span className="text-sm text-white ml-12 mt-2">0/40</span>
+        </div>
       </div>
-      <div>
+      
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">대여비</label>
-        <input
-          className="shadow appearance-none border rounded w-96 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="text"
-          placeholder="대여비를 입력하세요"
-        />
+        <div className="flex items-center">
+          <span className=" w-48  flex-shrink-0 text-left mr-1">대여비 </span>
+          <input
+            className="shadow appearance-none border rounded w-7/12 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="대여비를 입력하세요"
+          />
+          <span className=" text-sm text-white ml-16 mt-2">원</span>
+        </div>
       </div>
+
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">구매시기</label>
-        <input
-          className="shadow appearance-none border rounded w-96 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="date"
-        />
+        <div className="flex items-center">
+          <span className="w-48 flex-shrink-0 text-left mr-1">사이즈</span>
+          <select
+            className="shadow appearance-none border rounded w-8/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-1"
+          >
+            <option value="">S,M,L</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+          </select>
+          </div>
+        </div>
+
+        <div className="mb-4">
+        <div className="flex items-center">
+          <span className=" w-48  flex-shrink-0 text-left mr-1">브랜드 </span>
+          <input
+            className="shadow appearance-none border rounded w-8/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="브랜드"
+          />
+        </div>
+      </div>
+
+        <div className="mb-4">
+        <div className="flex items-center">
+          <span className="w-48 flex-shrink-0 text-left mr-1">카테고리</span>
+          <select
+            className="shadow appearance-none border rounded w-8/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-1"
+          >
+            <option value="">전체</option>
+            <option value="아우터">아우터</option>
+            <option value="상의">상의</option>
+            <option value="하의">하의</option>
+            <option value="잡화">잡화</option>
+            <option value="신발">신발</option>
+          </select>
+          </div>
+        </div>
+      <div className="mb-4">
+        <div className="flex items-center">
+          <span className="w-48 flex-shrink-0 text-left mr-1">구매시기 </span>
+          <input
+            className="shadow appearance-none border rounded w-8/12 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="date"
+          />
       </div>
     </div>
+
+    
+
+
+    <div className="mb-4">
+        <div className="flex items-center">
+          <span className=" w-48  flex-shrink-0 text-left mr-1">설명 </span>
+          <input
+            className="text-left shadow appearance-none border rounded w-8/12 py-20 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="상품 설명을 최대한 자세히 적어주세요."
+          />
+        </div>
+      </div>
+
+      <div className="mb-4">
+        <div className="flex items-center">
+          <span className="w-48 flex-shrink-0 text-left mr-1">태그 (선택) </span>
+          <input
+            className="shadow appearance-none border rounded w-8/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="태그를 입력해주세요. (최대 5개)"
+          />
+        </div>
+        <div className="ml-52 mt-2 text-left text-sm text-gray-500">- 태그는 띄어쓰기로 구분되며 최대 N자까지 입력할 수 있어요.</div>
+      </div>
+      <br></br>
+      <br></br>
+      <br></br>
+      <p className="text-left text-3xl ">추가 정보</p>
+      <hr className=" w-12/12 ml-auto mr-auto mt-10 mb-20 text-mainWhite " />
+
+      <div className="mb-4">
+        <div className="flex items-center">
+          <span className="w-48 flex-shrink-0 text-left mr-1">수량 </span>
+          <input
+            className="shadow appearance-none border rounded w-4/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
+            type="text"
+            placeholder="수량 "
+          />
+          <span className=" text-sm text-white ml-1 mt-2">개</span>
+        </div>
+        </div>
+
+          {/* 거래지역 입력 */}
+      <div className="mb-4">
+        <div className="flex items-center">
+          <span className="w-48 flex-shrink-0 text-left mr-1">거래지역</span>
+          <input
+            className="shadow appearance-none border rounded w-2/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="내 위치"
+          />
+        </div>
+        <input
+          className=" shadow appearance-none border rounded  w-4/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ml-3 mt-2 "
+          type="text"
+          placeholder="지역 주소"
+        />
+      </div>
+
+
     </div>
+    </form>
   );
 }
 
 export default ProductReg;
+
+
 
 
