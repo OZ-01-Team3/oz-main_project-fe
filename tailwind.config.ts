@@ -15,6 +15,7 @@ const config: Config = {
         subGray: "#6F6F6F",
         modalBg: "rgba(0, 0, 0, 0.57)",
         hrGray: "#DFDFDF",
+        gray: "#B6B6B6",
       },
       fontFamily: {
         didot: ["var(--font-didot)"],

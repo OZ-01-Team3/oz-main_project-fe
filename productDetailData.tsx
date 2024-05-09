@@ -8,14 +8,16 @@ interface productsDetails {
   status: string;
   style: string[];
   description: string;
+  price: string;
 }
 const productsDetails = [
   {
     id: 1,
     image:
-      "https://image.msscdn.net/images/goods_img/20240117/3800972/3800972_17071843073582_500.jpg",
+      "https://image.msscdn.net/images/goods_img/20240507/4108579/4108579_17151337802676_320.jpg",
     title: "로라로라 장원영 가디건 M사이즈1",
     size: "M",
+    price: "10,000",
     brand: "로라로라",
     date: "2024년 3월",
     status: "사용감 적음",
