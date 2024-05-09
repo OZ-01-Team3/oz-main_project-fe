@@ -10,7 +10,7 @@ const ProductReg = () => {
     <hr className="w-full ml-auto mr-auto mt-6 mb-7 text-hrGray" />
     <div>
         <div className="mb-4">
-            <div className="flex items-center">
+            <div className="flex items-left">
                 <span className="w-48 flex-shrink-0 text-left mr-1">상품명 </span>
                 <input
                     className="shadow appearance-none border rounded w-full md:w-7/12 py-2 px-4 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
@@ -22,7 +22,7 @@ const ProductReg = () => {
         <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
 
         <div className="mb-4">
-            <div className="flex items-center">
+            <div className="flex items-left">
                 <span className="w-48 flex-shrink-0 text-left mr-1">대여비</span>
                 <input
                     className=" shadow appearance-none border rounded w-full md:w-7/12 py-2 px-4 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
@@ -34,7 +34,7 @@ const ProductReg = () => {
         <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
 
         <div className="mb-4">
-            <div className="flex items-center">
+            <div className="flex items-left">
                 <span className="w-48 flex-shrink-0 text-left mr-1">사이즈</span>
                 <select
                     className="shadow appearance-none border rounded w-full md:w-8/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline mt-1 focus:border-mainWhite focus:bg-mainWhite">
@@ -49,7 +49,7 @@ const ProductReg = () => {
         <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
 
         <div className="mb-4">
-            <div className="flex items-center">
+            <div className="flex items-left">
                 <span className="w-48 flex-shrink-0 text-left mr-1">브랜드 </span>
                 <input
                     className="shadow appearance-none border rounded w-full md:w-8/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
@@ -60,7 +60,7 @@ const ProductReg = () => {
         <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
 
         <div className="mb-4">
-            <div className="flex items-center">
+            <div className="flex items-left">
                 <span className="w-48 flex-shrink-0 text-left mr-1">카테고리</span>
                 <select
                     className="shadow appearance-none border rounded w-full md:w-8/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline mt-1 focus:border-mainWhite focus:bg-mainWhite">
@@ -76,7 +76,7 @@ const ProductReg = () => {
         <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
 
         <div className="mb-4">
-            <div className="flex items-center">
+            <div className="flex items-left">
                 <span className="w-48 flex-shrink-0 text-left mr-1">구매시기</span>
                 <input
                     className="shadow appearance-none border rounded w-full md:w-8/12 py-2 px-4 text-mainBlack leading-tight focus:outline-none focus:shadow-outline "
@@ -85,7 +85,7 @@ const ProductReg = () => {
         </div>
         <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
 
-        <div className="flex items-center">
+        <div className="flex items-left">
   <span className="w-48 flex-shrink-0 text-left mr-1">상품 상태</span>
   <div className="flex items-start flex-col">
     <div className="flex items-center">
@@ -120,18 +120,21 @@ const ProductReg = () => {
         <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
 
         <div className="mb-4">
-            <div className="flex items-center">
-                <span className="w-48 flex-shrink-0 text-left mr-1">설명</span>
-                <input
-                    className="shadow appearance-none border rounded w-full md:w-8/12 py-20 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
-                    type="text"
-                    placeholder="상품 설명을 최대한 자세히 적어주세요."/>
-            </div>
-        </div>
+    <div className="flex items-left">
+        <span className="w-48 flex-shrink-0 text-left mr-1">설명</span>
+        <textarea
+            className="shadow appearance-none border rounded w-full md:w-8/12 py-3 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
+            placeholder="상품 설명을 최대한 자세히 적어주세요."
+            style={{ height: "150px" }} 
+        ></textarea>
+    </div>
+</div>
+
+
         <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
 
         <div className="mb-4">
-            <div className="flex items-center">
+            <div className="flex items-left">
                 <span className="w-48 flex-shrink-0 text-left mr-1">태그 <span className="text-subGray">(선택)</span></span>
                 <input
                     className="shadow appearance-none border rounded w-full md:w-8/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
@@ -145,7 +148,7 @@ const ProductReg = () => {
         <hr className="w-full ml-auto mr-auto mt-6 mb-7 text-hrGray" />
 
         <div className="mb-4">
-            <div className="flex items-center">
+            <div className="flex items-left">
                 <span className="w-48 flex-shrink-0 text-left mr-1">수량</span>
                 <input
                     className="text-right shadow appearance-none border rounded w-62 md:w-4/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
@@ -158,7 +161,7 @@ const ProductReg = () => {
 
               
         <div className="mb-4">
-            <div className="flex items-center">
+            <div className="flex items-left">
                 <span className="w-48 flex-shrink-0 text-left mr-1">거래지역</span>
                 <div className="flex items-start flex-col">
                     <input
