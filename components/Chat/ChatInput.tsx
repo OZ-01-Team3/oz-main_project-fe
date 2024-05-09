@@ -9,7 +9,7 @@ const ChatInput = () => {
       <div className="flex flex-row justify-between bg-chatBg rounded-full w-full">
         <input
           placeholder="메시지를 입력하세요"
-          className="w-full  bg-chatBg rounded-full border-none text-sm px-4 focus:outline-none"
+          className="w-full  bg-chatBg rounded-full text-sm px-4 border-gray"
         />
         <div className="w-10 h-10 bg-chatBg rounded-full flex justify-center items-center">
           <PaperAirplaneIcon className="w-7 h-7 cursor-pointer" />

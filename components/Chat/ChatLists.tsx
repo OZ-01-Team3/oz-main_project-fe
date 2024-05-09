@@ -11,6 +11,20 @@ const ChatLists = () => {
         profile="https://i.pinimg.com/564x/2a/58/e3/2a58e3d012bb65932a7c38d7381f29ee.jpg"
       />
       <ChatLIst
+        user="강계령"
+        content="강철빤스 나 주라"
+        time="2024.03.20"
+        profile="https://i.pinimg.com/736x/39/6f/d7/396fd73ae75a7f13d84b6d6fef99da29.jpg"
+        product="https://image.msscdn.net/images/goods_img/20190627/1084594/1084594_2_320.jpg"
+      />
+      <ChatLIst
+        user="꽉끼는 남자 꽉승환"
+        content="야 나 꽉 끼는 남잔데 ㅋ 이거 나 대여하고싶다"
+        time="2024.03.20"
+        profile="https://i.pinimg.com/564x/74/d2/cb/74d2cb3abadc29805a5848f126c1073b.jpg"
+        product="https://image.msscdn.net/images/goods_img/20230608/3352449/3352449_16861983997505_320.jpg"
+      />
+      <ChatLIst
         user="변갱갱"
         content="어 난데 저거 나 주라"
         time="2024.03.20"
