@@ -8,7 +8,7 @@ interface ChatListProps {
 const ChatLIst = ({ user, content, time, profile, product }: ChatListProps) => {
   return (
     <>
-      <div className="flex flex-row justify-between items-center pt-3 px-2  ">
+      <div className="flex flex-row justify-between items-center pt-3 px-2  cursor-pointer ">
         {/* <UserCircleIcon className="w-14 h-14  " /> */}
         <div className="w-16 aspect-[1/1] mr-2 border-mainBlack rounded-full border">
           <img

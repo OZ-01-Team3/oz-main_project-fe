@@ -43,7 +43,14 @@ const Chat = () => {
           </div>
           <div className="text-2xl my-3">하염빵</div>
         </div>
-        <hr className="w-4/5 mx-auto text-mainWhite" />
+        {/* 날짜 수평선 */}
+        <div className="flex items-center justify-center space-x-2 w-5/6 m-auto">
+          <div className="flex-1 border-b  border-hrGray"></div>
+          <div className="text-subGray text-xs font-didot bg-mainWhite px-2">
+            2024.05.09
+          </div>
+          <div className="flex-1 border-b border-hrGray"></div>
+        </div>
         {/* 채팅창 */}
         <div className="flex flex-col flex-grow overflow-y-scroll scrollbar-hide pb-3 ">
           <div className="flex flex-col justify-between mt-4">
@@ -55,20 +62,6 @@ const Chat = () => {
                 subject={data.subject}
               />
             ))}
-
-            {/* 시간 채팅방 묶은거 */}
-            <div className="flex justify-start items-center">
-              <div className="flex flex-row-reverse items-center rounded-full pl-2">
-                <p className="text-xs mb-1">오후 10:02</p>
-                <div className="bg-mainWhite text-mainBlack text-sm rounded-lg px-4 py-2 max-w-md">
-                  <img
-                    src="https://image.msscdn.net/images/goods_img/20231124/3732933/3732933_17008179351517_320.png"
-                    alt="상품 이미지"
-                    className="w-20 h-20 mr-2 rounded-lg"
-                  />
-                </div>
-              </div>
-            </div>
           </div>
         </div>
         {/* 입력창 */}
