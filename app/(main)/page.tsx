@@ -1,19 +1,17 @@
-"use client";
-import Banner from "@/components/Banner";
-import EventBanner from "@/components/EventBanner";
-import ProductDetailModal from "@/components/ProductDetail/ProductDetailModal";
-import Products from "@/components/Products";
-import StyleModal from "@/components/StyleModal";
-import { useState } from "react";
+'use client';
+import Banner from '@/components/Banner';
+import EventBanner from '@/components/EventBanner';
+import Footer from '@/components/Footer';
+import ProductDetailModal from '@/components/ProductDetail/ProductDetailModal';
+import Products from '@/components/Products';
+import StyleModal from '@/components/StyleModal';
+import { useState } from 'react';
 
 const MainPage = () => {
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   return (
     <div>
-      <ProductDetailModal
-        detailModalOpen={detailModalOpen}
-        setDetailModalOpen={setDetailModalOpen}
-      />
+      <ProductDetailModal detailModalOpen={detailModalOpen} setDetailModalOpen={setDetailModalOpen} />
       <StyleModal />
       <Banner />
       <div className="pt-32 w-2/3 ml-auto mr-auto ">
@@ -25,6 +23,7 @@ const MainPage = () => {
         <hr className=" w-3/4 ml-auto mr-auto mt-10 mb-20 text-mainWhite " />
         <EventBanner />
       </div>
+      <Footer />
     </div>
   );
 };
