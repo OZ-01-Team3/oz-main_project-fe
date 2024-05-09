@@ -7,8 +7,8 @@ interface ChatInputProps {
 const ChatBubble = ({ content, time, subject }: ChatInputProps) => {
   const flexStyle =
     subject === "me"
-      ? "flex flex-row items-center px-2 rounded-3xl  "
-      : "flex flex-row-reverse items-center rounded-3xl pl-2";
+      ? "flex flex-row items-end px-2 rounded-3xl  "
+      : "flex flex-row-reverse items-end rounded-3xl pl-2";
   const justifyStyle =
     subject === "me"
       ? "flex justify-end items-center mt-3"

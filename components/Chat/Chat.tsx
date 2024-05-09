@@ -1,4 +1,4 @@
-import ChatBubble from "./\bChatBubble";
+import ChatBubble from "./ChatBubble";
 import ChatInput from "./ChatInput";
 const chatData = [
   {
