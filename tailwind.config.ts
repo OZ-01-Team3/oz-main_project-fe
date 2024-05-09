@@ -27,9 +27,10 @@ const config: Config = {
         footerText: "9px",
       },
       screens: {
-        sm: { min: "390px", max: "819px" },
-        md: { min: "820px", max: "1023px" },
-        lg: { min: "1080px" },
+        sm: { max: "640px" },
+        md: { min: "641px", max: "768px" },
+        lg: { min: "769px", max: "1280px" },
+        xl: { min: "1281px" },
       },
     },
   },

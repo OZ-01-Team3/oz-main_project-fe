@@ -37,12 +37,12 @@ const Header = () => {
       <nav className="w-full flex justify-between items-center h-24 p-4 bg-mainBlack">
         <div className="flex-1"></div>
         <div className="font-didot text-5xl  text-mainWhite text-center md:text-left">Coaty Closet</div>
-        <div className="md:hidden lg:hidden flex items-center justify-end flex-1">
+        <div className=" lg:hidden  xl:hidden flex items-center justify-end flex-1">
           <button onClick={handleToggleNotification}>
             <BellIcon className="w-6 h-6 text-mainWhite" />
           </button>
         </div>
-        <div className="lg:flex md:flex sm:hidden flex-1 justify-end"> {/* PC 사이즈에서만 보이도록 수정 */}
+        <div className="xl:flex lg:flex md:hidden sm:hidden  flex-1 justify-end"> {/* PC 사이즈에서만 보이도록 수정 */}
           <div className="w-auto">
             <ul className="flex justify-between w-52 text-sm font-light text-mainWhite">
               {mainMenuItems.map(({ label, onClick }) => (
@@ -61,7 +61,7 @@ const Header = () => {
       </nav>
       <ChatNotification isOpen={isNotificationOpen} onClose={handleToggleNotification} />
 
-      <div className="w-full md:hidden lg:hidden">
+      <div className="w-full  lg:hidden xl:hidden">
         <MobileNave />
       </div>
     </>
