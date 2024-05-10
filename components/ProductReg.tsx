@@ -177,8 +177,8 @@ const ProductReg = () => {
             <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
         </div>
         <div className='text-right'>
-          <CommonButton className=" w-44 rounded-lg bg-mainBlack px-auto py-3.5 text-lg font-semibold font-didot  text-mainWhite  shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 mt-10 ml-2 border border-solid border-mainWhite focus:bg-mainWhite">임시저장</CommonButton>
-          <CommonButton className=" w-44 rounded-lg bg-mainWhite px-auto py-3.5 text-lg font-semibold font-didot text-mainBlack shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 mt-10 ml-2 border border-solid border-mainWhite focus:bg-mainWhite">등록하기</CommonButton>
+          <CommonButton className=" align-middle w-44 rounded-lg bg-mainBlack px-auto py-3.5 text-lg font-semibold font-didot  text-mainWhite  shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 mt-10 ml-2 border border-solid border-mainWhite focus:bg-mainWhite">임시저장</CommonButton>
+          <CommonButton className=" align-middle w-44 rounded-lg bg-mainWhite px-auto py-3.5 text-lg font-semibold font-didot text-mainBlack shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 mt-10 ml-2 border border-solid border-mainWhite focus:bg-mainWhite">등록하기</CommonButton>
 </div>
     </div>
 </form>

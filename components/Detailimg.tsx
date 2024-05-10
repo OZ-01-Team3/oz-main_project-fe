@@ -1,7 +1,7 @@
 import { PhotoIcon } from '@heroicons/react/16/solid';
 import React from 'react';
 
-const Detailimg = () => {
+const DetailImg = () => {
     return (
         <div className="col-span-full">
 
@@ -31,4 +31,4 @@ const Detailimg = () => {
     );
 }
 
-export default Detailimg;
+export default DetailImg;
