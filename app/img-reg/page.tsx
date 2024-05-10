@@ -1,5 +1,5 @@
 import CommonButton from '@/components/CommonButton';
-import Detailimg from '@/components/Detailimg';
+import Detailimg from '@/components/DetailImg';
 import Footer from '@/components/Footer';
 
 const imgReg = () => {
