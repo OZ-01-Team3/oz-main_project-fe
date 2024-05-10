@@ -4,11 +4,12 @@ interface ChatListProps {
   time: string;
   product: string;
   profile?: string;
+  message?: string;
 }
 const UserResponseCss = 'flex flex-col items-start justify-center w-72 pr-1  h-18 md:mr-0 ml-1 md:h-20 pt-2';
 const ProductResCss = 'w-16 h-16 aspect-[1/1] border-gray rounded-md border ';
 
-const ChatLIst = ({ user, content, time, profile, product }: ChatListProps) => {
+const ChatLIst = ({ user, content, time, profile, product, message }: ChatListProps) => {
   return (
     <>
       <div className="flex flex-row items-center justify-center  px-2 cursor-pointer  flex-none  md:px-0 sm:pt-2">
@@ -16,7 +17,14 @@ const ChatLIst = ({ user, content, time, profile, product }: ChatListProps) => {
           <img src={profile} className="w-full h-full  object-cover rounded-full" alt="프로필 이미지" />
         </div>
         <div className={`sm:hidden md:${UserResponseCss}  `}>
-          <p className="text-sm h-5 overflow-hidden  font-semibold ">{user}</p>
+          <div className="flex flex-row items-center">
+            <p className="text-sm h-5 overflow-hidden  font-semibold mr-1">{user}</p>
+            {message !== '0' && (
+              <p className="bg-[#D80C18] w-4 h-4 rounded-full flex justify-center items-center text-mainWhite text-[10px]">
+                {message}
+              </p>
+            )}
+          </div>
 
           <p className="text-[12px] font-light overflow-hidden h-10 md:h-8 sm:text-xs">
             {content.length > 30 ? `${content.substring(0, 30)}...` : content}
