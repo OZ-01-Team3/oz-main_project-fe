@@ -55,7 +55,8 @@ const signUp = () => {
     try {
       const response = await axios.post('/api/v1/members/register', {
         email: data.email,
-        password: data.password,
+        password1: data.password,
+        password2: data.confirmPassword,
         nickname: data.nickname,
         phone: data.password,
       });
