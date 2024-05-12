@@ -1,6 +1,7 @@
 'use client';
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
 import { BellIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import ChatNotification from './ChatNotification';
 import MobileNave from './MobileNav';
@@ -9,6 +10,7 @@ interface MenuItem {
   label: string;
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   Icon?: () => JSX.Element;
+  href?: string;
 }
 const Header = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false); // pc 상태
@@ -20,13 +22,13 @@ const Header = () => {
 
   const mainMenuItems: MenuItem[] = [
     { label: '알림', onClick: handleToggleNotification },
-    { label: '마이페이지' },
-    { label: '로그아웃' },
+    { label: '마이페이지', href: '/mypage/member-info' },
+    { label: '로그인', href: '/sign-in' },
   ];
 
   const subMenuItems: MenuItem[] = [
-    { label: 'WishList' },
-    { label: 'MyCloset' },
+    { label: 'WishList', href: '/wishList' },
+    { label: 'MyCloset', href: '/404' },
     { label: '', Icon: () => <MagnifyingGlassIcon className="w-6" /> },
   ];
 
@@ -45,8 +47,15 @@ const Header = () => {
           {/* PC 사이즈에서만 보이도록 수정 */}
           <div className="w-auto">
             <ul className="flex justify-between w-52 text-sm font-light text-mainWhite">
-              {mainMenuItems.map(({ label, onClick }) => (
+              {mainMenuItems.map(({ label, onClick, href }) => (
                 <li key={label} className="cursor-pointer" onClick={onClick}>
+                  {href ? (
+                    <Link href={href}>
+                      <a>{label}</a>
+                    </Link>
+                  ) : (
+                    label
+                  )}
                   {label}
                 </li>
               ))}
