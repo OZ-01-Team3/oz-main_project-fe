@@ -13,11 +13,23 @@ export const handlers = [
     });
   }),
 
-  //테ㅛ스트룔
-  http.get('/users', () => {
-    // Response resolver allows you to react to captured requests,
-    // respond with mock responses or passthrough requests entirely.
-    // For now, let’s just print a message to the console.
-    return HttpResponse.json({});
+  //로그인
+  http.post('/api/v1/members/login', async ({ request }) => {
+    const info = await request.json();
+    console.log('로그인', info.name);
+
+    const email = info?.email;
+    const password = info.password;
+
+    if (email === email && password === password) {
+      return new HttpResponse(JSON.stringify(info), {
+        status: 200,
+      });
+    } else {
+      return new HttpResponse(null, {
+        status: 400,
+        statusText: 'authentication_failed',
+      });
+    }
   }),
 ];
