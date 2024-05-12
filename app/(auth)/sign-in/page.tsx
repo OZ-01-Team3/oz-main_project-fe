@@ -4,20 +4,9 @@ import AuthInput from '@/components/AuthInput';
 import CommonButton from '@/components/CommonButton';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
+import Link from 'next/link';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
-interface FormData {
-  id: string;
-  type: 'text' | 'number' | 'password' | 'email' | 'tel';
-  placeholder: string;
-  label: string;
-}
-
-//로그인 폼 입력 필드
-const formData: FormData[] = [
-  { id: 'email', type: 'email', placeholder: '이메일', label: 'Email' },
-  { id: 'password', type: 'password', placeholder: '비밀번호', label: 'Password' },
-];
 
 // 소셜미디어 로그인 버튼
 const socialMedia = [
@@ -55,7 +44,14 @@ const signIn = () => {
         password: data.password,
       });
       console.log(response, '로그인 성공');
-    } catch (error) {}
+    } catch (error) {
+      // if ((error as AxiosError).response && (error as AxiosError).response?.status === 409) {
+      //   console.error('이메일 또는 비밀번호가 잘못되었습니다.', (error as AxiosError).response?.data);
+      //   toast.error('이메일 또는 비밀번호가 잘못되었습니다.');
+      // } else {
+      //   console.error('사용자 등록 오류:', error);
+      // }
+    }
     console.log(data);
   });
   return (
@@ -78,9 +74,11 @@ const signIn = () => {
         </div>
         <div className="mt-6 font-light">
           아직 회원이 아니신가요?
-          <button type="button" className="font-semibold ml-2">
-            Sign in
-          </button>
+          <Link href="sign-up">
+            <button type="button" className="font-semibold ml-2">
+              Sign in
+            </button>
+          </Link>
         </div>
         <div className="flex justify-center items-center mt-10 w-[460px]">
           <span className=" w-full h-[1px] bg-mainWhite mr-2"></span>
