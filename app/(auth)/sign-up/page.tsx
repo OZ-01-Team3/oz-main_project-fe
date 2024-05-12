@@ -13,7 +13,7 @@ const signUp = () => {
     .object({
       // 이메일 형식 지정
       email: z.string().email({ message: '이메일 형식이 아닙니다.' }),
-      code: z.string().min(1, { message: '인증코드를 입력해주세요' }),
+      code: z.string().min(1, { message: '인증코드를 입력해주세요.' }),
       password: z // 비밀번호 형식 지정
         .string()
         .regex(
@@ -28,7 +28,7 @@ const signUp = () => {
     })
     .refine(data => data.password === data.confirmPassword, {
       path: ['confirmPassword'],
-      message: '비밀번호가 일치하지 않습니다',
+      message: '비밀번호가 일치하지 않습니다.',
     });
 
   //회원가입 폼 상태 관리
@@ -77,7 +77,7 @@ const signUp = () => {
       <div className="w-full mb-40 bg-mainBlack flex justify-center items-center flex-col">
         <div className="w-[460px] flex justify-center flex-col mt-40">
           <p className="font-didot text-3xl text-center mb-7">Sign Up</p>
-          <form onSubmit={handleClickSignUp}>
+          <form onSubmit={handleClickSignUp} autoComplete="off">
             <div className="w-full flex items-center">
               <div className="flex-grow">
                 <AuthInput {...register('email')} type="email">
@@ -117,7 +117,7 @@ const signUp = () => {
               Nickname
             </AuthInput>
             {errors.nickname && <p className=" text-sm text-red-500 mt-1">{errors.nickname.message}</p>}
-            <AuthInput {...register('phone')} type="tel">
+            <AuthInput {...register('phone')} type="tel" placeholder="010-0000-0000">
               Phone
             </AuthInput>
             {errors.phone && <p className=" text-sm text-red-500 mt-1">{errors.phone.message}</p>}
