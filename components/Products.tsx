@@ -1,17 +1,17 @@
 'use client';
+import products from '@/productData';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import { Dispatch, SetStateAction, useRef } from 'react';
 interface ProductsProps {
   setDetailModalOpen: Dispatch<SetStateAction<boolean>>;
 }
-const Products = async ({ setDetailModalOpen }: ProductsProps) => {
+const Products = ({ setDetailModalOpen }: ProductsProps) => {
   const wishIconRef = useRef<SVGSVGElement>(null);
   const handleOpenStyleModal = () => {
     setDetailModalOpen(true);
     document.body.style.overflow = 'hidden';
   };
 
-  const data = await getData();
 
   return (
     <>
@@ -21,7 +21,7 @@ const Products = async ({ setDetailModalOpen }: ProductsProps) => {
         onClick={handleOpenStyleModal}
       >
         {/* 각각의 상품 하나하나 */}
-        {data.map(product => (
+        {products.map(product => (
           <div key={product.id} className="flex flex-col hover:cursor-pointer">
             <img src={product.image} className="aspect-[3/3.5] relative mb-2" />
             <div className="flex justify-between">
@@ -36,11 +36,5 @@ const Products = async ({ setDetailModalOpen }: ProductsProps) => {
     </>
   );
 };
-
-const getData = async () => {
-  const response = await fetch('http://loaclhost:3000/api/products');
-  const json = await response.json();
-  return json;
-}
 
 export default Products;
