@@ -134,7 +134,7 @@ const signUp = () => {
       console.log(response, '회원가입성공');
       router.push('/sign-in')
     } catch (error) {
-      //에러처리인데 이건 나중에 api 그거 맞춰서 나오면 수정~
+      //에러처리인데 이미 있는 회원이면.. 무슨코드 내려주는지 모르겟서잉...
       if ((error as AxiosError).response && (error as AxiosError).response?.status === 409) {
         console.error('이미 존재하는 회원입니다:', (error as AxiosError).response?.data);
         toast.error('이미 존재하는 회원입니다.');
