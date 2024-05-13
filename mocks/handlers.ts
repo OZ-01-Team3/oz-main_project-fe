@@ -248,4 +248,12 @@ export const handlers = [
       ],
     });
   }),
+  //상품등록
+  http.post('/api/v1/products', async ({ request }) => {
+    const info = await request.json();
+
+    return HttpResponse.json(info, {
+      status: 200,
+    });
+  }),
 ];
