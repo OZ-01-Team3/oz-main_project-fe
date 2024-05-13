@@ -256,4 +256,12 @@ export const handlers = [
       status: 200,
     });
   }),
+  //상품 이미지 등록
+  http.post('/api/v1/products/img', async ({ request }) => {
+    const info = await request.json();
+
+    return HttpResponse.json(info, {
+      status: 200,
+    });
+  }),
 ];
