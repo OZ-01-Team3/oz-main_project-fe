@@ -2,7 +2,14 @@
 import CommonButton from '@/components/CommonButton';
 import axios from 'axios';
 import { FormProvider, useForm } from 'react-hook-form';
-
+const sizes = ['S', 'M', 'L', 'XL'];
+const categorys = ['전체', '아우터', '상의', '하의', '잡화', '신발'];
+const productStatusOptions = [
+  { id: 1, label: '새 상품 (미사용)', description: '사용하지 않은 상품' },
+  { id: 2, label: '사용감 없음', description: '사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음' },
+  { id: 3, label: '사용감 적음', description: '눈에 띄는 흔적이나 얼룩이 약간 있음' },
+  { id: 4, label: '사용감 많음', description: '눈에 띄는 흔적이나 얼룩이 많이 있음' },
+];
 const ProductReg = () => {
   const form = useForm({
     defaultValues: {
@@ -81,11 +88,11 @@ const ProductReg = () => {
                 className="shadow appearance-none border rounded w-full md:w-8/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline mt-1 focus:border-mainWhite focus:bg-mainWhite"
                 {...register('size')}
               >
-                <option value="">S,M,L</option>
-                <option value="S">S</option>
-                <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
+                {sizes.map((size, index) => (
+                  <option key={index} value={size}>
+                    {size}
+                  </option>
+                ))}
               </select>
             </div>
             <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
@@ -111,12 +118,11 @@ const ProductReg = () => {
                 className="shadow appearance-none border rounded w-full md:w-8/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline mt-1 focus:border-mainWhite focus:bg-mainWhite"
                 {...register('category')}
               >
-                <option value="">전체</option>
-                <option value="아우터">아우터</option>
-                <option value="상의">상의</option>
-                <option value="하의">하의</option>
-                <option value="잡화">잡화</option>
-                <option value="신발">신발</option>
+                {categorys.map((category, index) => (
+                  <option key={index} value={category}>
+                    {category}
+                  </option>
+                ))}
               </select>
             </div>
             <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
@@ -137,37 +143,19 @@ const ProductReg = () => {
           <div className="flex items-center justify-center w-full">
             <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">상품 상태</span>
             <div className="flex w-3/4 items-start flex-col">
-              <div className="flex items-center">
-                <input
-                  type="radio"
-                  {...register('productStatus')}
-                  id="1"
-                  name="pro"
-                  className="focus:border-mainWhite focus:bg-mainWhite mr-5"
-                />
-                <label htmlFor="pro1">새 상품 (미사용)</label>
-                <span className="text-sm text-subGray ml-7 text-right"> 사용하지 않은 상품</span>
-              </div>
-
-              <div className="flex items-center">
-                <input type="radio" id="2" name="pro" className="focus:border-mainWhite focus:bg-mainWhite mr-5" />
-                <label htmlFor="pro2">사용감 없음</label>
-                <span className="text-sm text-subGray ml-7 text-right">
-                  사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음
-                </span>
-              </div>
-
-              <div className="flex items-center">
-                <input type="radio" id="3" name="pro" className="focus:border-mainWhite focus:bg-mainWhite mr-5" />
-                <label htmlFor="pro3">사용감 적음</label>
-                <span className="text-sm text-subGray ml-7 text-right"> 눈에 띄는 흔적이나 얼룩이 약간 있음</span>
-              </div>
-
-              <div className="flex items-center">
-                <input type="radio" id="4" name="pro" className="focus:border-mainWhite focus:bg-mainWhite mr-5" />
-                <label htmlFor="pro4">사용감 많음</label>
-                <span className="text-sm text-subGray ml-7 text-right"> 눈에 띄는 흔적이나 얼룩이 많이 있음</span>
-              </div>
+              {productStatusOptions.map(option => (
+                <div className="flex items-center" key={option.id}>
+                  <input
+                    type="radio"
+                    {...register('productStatus')}
+                    id={String(option.id)}
+                    name="productStatus"
+                    className="focus:border-mainWhite focus:bg-mainWhite mr-5 "
+                  />
+                  <label htmlFor={`pro${option.id}`}>{option.label}</label>
+                  <span className="text-sm text-subGray ml-7 text-right">{option.description}</span>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -177,9 +165,8 @@ const ProductReg = () => {
             <div className="flex items-center justify-center w-full">
               <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">설명</span>
               <input
-                className="shadow appearance-none border rounded w-full md:w-8/12 py-3 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
+                className="shadow appearance-none border rounded w-full md:w-8/12 py-3 px-3 h-[150px]  text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
                 placeholder="상품 설명을 최대한 자세히 적어주세요."
-                style={{ height: '150px' }}
                 {...register('description')}
               />
             </div>
@@ -191,17 +178,13 @@ const ProductReg = () => {
               <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">
                 태그 <span className="text-subGray">(선택)</span>
               </span>
-              <div className="flex flex-col w-full">
-                <input
-                  type="text"
-                  className="shadow appearance-none border rounded w-full md:w-8/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
-                  placeholder="태그를 입력해주세요. (최대 5개)"
-                  {...register('tag')}
-                />
-                <div className="mt-2 text-left text-sm text-subGray">
-                  - 태그는 띄어쓰기로 구분되며 최대 N자까지 입력할 수 있어요.
-                </div>
-              </div>
+
+              <input
+                type="text"
+                className="shadow appearance-none border rounded w-full md:w-8/12 py-3 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
+                placeholder="ex) 긱시크 (최대 5개) "
+                {...register('tag')}
+              />
             </div>
           </div>
         </div>
@@ -239,7 +222,7 @@ const ProductReg = () => {
         <div className="text-right">
           <CommonButton
             type="submit"
-            className="align-middle w-44 rounded-lg bg-mainWhite px-auto py-3.5 text-lg font-semibold font-didot text-mainBlack shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 mt-10 ml-2 border border-solid border-mainWhite focus:bg-mainWhite"
+            className="align-middle w-44 rounded-lg bg-mainWhite px-auto py-3.5  font-semibold  text-mainBlack  my-10 "
           >
             등록하기
           </CommonButton>
