@@ -27,7 +27,7 @@ const ProductReg = () => {
             { value: 'significantWear', label: '사용감 많음', description: '눈에 띄는 흔적이나 얼룩이 많이 있음' },
           ]}
         />
-        <ProductField label="설명" type="textarea" placeholder="상품 설명을 최대한 자세히 적어주세요." />
+        <ProductField label="설명" type="textarea" placeholder="상품 설명을 최대한 자세히 적어주세요." height="150px" />
         <ProductField
           label="태그"
           type="textarea"
