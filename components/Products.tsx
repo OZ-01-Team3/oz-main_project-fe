@@ -12,6 +12,7 @@ const Products = ({ setDetailModalOpen }: ProductsProps) => {
     document.body.style.overflow = 'hidden';
   };
 
+
   return (
     <>
       {/* 8개 상품 컨테이너*/}

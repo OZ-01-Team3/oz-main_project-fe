@@ -10,6 +10,7 @@ const category = ['전체', '아우터', '상의', '하의', '잡화', '신발']
 const sort = ['전체', '대여많은순', '최신순', '가격낮은순', '가격높은순'];
 const totalProductsPage = () => {
   const [detailModalOpen, setDetailModalOpen] = useState(false);
+
   return (
     <>
       <ProductDetailModal detailModalOpen={detailModalOpen} setDetailModalOpen={setDetailModalOpen} />
