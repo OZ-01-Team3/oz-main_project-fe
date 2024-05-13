@@ -5,11 +5,11 @@ import AuthInput from '@/components/AuthInput';
 import CommonButton from '@/components/CommonButton';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
-import {useRouter} from 'next/navigation'
 
 const { BASE_REQUEST_URL } = process.env;
 
@@ -20,7 +20,7 @@ const signUp = () => {
   const [authCodeSent, setAuthCodeSent] = useState(false); // 인증코드 전송 여부를 나타내는 상태
   const [authCodeError, setAuthCodeError] = useState(false); // 인증코드 불일치 여부를 나타내는 상태
   const [emailVerified, setEmailVerified] = useState(false);// 이메일 인증이 완료되었을 때 화면에 표시될 문구 상태 
-  
+
   const signUpFormSchema = z
     .object({
       // 이메일 형식 지정
@@ -76,16 +76,16 @@ const signUp = () => {
       setEmailVerified(false);
       // 카운트 다운
       setCountdown(600);
-     const countdownInterval = setInterval(() => {
-      setCountdown(prevCountdown => {
-        if (prevCountdown > 0) {
-          return prevCountdown - 1;
-        } else {
-          clearInterval(countdownInterval);
-          return 0;
-        }
-      });
-    }, 1000);
+      const countdownInterval = setInterval(() => {
+        setCountdown(prevCountdown => {
+          if (prevCountdown > 0) {
+            return prevCountdown - 1;
+          } else {
+            clearInterval(countdownInterval);
+            return 0;
+          }
+        });
+      }, 1000);
 
       //카운트 다운 종료
       setTimeout(() => {
@@ -132,15 +132,15 @@ const signUp = () => {
         phone: data.password,
       });
       console.log(response, '회원가입성공');
-
+      router.push('/sign-in')
     } catch (error) {
       //에러처리인데 이건 나중에 api 그거 맞춰서 나오면 수정~
-      // if ((error as AxiosError).response && (error as AxiosError).response?.status === 409) {
-      //   console.error('이미 존재하는 회원입니다:', (error as AxiosError).response?.data);
-      //   toast.error('이미 존재하는 회원입니다.');
-      // } else {
-      //   console.error('사용자 등록 오류:', error);
-      // }
+      if ((error as AxiosError).response && (error as AxiosError).response?.status === 409) {
+        console.error('이미 존재하는 회원입니다:', (error as AxiosError).response?.data);
+        toast.error('이미 존재하는 회원입니다.');
+      } else {
+        console.error('사용자 등록 오류:', error);
+      }
     }
     console.log(data);
   });
