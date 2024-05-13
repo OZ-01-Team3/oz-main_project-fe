@@ -2,7 +2,7 @@ import ProductReg from '@/components/ProductReg';
 
 const productReg = () => {
   return (
-    <div className="lg:w-[700px] w-[900px] md:w-[500px] sm:w-[300px] m-auto">
+    <div className="lg:w-[700px] w-[900px] md:w-[500px] sm:w-[350px] sm:text-sm m-auto">
       <ProductReg />
     </div>
   );
