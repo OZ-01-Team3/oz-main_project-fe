@@ -4,7 +4,7 @@ type ButtonProps = {
   className: string;
   onClick?: () => void;
   children?: ReactNode;
-  type?: 'submit' | 'reset' | 'button' | undefined | 'submit';
+  type?: 'button' | 'submit' | 'reset';
 };
 
 const CommonButton = ({ className, onClick, children, type }: ButtonProps) => {

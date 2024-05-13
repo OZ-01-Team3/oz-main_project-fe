@@ -2,6 +2,8 @@ import Header from '@/components/Header';
 import { MSWComponent } from '@/components/MSWComponent';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './globals.css';
 
 const pretendard = localFont({
@@ -31,6 +33,18 @@ export default function RootLayout({
     <html lang="en" className={didot.variable}>
       <body className={pretendard.className}>
         <MSWComponent>
+          <ToastContainer
+            position="top-center"
+            autoClose={700}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+          />
           <Header />
           {children}
           {/* 로그인 상태에 따라서 렌더링 할 예정 */}

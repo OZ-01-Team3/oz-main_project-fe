@@ -1,12 +1,16 @@
 'use client';
 
+import authRequests from '@/api/authRequests';
 import AuthInput from '@/components/AuthInput';
 import CommonButton from '@/components/CommonButton';
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+
 
 // 소셜미디어 로그인 버튼
 const socialMedia = [
@@ -16,10 +20,13 @@ const socialMedia = [
 ];
 
 const signIn = () => {
+  const router = useRouter();
+
   // 유효성 검증
   const signInFormSchema = z.object({
     // 이메일 형식 지정
     email: z.string().email({ message: '이메일 형식이 아닙니다.' }),
+    password: z.string().min(1, { message: '비밀번호를 입력해주세요.' })
   });
 
   //로그인 폼 상태 관리
@@ -34,23 +41,26 @@ const signIn = () => {
   const {
     register,
     formState: { errors },
+    setError
   } = form;
 
   //Sign In 버튼 눌렀을 때 api 호출하는 함수
   const handleClickSignIn = form.handleSubmit(async data => {
     try {
-      const response = await axios.post('/api/v1/members/login', {
+      const response = await axios.post(process.env.NEXT_PUBLIC_BASE_REQUEST_URL + authRequests.login, {
         email: data.email,
         password: data.password,
       });
       console.log(response, '로그인 성공');
+      router.push('/')
     } catch (error) {
-      // if ((error as AxiosError).response && (error as AxiosError).response?.status === 409) {
-      //   console.error('이메일 또는 비밀번호가 잘못되었습니다.', (error as AxiosError).response?.data);
-      //   toast.error('이메일 또는 비밀번호가 잘못되었습니다.');
-      // } else {
-      //   console.error('사용자 등록 오류:', error);
-      // }
+      if ((error as AxiosError).response && (error as AxiosError).response?.status === 400) {
+        console.error('이메일 또는 비밀번호가 잘못되었습니다.', (error as AxiosError).response?.data);
+        setError('email', { type: 'custom', message: '이메일 또는 비밀번호가 잘못되었습니다.' });
+        setError('password', { type: 'custom', message: '이메일 또는 비밀번호가 잘못되었습니다.' });
+      } else {
+        console.error('사용자 등록 오류:', error);
+      }
     }
     console.log(data);
   });
