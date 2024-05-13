@@ -8,7 +8,7 @@ const authRequests = {
   refresh: '/accounts/token/refresh', // access token 재발급
   // 이메일 전송
   send_code: '/accounts/send-code/', // 이메일 코드 전송
-  verify_email: 'accounts/verify-email/', // 이메일 인증
+  verify_email: '/accounts/confirm-email/', // 이메일 인증
 };
 
 export default authRequests;
