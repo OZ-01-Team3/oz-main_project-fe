@@ -1,19 +1,15 @@
 import CommonButton from '@/components/CommonButton';
-import Detailimg from '@/components/DetailImg';
-import Footer from '@/components/Footer';
+import Detailimg from '@/components/Detailimg';
 
 const imgReg = () => {
   return (
     <>
-      <div className="w-30">
+      <div className="w-[600px] md:w-[400px] sm:w-[400px]  m-auto flex flex-col justify-center items-center mt-10 ">
         <Detailimg />
-        <div className="text-center">
-          <CommonButton className=" w-80 rounded-lg bg-mainWhite px-3.5 py-2.5 text-lg font-semibold font-didot text-mainBlack shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 mt-6">
-            다음
-          </CommonButton>
-        </div>
+        <CommonButton className=" w-96 rounded-lg bg-mainWhite mt-5 py-3 font-semibold text-mainBlack shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ">
+          다음
+        </CommonButton>
       </div>
-      <Footer />
     </>
   );
 };

@@ -1,24 +1,22 @@
 import { PhotoIcon } from '@heroicons/react/16/solid';
-
+const dragStyle = {
+  box: 'bg-[#ebe9e935] w-full flex justify-center rounded-lg  border border-dashed border-[#FF5634] py-10 mt-5 ',
+  img: 'mx-auto h-60 w-6h-60 text-gray-300 text-mainBlack ',
+  text: 'mt-5  text-mainBlack',
+};
+const style = {
+  box: 'w-full flex justify-center rounded-lg border border-dashed border-mainWhite py-10 mt-5',
+  img: 'mx-auto h-60 w-6h-60 text-gray-300 ',
+  text: 'mt-5',
+};
 const DetailImg = () => {
   return (
-    <div className="col-span-full">
-      <p className="text-center text-x leading-10 text-mainWhite py-24">상품 이미지 등록</p>
-      <div className="mt-5 flex justify-center rounded-lg border border-dashed border-mainWhite px-6 py-10">
+    <div className="w-full flex flex-col justify-center items-center">
+      <p className="">상품 이미지 등록</p>
+      <div className={style.box}>
         <div className="text-center">
-          <PhotoIcon className="mx-auto h-52 w-52 text-gray-300" aria-hidden="true" />
-
-          <div className="mt-4 flex text-sm leading-6 text-mainWhite">
-            <label
-              htmlFor="file-upload"
-              className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-            >
-              <span>파일 업로드</span>
-              <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-            </label>
-            <p className="pl-1">or drag and drop</p>
-          </div>
-          <p className="text-xs leading-5 text-mainWhite">클릭하거나 파일을 여기에 드롭하여 선택하세요</p>
+          <PhotoIcon className={style.img} aria-hidden="true" />
+          <p className={style.text}>클릭하거나 파일을 여기에 드롭하여 선택하세요</p>
         </div>
       </div>
     </div>
