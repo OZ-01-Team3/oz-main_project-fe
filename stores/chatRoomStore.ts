@@ -2,7 +2,12 @@
 
 import { create } from 'zustand';
 
-const useChatRoomStore = create(set => ({
+interface ChatRoomState {
+  chatRoomId: number | null;
+  setChatRoomId: (id: number) => void;
+}
+
+const useChatRoomStore = create<ChatRoomState>(set => ({
   chatRoomId: null,
   setChatRoomId: id => set({ chatRoomId: id }),
 }));

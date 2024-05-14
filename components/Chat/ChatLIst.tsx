@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 interface ChatListProps {
   user: string;
+  chatId: number;
   content: string;
   time: string;
   product: string;
@@ -63,7 +64,7 @@ const ChatLIst = ({ chatId, user, content, time, profile, product, message }: Ch
 };
 
 // 시간포맷함수
-const formatTime = (timestamp) => {
+const formatTime = (timestamp: number | string) => {
   const now = new Date();
   const targetTime = new Date(timestamp);
   const diff = now.getTime() - targetTime.getTime();

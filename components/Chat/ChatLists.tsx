@@ -4,15 +4,33 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
 import ChatLIst from './ChatLIst';
-const ChatLists = () => {
 
+interface ChatInfo {
+  id: number;
+  user_info: {
+    nickname: string;
+  };
+  product: string;
+  last_message: {
+    chatroom: number;
+    id: string;
+    image: string;
+    nickname: string;
+    status: boolean;
+    text: string;
+    timestamp: string;
+  };
+}
+
+
+const ChatLists = () => {
   const ac = Cookies.get('ac')
-  const [chatList, setChatList] = useState([])
+  const [chatList, setChatList] = useState<ChatInfo[]>([])
 
   useEffect(() => {
     const fetchChatListData = async () => {
       try {
-        const response = await axios.get(process.env.NEXT_PUBLIC_BASE_REQUEST_URL + chatRequests.chat, {
+        const response = await axios.get<ChatInfo[]>(process.env.NEXT_PUBLIC_BASE_REQUEST_URL + chatRequests.chat, {
           headers: {
             Authorization: `Bearer ${ac}`,
           },

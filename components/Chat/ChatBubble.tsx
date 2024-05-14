@@ -7,16 +7,18 @@ interface ChatInputProps {
   subject: string;
   img?: string;
   read?: boolean;
-  message?: {};
 }
 
-const ChatBubble = ({ content, time, subject, img, read, message }: ChatInputProps) => {
+const ChatBubble = ({ content, time, subject, img, read }: ChatInputProps) => {
   const { user } = useUserStore()
+
+  // 상대방의 이미지만 보이도록 조건 추가
+  const showOpponentImage = subject !== `${user?.nickname}` && img;
 
 
   const justifyStyle =
     subject === `${user?.nickname}` ? 'flex justify-end items-center mt-3' : 'flex justify-start items-center mt-3  relative';
-  const flexStyle = subject === `${user?.nickname}` ? 'flex flex-row items-end px-2   ' : 'flex flex-row-reverse items-end pl-11';
+  const flexStyle = subject === `${user?.nickname}` ? 'flex flex-row items-end px-2   ' : 'flex flex-row-reverse items-end ';
 
   const inputColor =
     subject === `${user?.nickname}`
@@ -30,7 +32,7 @@ const ChatBubble = ({ content, time, subject, img, read, message }: ChatInputPro
         {read && <p className="text-footerText  mb-1 font-light ">안읽음</p>}
         <p className="text-footerText mb-1 mx-2">{time}</p>
         <div className={inputColor}>{content}</div>
-        {img && <img src={img} className="w-9 rounded-full border mr-2 absolute left-0 top-0" />}
+        {showOpponentImage && <img src={img} className="w-9 rounded-full border mr-2 " />}
       </div>
     </div>
   );
