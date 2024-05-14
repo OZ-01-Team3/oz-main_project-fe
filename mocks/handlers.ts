@@ -256,4 +256,23 @@ export const handlers = [
       status: 200,
     });
   }),
+
+  //상품 이미지 등록
+  http.post('/api/v1/products/img', async ({ request }) => {
+    const data = await request.formData();
+    const file = data.get('file');
+
+    if (!file) {
+      return new HttpResponse('Missing document', { status: 400 });
+    }
+
+    if (!(file instanceof File)) {
+      return new HttpResponse('Uploaded document is not a File', {
+        status: 400,
+      });
+    }
+    return HttpResponse.json({
+      contents: await file.text(),
+    });
+  }),
 ];
