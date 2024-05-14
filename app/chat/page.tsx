@@ -51,19 +51,20 @@ const page = () => {
   }, [chatRoomId])
 
   //메시지 전송 함수
-  const sendMessage = (message: string) => {
+  const sendMessage = (message: string, image: string) => {
     if (webSocket.current) {
       webSocket.current.send(JSON.stringify({
-        "message": message
+        "message": message,
+        "image": image
       }));
-      console.log(message);
+      console.log("메세지 전송함수", message, "사진", image);
     }
   }
 
 
   return (
     <>
-      <div className="sm:w-full h-[calc(100vh-99.59px)] bg-white text-mainBlack xl:px-32 sm:px-10 md:px-10 lg:px-10 ">
+      <div className="sm:w-full h-[calc(100vh-99.59px)] bg-white text-mainBlack xl:px-32 sm:px-5 md:px-10 lg:px-10 ">
         <div className="text-2xl pl-6 h-14 flex items-center font-semibold sm:justify-center md:justify-start">
           채팅
         </div>
