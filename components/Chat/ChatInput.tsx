@@ -2,7 +2,11 @@
 import { CameraIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
-const ChatInput = ({ sendMessage }) => {
+interface ChatProps {
+  sendMessage: (message: string) => void;
+}
+
+const ChatInput = ({ sendMessage }: ChatProps) => {
   const [inputMessage, setInputMessage] = useState("");
 
   const handleSend = () => {

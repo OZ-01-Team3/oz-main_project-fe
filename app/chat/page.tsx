@@ -2,17 +2,22 @@
 import Chat from '@/components/Chat/Chat';
 import ChatLists from '@/components/Chat/ChatLists';
 import useChatRoomStore from '@/stores/chatRoomStore';
+import Message from '@/type';
 import { useEffect, useRef, useState } from 'react';
-// const ACTOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE1NjIwNDAyLCJpYXQiOjE3MTU2MTY4MDIsImp0aSI6IjllNmY1ZTFlZjZiMzQ0NjZiMzBkODAzMGIyNDI0NTcwIiwidXNlcl9pZCI6MX0.dxV6B-xx8tgUvZ2VenvmMZLDPu8Ccpw8QuJqboinS-0'
 
 const page = () => {
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   let webSocket = useRef<WebSocket | null>(null);
   const { chatRoomId } = useChatRoomStore()
-  console.log("채팅 전체페이지 채팅 아이디 확인용", chatRoomId)
+
+  //페이지 이동시 웹소켓 종료
+  useEffect(() => {
+    return () => {
+      webSocket.current?.close()
+    }
+  }, [])
 
   // 컴포넌트 렌더링 될때마다 웹소켓 인스턴스 생성돼서 처음 마운트될때만 웹소켓 연결하기 위한.. 유즈이펙트.
-
   useEffect(() => {
     console.log("유즈이펙트안에 채팅아이디2", chatRoomId)
     webSocket.current = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${chatRoomId}/`)
@@ -35,10 +40,15 @@ const page = () => {
       setMessages((prev) => [...prev, data]);
       console.log("메세지 받았읍니다.", data)
     }
+
+    window.addEventListener('beforeunload', () => {
+      webSocket.current?.close()
+    })
+
     return () => {
       webSocket.current?.close()
     }
-  }, [chatRoomId]) // 빈 배열 사용해서 컴포넌트가 마운트될때만 실행
+  }, [chatRoomId])
 
   //메시지 전송 함수
   const sendMessage = (message: string) => {
@@ -49,17 +59,6 @@ const page = () => {
       console.log(message);
     }
   }
-
-
-
-
-
-
-  // 이거 예외처리 해서 잘 닫아두로곡....
-  //컴포넌트가 언마운트될 때 웹소켓 연결 종료
-  // webSocket.current?.close();
-  // 언제냐ㅐ머는~ 채팅 페이지 벗어날때~ 다른채팅방 눌럿을때~
-
 
 
   return (

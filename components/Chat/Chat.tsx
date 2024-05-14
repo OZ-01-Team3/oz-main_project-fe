@@ -4,29 +4,36 @@ import chatRequests from '@/api/chatRequests';
 import productsDetails from '@/productDetailData';
 import useChatRoomStore from '@/stores/chatRoomStore';
 import useUserStore from '@/stores/userStore';
+import Message from '@/type';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import ChatAcceptModal from './ChatAcceptModal';
 import ChatBubble from './ChatBubble';
 import ChatInput from './ChatInput';
 import ChatRentalModal from './ChatRentalModal';
-const userResCss = 'flex justify-center items-center flex-row ';
-const Chat = ({ sendMessage, messages, setMessages }) => {
-  const [rentalModalOpen, setRentalModalOpen] = useState(false);
-  const [acceptModalOpen, setAcceptModalOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState([]);
+
+
+interface ChatProps {
+  messages: Message[];
+  sendMessage: (message: string) => void;
+  setMessages: Dispatch<SetStateAction<Message[]>>;
+}
+
+const Chat = ({ sendMessage, messages }: ChatProps) => {
+  const [rentalModalOpen, setRentalModalOpen] = useState<boolean>(false);
+  const [acceptModalOpen, setAcceptModalOpen] = useState<boolean>(false);
+  const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const setUser = useUserStore((state) => state.setUser)
-  const { user } = useUserStore()
   const ac = Cookies.get('ac')
   const { chatRoomId } = useChatRoomStore()
 
   useEffect(() => {
-    fethChatMessages()
+    fetchChatMessages()
     fetchUserData()
   }, [chatRoomId])
 
-  const fethChatMessages = async () => {
+  const fetchChatMessages = async () => {
     try {
       const response = await axios.get(process.env.NEXT_PUBLIC_BASE_REQUEST_URL + chatRequests.chat + `${chatRoomId}/`, {
         headers: {
@@ -47,7 +54,6 @@ const Chat = ({ sendMessage, messages, setMessages }) => {
           Authorization: `Bearer ${ac}`,
         },
       })
-      // const userData = await response()
       setUser(response.data)
       console.log("chatBubble에서 불러오는 회원정보", response)
     } catch (error) {
@@ -57,9 +63,14 @@ const Chat = ({ sendMessage, messages, setMessages }) => {
 
   console.log("실시간 채팅", messages)
 
-
-
-
+  // 대화 상대방의 닉네임 가져오기
+  const getPartnerNickname = () => {
+    if (chatMessages.length > 0) {
+      const partnerNickname = chatMessages[1].nickname;
+      return partnerNickname;
+    }
+    return "";
+  };
 
 
   return (
@@ -82,7 +93,7 @@ const Chat = ({ sendMessage, messages, setMessages }) => {
                   alt="프로필 이미지"
                 />
               </div>
-              <div className="text-2xl my-3">상대방 이름</div>
+              <div className="text-2xl my-3">{getPartnerNickname()}</div>
             </div>
             <div className="flex justify-between items-center">
               {/* 상품정보 */}
@@ -136,7 +147,8 @@ const Chat = ({ sendMessage, messages, setMessages }) => {
                     content={data.text}
                     time={data.timestamp}
                     subject={data.nickname}
-                    img={data.image}
+                    // img={data.profile_img}
+                    img={`https://i.pinimg.com/564x/9d/d4/52/9dd45271b020a094a12bfeee12b39f65.jpg`}
                     read={data.status}
                   />
                 )))}
@@ -147,7 +159,8 @@ const Chat = ({ sendMessage, messages, setMessages }) => {
                   content={data.message}
                   time={data.timestamp}
                   subject={data.nickname}
-                  img={data.image}
+                  // img={data.image}
+                  img={`https://i.pinimg.com/564x/9d/d4/52/9dd45271b020a094a12bfeee12b39f65.jpg`}
                   read={data.status}
                 />
               ))}
@@ -161,4 +174,5 @@ const Chat = ({ sendMessage, messages, setMessages }) => {
   );
 };
 
+const userResCss = 'flex justify-center items-center flex-row ';
 export default Chat;
