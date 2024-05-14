@@ -7,6 +7,7 @@ interface Message {
   nickname: string;
   image?: string;
   status: boolean;
+  image_url?: string;
 }
 
 export default Message;
