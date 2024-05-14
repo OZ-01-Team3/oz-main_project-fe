@@ -1,6 +1,6 @@
 'use client';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Dispatch, SetStateAction, useRef } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import ModalStyleButton from './ModalStyleButton';
 import ProductDetailResponse from './ProductDetailResponse';
 import ProductDetailsDescription from './ProductDetailsDescription';
@@ -13,6 +13,7 @@ const style = ['#모던', '#페미닌', '#가디건'];
 
 // 상품클릭 시 나오는 모달
 const ProductDetailModal = ({ detailModalOpen, setDetailModalOpen }: PropsType) => {
+  useEffect(() => {}, []);
   // 바깥이랑 x 눌렀을때 모달 닫히도록
   const outerBoxRef = useRef(null);
   // 모달 닫는 함수

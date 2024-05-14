@@ -1,17 +1,37 @@
 'use client';
-import products from '@/productData';
 import { HeartIcon } from '@heroicons/react/24/outline';
-import { Dispatch, SetStateAction, useRef } from 'react';
+import axios from 'axios';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 interface ProductsProps {
   setDetailModalOpen: Dispatch<SetStateAction<boolean>>;
 }
+interface product {
+  id: number;
+  image: string;
+  title: string;
+  description: string;
+  price: number;
+}
 const Products = ({ setDetailModalOpen }: ProductsProps) => {
-  const wishIconRef = useRef<SVGSVGElement>(null);
+  const [products, setProducts] = useState<product[]>([]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:9090/api/v1/products');
+        console.log(response.data); // 받은 데이터를 로그로 출력
+        setProducts(response.data.items); // 받은 데이터의 items 배열을 상품 목록으로 설정
+      } catch (error) {
+        console.error('상품 불러오기 실패:', error);
+      }
+    };
+
+    fetchProducts(); // 컴포넌트가 마운트된 후에 상품 데이터를 가져오는 함수 호출
+  }, []);
+
   const handleOpenStyleModal = () => {
     setDetailModalOpen(true);
     document.body.style.overflow = 'hidden';
   };
-
 
   return (
     <>
