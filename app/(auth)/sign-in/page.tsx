@@ -3,6 +3,7 @@
 import authRequests from '@/api/authRequests';
 import AuthInput from '@/components/AuthInput';
 import CommonButton from '@/components/CommonButton';
+import useUserStore from '@/stores/userStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
 import Link from 'next/link';
@@ -21,7 +22,8 @@ const socialMedia = [
 
 const signIn = () => {
   const router = useRouter();
-
+  const setUser = useUserStore((state) => state.setUser)
+  const { user } = useUserStore();
   // 유효성 검증
   const signInFormSchema = z.object({
     // 이메일 형식 지정
@@ -51,7 +53,10 @@ const signIn = () => {
         email: data.email,
         password: data.password,
       });
+      // Cookies.set('ac', response.data.access);
+      // Cookies.set('rc', response.data.refresh);
       console.log(response, '로그인 성공');
+      setUser(response.data.user.nickname)
       router.push('/')
     } catch (error) {
       if ((error as AxiosError).response && (error as AxiosError).response?.status === 400) {
@@ -62,8 +67,9 @@ const signIn = () => {
         console.error('사용자 등록 오류:', error);
       }
     }
-    console.log(data);
   });
+
+  // console.log("유저 정보 ", user)
   return (
     <FormProvider {...form}>
       <div className="w-full  bg-mainBlack flex justify-center items-center flex-col">

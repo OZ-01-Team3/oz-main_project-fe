@@ -1,7 +1,7 @@
-import AuthInput from "@/components/AuthInput"
-import CommonButton from "@/components/CommonButton"
-import { UserCircleIcon } from "@heroicons/react/16/solid"
-
+'use client'
+import AuthInput from "@/components/AuthInput";
+import CommonButton from "@/components/CommonButton";
+import { UserCircleIcon } from "@heroicons/react/16/solid";
 
 const memberInfo = () => {
   return (
