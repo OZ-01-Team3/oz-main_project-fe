@@ -1,6 +1,7 @@
 'use client'
 import { CameraIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import { useRef, useState } from 'react';
+import CommonButton from '../CommonButton';
 
 interface ChatProps {
   sendMessage: (message: string, image?: string) => void;
@@ -59,12 +60,12 @@ const ChatInput = ({ sendMessage }: ChatProps) => {
           onChange={(e) => setInputMessage(e.target.value)}
           value={inputMessage}
         />
-        <button
+        <CommonButton
           className="w-10 h-10 bg-chatBg rounded-full flex justify-center items-center"
           onClick={handleSend}
         >
           <PaperAirplaneIcon className="w-7 h-7 cursor-pointer" />
-        </button>
+        </CommonButton>
       </div>
     </div>
   );

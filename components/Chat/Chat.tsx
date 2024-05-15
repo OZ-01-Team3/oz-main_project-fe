@@ -8,6 +8,7 @@ import Message from '@/type';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import CommonButton from '../CommonButton';
 import ChatAcceptModal from './ChatAcceptModal';
 import ChatBubble from './ChatBubble';
 import ChatInput from './ChatInput';
@@ -131,26 +132,26 @@ const Chat = ({ sendMessage, messages }: ChatProps) => {
                     </div>
                   ))}
                   <div>
-                    <div
+                    <CommonButton
                       className="bg-mainBlack text-mainWhite w-32 h-9 flex text-sm justify-center items-center mb-2 rounded-md p-1 sm:w-24 cursor-pointer "
                       onClick={() => setRentalModalOpen(true)}
                     >
                       대여 신청하기
-                    </div>
-                    <div
+                    </CommonButton>
+                    <CommonButton
                       className="bg-[#D3D3D3] text-subGray  w-32 h-9 flex text-sm justify-center items-center rounded-md p-1 sm:w-24 cursor-pointer 
               "
                       onClick={() => setAcceptModalOpen(true)}
                     >
                       수락하기
-                    </div>
+                    </CommonButton>
                   </div>
                 </div>
               </div>
               {/* 날짜 수평선 */}
               <div className="flex items-center justify-center space-x-2  ">
                 <div className="flex-1 border-b  border-hrGray"></div>
-                <div className="text-subGray text-[11px]  bg-mainWhite px-2">2024.05.09</div>
+                <div className="text-subGray text-[11px]  px-2">2024.05.09</div>
                 <div className="flex-1 border-b border-hrGray"></div>
               </div>
               {/* 채팅창 */}

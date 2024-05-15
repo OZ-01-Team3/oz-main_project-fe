@@ -17,6 +17,8 @@ const ProductResCss = 'w-16 h-16 aspect-[1/1] border-gray rounded-md border ';
 
 const ChatLIst = ({ chatId, user, content, time, profile, product, message }: ChatListProps) => {
   const [formattedTime, setFormattedTime] = useState(formatTime(time));
+  const [displayContent, setDisplayContent] = useState('');
+
   const setChatRoomId = useChatRoomStore((state) => state.setChatRoomId)
 
   const handleClickChatRoom = () => {
@@ -31,7 +33,10 @@ const ChatLIst = ({ chatId, user, content, time, profile, product, message }: Ch
     return () => clearInterval(interval);
   }, [time, formattedTime, setFormattedTime]);
 
-
+  // content가 변경될 때마다 displayContent 상태를 업데이트
+  useEffect(() => {
+    setDisplayContent(content.length > 30 ? `${content.substring(0, 30)}...` : content);
+  }, [content]);
 
   return (
     <>
@@ -50,7 +55,7 @@ const ChatLIst = ({ chatId, user, content, time, profile, product, message }: Ch
           </div>
 
           <p className="text-sm overflow-hidden h-10 md:h-8 sm:text-xs text-subGray">
-            {content.length > 30 ? `${content.substring(0, 30)}...` : content}
+            {displayContent}
           </p>
           <p className="text-[12px] text-subGray">{formattedTime}</p>
         </div>
