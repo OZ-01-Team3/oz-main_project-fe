@@ -12,7 +12,6 @@ export const handlers = [
       },
     });
   }),
-
   //로그인
   http.post('/api/v1/members/login', async ({ request }) => {
     const info = await request.json();
@@ -95,6 +94,129 @@ export const handlers = [
         },
       ],
     });
+  }),
+  //상품상세
+  http.get('/api/v1/products/:id', ({ params }) => {
+    const { id } = params;
+
+    // 가상의 제품 데이터베이스
+    const products = [
+      {
+        id: 1,
+        image: 'https://image.msscdn.net/images/goods_img/20240507/4108579/4108579_17151337802676_320.jpg',
+        title: '로라로라 장원영 가디건',
+        size: 'M',
+        price: '10,000',
+        brand: '로라로라',
+        date: '2024년 3월',
+        status: '사용감 적음',
+        statusDetail: '사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음',
+        style: ['#모던', '#페미닌', '#가디건'],
+        description:
+          '원영웅니가 입은 가디건입니다.2024년 1월에 구매했고 M사이즈입니다.소매 부분에 작은 얼룩이 있어요 원영웅니가 입은 가디건입니다.소매 부분에 작은 얼룩이 있어요',
+      },
+      {
+        id: 2,
+        image: 'https://image.msscdn.net/images/goods_img/20240117/3800972/3800972_17071843073582_500.jpg',
+        title: '로라로라 장원영 가디건 M사이즈2',
+        size: 'M',
+        brand: '로라로라',
+        date: '2024년 3월',
+        status: '사용감 적음',
+        statusDetail: '사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음',
+        style: ['#모던', '#페미닌', '#가디건'],
+        description:
+          '   원영웅니가 입은 가디건입니다.2024년 1월에 구매했고 M사이즈입니다.소매 부분에 작은 얼룩이 있어요 원영웅니가 입은 가디건입니다.소매 부분에 작은 얼룩이 있어요',
+      },
+      {
+        id: 3,
+        image: 'https://image.msscdn.net/images/goods_img/20240117/3800972/3800972_17071843073582_500.jpg',
+        title: '로라로라 장원영 가디건 M사이즈3',
+        size: 'M',
+        brand: '로라로라',
+        date: '2024년 3월',
+        status: '사용감 적음',
+        statusDetail: '사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음',
+        style: ['#모던', '#페미닌', '#가디건'],
+        description:
+          '   원영웅니가 입은 가디건입니다.2024년 1월에 구매했고 M사이즈입니다.소매 부분에 작은 얼룩이 있어요 원영웅니가 입은 가디건입니다.소매 부분에 작은 얼룩이 있어요',
+      },
+      {
+        id: 4,
+        image: 'https://image.msscdn.net/images/goods_img/20240117/3800972/3800972_17071843073582_500.jpg',
+        title: '로라로라 장원영 가디건 M사이즈4',
+        size: 'M',
+        brand: '로라로라',
+        date: '2024년 3월',
+        status: '사용감 적음',
+        statusDetail: '사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음',
+        style: ['#모던', '#페미닌', '#가디건'],
+        description:
+          '   원영웅니가 입은 가디건입니다.2024년 1월에 구매했고 M사이즈입니다.소매 부분에 작은 얼룩이 있어요 원영웅니가 입은 가디건입니다.소매 부분에 작은 얼룩이 있어요',
+      },
+      {
+        id: 5,
+        image: 'https://image.msscdn.net/images/goods_img/20240117/3800972/3800972_17071843073582_500.jpg',
+        title: '로라로라 장원영 가디건 M사이즈5',
+        size: 'M',
+        brand: '로라로라',
+        date: '2024년 3월',
+        status: '사용감 적음',
+        statusDetail: '사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음',
+        style: ['#모던', '#페미닌', '#가디건'],
+        description:
+          '   원영웅니가 입은 가디건입니다.2024년 1월에 구매했고 M사이즈입니다.소매 부분에 작은 얼룩이 있어요 원영웅니가 입은 가디건입니다.소매 부분에 작은 얼룩이 있어요',
+      },
+      {
+        id: 6,
+        image: 'https://image.msscdn.net/images/goods_img/20240117/3800972/3800972_17071843073582_500.jpg',
+        title: '로라로라 장원영 가디건 M사이즈6',
+        size: 'M',
+        brand: '로라로라',
+        date: '2024년 3월',
+        status: '사용감 적음',
+        statusDetail: '사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음',
+        style: ['#모던', '#페미닌', '#가디건'],
+        description:
+          '   원영웅니가 입은 가디건입니다.2024년 1월에 구매했고 M사이즈입니다.소매 부분에 작은 얼룩이 있어요 원영웅니가 입은 가디건입니다.소매 부분에 작은 얼룩이 있어요',
+      },
+      {
+        id: 7,
+        image: 'https://image.msscdn.net/images/goods_img/20240117/3800972/3800972_17071843073582_500.jpg',
+        title: '로라로라 장원영 가디건 M사이즈7',
+        size: 'M',
+        brand: '로라로라',
+        date: '2024년 3월',
+        status: '사용감 적음',
+        statusDetail: '사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음',
+        style: ['#모던', '#페미닌', '#가디건'],
+        description:
+          '   원영웅니가 입은 가디건입니다.2024년 1월에 구매했고 M사이즈입니다.소매 부분에 작은 얼룩이 있어요 원영웅니가 입은 가디건입니다.소매 부분에 작은 얼룩이 있어요',
+      },
+      {
+        id: 8,
+        image: 'https://image.msscdn.net/images/goods_img/20240117/3800972/3800972_17071843073582_500.jpg',
+        title: '로라로라 장원영 가디건 M사이즈8',
+        size: 'M',
+        brand: '로라로라',
+        date: '2024년 3월',
+        status: '사용감 적음',
+        statusDetail: '사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음',
+        style: ['#모던', '#페미닌', '#가디건'],
+        description:
+          '   원영웅니가 입은 가디건입니다.2024년 1월에 구매했고 M사이즈입니다.소매 부분에 작은 얼룩이 있어요 원영웅니가 입은 가디건입니다.소매 부분에 작은 얼룩이 있어요',
+      },
+    ];
+    // params로부터 받은 id에 해당하는 제품을 찾습니다.
+    const product = products.find(product => product.id === Number(id));
+
+    if (!product) {
+      // 제품을 찾지 못한 경우, 에러 메시지를 반환합니다.
+      return HttpResponse.json({ error: 'Product not found.' });
+    }
+
+    // 제품을 찾은 경우, 제품 정보를 반환합니다.
+    return HttpResponse.json(product);
   }),
 
   //주문 이력

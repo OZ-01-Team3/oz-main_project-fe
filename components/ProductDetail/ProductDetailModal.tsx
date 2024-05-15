@@ -1,18 +1,59 @@
 'use client';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Dispatch, SetStateAction, useRef } from 'react';
+import axios from 'axios';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import ModalStyleButton from './ModalStyleButton';
 import ProductDetailResponse from './ProductDetailResponse';
 import ProductDetailsDescription from './ProductDetailsDescription';
 
 interface PropsType {
   detailModalOpen: boolean;
+  selectedProductId: number;
   setDetailModalOpen: Dispatch<SetStateAction<boolean>>;
 }
+interface productsDetailsType {
+  id: number;
+  image: string;
+  title: string;
+  brand: string;
+  size: string;
+  date: string;
+  status: string;
+  style: string[];
+  description: string;
+  price: string;
+}
+
+const initialProductDetails: productsDetailsType = {
+  id: 0,
+  image: '',
+  title: '',
+  brand: '',
+  size: '',
+  date: '',
+  status: '',
+  style: [],
+  description: '',
+  price: '',
+};
+
 const style = ['#모던', '#페미닌', '#가디건'];
 
 // 상품클릭 시 나오는 모달
-const ProductDetailModal = ({ detailModalOpen, setDetailModalOpen }: PropsType) => {
+const ProductDetailModal = ({ detailModalOpen, setDetailModalOpen, selectedProductId }: PropsType) => {
+  const [productDetails, setProductDetails] = useState(initialProductDetails);
+  useEffect(() => {
+    fetchProductDetail(selectedProductId);
+  }, [selectedProductId]);
+  const fetchProductDetail = async (selectedProductId: number) => {
+    try {
+      const response = await axios.get(`http://localhost:9090/api/v1/products/${selectedProductId}`);
+      console.log(response.data);
+      setProductDetails(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   // 바깥이랑 x 눌렀을때 모달 닫히도록
   const outerBoxRef = useRef(null);
   // 모달 닫는 함수
@@ -58,7 +99,7 @@ const ProductDetailModal = ({ detailModalOpen, setDetailModalOpen }: PropsType) 
               </div>
             </div>
             {/* 상세 설명 영역 */}
-            <ProductDetailsDescription />
+            <ProductDetailsDescription productDetails={productDetails} />
           </div>
         </div>
       </>
