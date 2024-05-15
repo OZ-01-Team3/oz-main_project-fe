@@ -43,6 +43,8 @@ export const handlers = [
           title: '옷정리합니다',
           description: '가방 예뿌네잉',
           price: 43200,
+          views: 3,
+          created_at: '2024-05-13',
         },
         {
           id: 2,
@@ -50,6 +52,8 @@ export const handlers = [
           title: '대충 신발신발',
           description: '신발사세요 예뿌네잉',
           price: 43200,
+          views: 4,
+          created_at: '2024-05-15',
         },
         {
           id: 3,
@@ -57,6 +61,8 @@ export const handlers = [
           title: '대충 바지',
           description: '다리짧아보이는 바지',
           price: 43200,
+          views: 5,
+          created_at: '2024-05-16',
         },
         {
           id: 4,
@@ -64,6 +70,8 @@ export const handlers = [
           title: '대충 치마',
           description: '똥꼬치마',
           price: 43200,
+          views: 6,
+          created_at: '2024-05-13',
         },
         {
           id: 5,
@@ -71,6 +79,8 @@ export const handlers = [
           title: '세인트 피그먼트 반팔티',
           description: '안티티티티 프레즐먹고싶다',
           price: 43200,
+          views: 7,
+          created_at: '2024-05-13',
         },
         {
           id: 6,
@@ -78,6 +88,8 @@ export const handlers = [
           title: '옷정리합니다',
           description: '가방 예뿌네잉',
           price: 43200,
+          views: 8,
+          created_at: '2024-05-14',
         },
         {
           id: 7,
@@ -85,6 +97,8 @@ export const handlers = [
           title: '대충 신발신발',
           description: '신발사세요 예뿌네잉',
           price: 43200,
+          views: 9,
+          created_at: '2024-05-15',
         },
         {
           id: 8,
@@ -92,6 +106,8 @@ export const handlers = [
           title: '대충 바지',
           description: '다리짧아보이는 바지',
           price: 43200,
+          views: 10,
+          created_at: '2024-05-16',
         },
       ],
     });
