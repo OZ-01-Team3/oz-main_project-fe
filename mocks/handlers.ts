@@ -207,7 +207,6 @@ export const handlers = [
           '   원영웅니가 입은 가디건입니다.2024년 1월에 구매했고 M사이즈입니다.소매 부분에 작은 얼룩이 있어요 원영웅니가 입은 가디건입니다.소매 부분에 작은 얼룩이 있어요',
       },
     ];
-
     // params로부터 받은 id에 해당하는 제품을 찾습니다.
     const product = products.find(product => product.id === Number(id));
 

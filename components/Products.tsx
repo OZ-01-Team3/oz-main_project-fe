@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 interface ProductsProps {
   setDetailModalOpen: Dispatch<SetStateAction<boolean>>;
+  setSelectedProductId: Dispatch<SetStateAction<number>>;
 }
 interface product {
   id: number;
@@ -12,7 +13,7 @@ interface product {
   description: string;
   price: number;
 }
-const Products = ({ setDetailModalOpen }: ProductsProps) => {
+const Products = ({ setDetailModalOpen, setSelectedProductId }: ProductsProps) => {
   const [products, setProducts] = useState<product[]>([]);
   useEffect(() => {
     const fetchProducts = async () => {
@@ -28,21 +29,23 @@ const Products = ({ setDetailModalOpen }: ProductsProps) => {
     fetchProducts(); // 컴포넌트가 마운트된 후에 상품 데이터를 가져오는 함수 호출
   }, []);
 
-  const handleOpenStyleModal = () => {
+  const handleOpenStyleModal = (id: number) => {
     setDetailModalOpen(true);
     document.body.style.overflow = 'hidden';
+    setSelectedProductId(id);
   };
 
   return (
     <>
       {/* 8개 상품 컨테이너*/}
-      <div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-x-8 gap-y-12 w-full pb-10"
-        onClick={handleOpenStyleModal}
-      >
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-x-8 gap-y-12 w-full pb-10">
         {/* 각각의 상품 하나하나 */}
         {products.map(product => (
-          <div key={product.id} className="flex flex-col hover:cursor-pointer">
+          <div
+            key={product.id}
+            className="flex flex-col hover:cursor-pointer"
+            onClick={() => handleOpenStyleModal(product.id)}
+          >
             <img src={product.image} className="aspect-[3/3.5] relative mb-2" />
             <div className="flex justify-between">
               <p className="font-bold text-base">{product.title}</p>
