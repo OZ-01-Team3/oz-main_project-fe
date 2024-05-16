@@ -1,11 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -18,7 +14,7 @@ const config: Config = {
         gray: '#B6B6B6',
       },
       fontFamily: {
-        didot: ['var(--font-didot)'],
+        didot: ['didot'],
         pretendard: ['var(--font-pretendard)'],
       },
       width: {
