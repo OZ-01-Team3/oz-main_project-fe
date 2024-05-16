@@ -1,11 +1,9 @@
 
-import authRequests from '@/api/authRequests';
 import chatRequests from '@/api/chatRequests';
-
+import instance from '@/api/instance';
 import useChatRoomStore from '@/stores/chatRoomStore';
 import useUserStore from '@/stores/userStore';
 import Message from '@/type';
-import axios from 'axios';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import CommonButton from '../CommonButton';
 import ChatAcceptModal from './ChatAcceptModal';
@@ -25,23 +23,17 @@ const ChatComponent = ({ sendMessage, messages }: ChatProps) => {
   const [acceptModalOpen, setAcceptModalOpen] = useState<boolean>(false);
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const setUser = useUserStore((state) => state.setUser)
   const { user } = useUserStore()
   // const ac = Cookies.get('ac')
   const { chatRoomId } = useChatRoomStore()
 
   useEffect(() => {
     fetchChatMessages()
-    fetchUserData()
   }, [chatRoomId])
 
   const fetchChatMessages = async () => {
     try {
-      const response = await axios.get(process.env.NEXT_PUBLIC_BASE_REQUEST_URL + chatRequests.chat + `${chatRoomId}/`, {
-        headers: {
-          Authorization: `Bearer ${ac}`,
-        },
-      });
+      const response = await instance.get(chatRequests.chat + `${chatRoomId}/`);
       setChatMessages(response.data.messages);
       console.log("채팅 메시지:", response.data.messages);
     } catch (error) {
@@ -49,19 +41,15 @@ const ChatComponent = ({ sendMessage, messages }: ChatProps) => {
     }
   }
 
-  const fetchUserData = async () => {
-    try {
-      const response = await axios.get(process.env.NEXT_PUBLIC_BASE_REQUEST_URL + authRequests.userInfo, {
-        headers: {
-          Authorization: `Bearer ${ac}`,
-        },
-      })
-      setUser(response.data)
-      console.log("chatBubble에서 불러오는 회원정보", response)
-    } catch (error) {
-      console.error('회원정보 불러오기 에러', error)
-    }
-  }
+  // const fetchUserData = async () => {
+  //   try {
+  //     const response = await instance.get(authRequests.userInfo)
+  //     setUser(response.data)
+  //     console.log("chatBubble에서 불러오는 회원정보", response)
+  //   } catch (error) {
+  //     console.error('회원정보 불러오기 에러', error)
+  //   }
+  // }
 
   console.log("실시간 채팅", messages)
 
@@ -113,14 +101,14 @@ const ChatComponent = ({ sendMessage, messages }: ChatProps) => {
                 </div>
                 <div className="flex justify-between items-center">
                   {/* 상품정보 */}
-                  {productsDetails.map(item => (
-                    <div className="flex flex-row justify-left items-center h-16 my-3" key={item.id}>
-                      {/* 상품이미지 */}
-                      <div className=" h-20 w-20 border-mainBlack flex justify-center items-center overflow-hidden">
+                  {/* {productsDetails.map(item => (
+                    <div className="flex flex-row justify-left items-center h-16 my-3" key={item.id}> */}
+                  {/* 상품이미지 */}
+                  {/* <div className=" h-20 w-20 border-mainBlack flex justify-center items-center overflow-hidden">
                         <img src={item.image} alt="상품이미지 " className="object-cover w-20 " />
-                      </div>
-                      {/* 상품상세정보 */}
-                      <div className="flex flex-col justify-center w-1/3 ml-3 h-14 sm:w-full md:w-full">
+                      </div> */}
+                  {/* 상품상세정보 */}
+                  {/* <div className="flex flex-col justify-center w-1/3 ml-3 h-14 sm:w-full md:w-full">
                         <p className="text-sm font-semibold">{item.title}</p>
 
                         <p className=" text-xs font-base text-subGray">
@@ -129,7 +117,7 @@ const ChatComponent = ({ sendMessage, messages }: ChatProps) => {
                         <p className="text-sm">대여비 {item.price}</p>
                       </div>
                     </div>
-                  ))}
+                  ))} */}
                   <div>
                     <CommonButton
                       className="bg-mainBlack text-mainWhite w-32 h-9 flex text-sm justify-center items-center mb-2 rounded-md p-1 sm:w-24 cursor-pointer "

@@ -21,7 +21,6 @@ const socialMedia = [
 const SignIn = () => {
   const navigate = useNavigate();
   const setUser = useUserStore((state) => state.setUser)
-  const { user } = useUserStore();
   // 유효성 검증
   const signInFormSchema = z.object({
     // 이메일 형식 지정

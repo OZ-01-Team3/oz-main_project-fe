@@ -1,7 +1,7 @@
 
 import chatRequests from "@/api/chatRequests";
-import axios from "axios";
 // import Cookies from 'js-cookie';
+import instance from "@/api/instance";
 import { useEffect, useState } from "react";
 import ChatLIst from './ChatLIst';
 
@@ -30,11 +30,7 @@ const ChatLists = () => {
   useEffect(() => {
     const fetchChatListData = async () => {
       try {
-        const response = await axios.get<ChatInfo[]>(process.env.NEXT_PUBLIC_BASE_REQUEST_URL + chatRequests.chat, {
-          headers: {
-            Authorization: `Bearer ${ac}`,
-          },
-        })
+        const response = await instance.get<ChatInfo[]>(chatRequests.chat)
         console.log("채팅방 리스트", response.data)
         setChatList(response.data)
       } catch (error) {

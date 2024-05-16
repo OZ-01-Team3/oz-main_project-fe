@@ -14,15 +14,15 @@ const cookies = new Cookies();
 
 const tokenRefresh = async () => {
   try {
-    const refreshToken = cookies.get('refreshToken');
+    const refreshToken = cookies.get('rc');
 
     const response = await axios.post(VITE_BASE_REQUEST_URL + authRequests.refresh, {
-      // headers: {
-      //   Authorization: `Bearer ${refreshToken}`,
-      //   "Content-Type": "application/json",
-      // },
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+        'Content-Type': 'application/json',
+      },
 
-      refresh: refreshToken,
+      rc: refreshToken,
     });
     // console.log("확잉용", response);
     cookies.set('accessToken', response.data.access);
