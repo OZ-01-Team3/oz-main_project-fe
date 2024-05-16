@@ -2,7 +2,6 @@ import { useModalOpenStore, useProductIdStore } from '@/stores/modalStore';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-
 interface product {
   id: number;
   image: string;
@@ -32,13 +31,13 @@ const Products = () => {
         console.error('상품 불러오기 실패:', error);
       }
     };
-
     fetchProducts(); // 컴포넌트가 마운트된 후에 상품 데이터를 가져오는 함수 호출
   }, []);
 
   const handleOpenModal = (id: number) => {
     setDetailModalOpen(true);
     setSelectedProductId(id);
+    history.pushState({}, '', `/product/${id}`);
   };
 
   return (

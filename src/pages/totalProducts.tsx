@@ -27,10 +27,10 @@ const TotalProducts = () => {
           ))}
         </select>
         <h1 className="text-4xl mb-20 font-didot text-center">ALL</h1>
-        <Products setDetailModalOpen={setDetailModalOpen} />
+        <Products />
         <EventBanner />
-        <Products setDetailModalOpen={setDetailModalOpen} />
-        <Products setDetailModalOpen={setDetailModalOpen} />
+        <Products />
+        <Products />
         {/* 페이지네이션 */}
         <PageNation />
       </div>
