@@ -1,16 +1,11 @@
-
+import { useModalOpenStore, useProductIdStore } from '@/stores/modalStore';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ModalStyleButton from './ModalStyleButton';
 import ProductDetailResponse from './ProductDetailResponse';
 import ProductDetailsDescription from './ProductDetailsDescription';
 
-interface PropsType {
-  detailModalOpen: boolean;
-  selectedProductId: number;
-  setDetailModalOpen: Dispatch<SetStateAction<boolean>>;
-}
 interface productsDetailsType {
   id: number;
   image: string;
@@ -40,11 +35,15 @@ const initialProductDetails: productsDetailsType = {
 const style = ['#모던', '#페미닌', '#가디건'];
 
 // 상품클릭 시 나오는 모달
-const ProductDetailModal = ({ detailModalOpen, setDetailModalOpen, selectedProductId }: PropsType) => {
+const ProductDetailModal = () => {
+  const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
+  const { selectedProductId } = useProductIdStore();
   const [productDetails, setProductDetails] = useState(initialProductDetails);
+
   useEffect(() => {
     fetchProductDetail(selectedProductId);
   }, [selectedProductId]);
+
   const fetchProductDetail = async (selectedProductId: number) => {
     try {
       const response = await axios.get(`/api/v1/products/${selectedProductId}`);
@@ -54,6 +53,7 @@ const ProductDetailModal = ({ detailModalOpen, setDetailModalOpen, selectedProdu
       console.log(error);
     }
   };
+
   // 바깥이랑 x 눌렀을때 모달 닫히도록
   const outerBoxRef = useRef(null);
   // 모달 닫는 함수
@@ -72,7 +72,7 @@ const ProductDetailModal = ({ detailModalOpen, setDetailModalOpen, selectedProdu
             }
           }}
         >
-          <ProductDetailResponse setDetailModalOpen={setDetailModalOpen} />
+          <ProductDetailResponse />
           {/* 모달 컨텐츠 */}
           <div className="flex flex-row justify-center pl-10 pr-10 bg-mainWhite h-[565.5px] w-[950px] lg:w-[730px] md:w-[620px] sm:w-full sm:h-full sm:flex-col pt-10 pb-5 rounded-lg relative lg:h-[500px] md:h-[400px] sm:overflow-y-scroll sm:justify-start sm:items-center sm:hidden md:hidden">
             {/* 닫기 버튼 */}

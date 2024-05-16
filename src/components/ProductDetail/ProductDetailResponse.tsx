@@ -1,11 +1,9 @@
+import { useModalOpenStore } from '@/stores/modalStore';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Dispatch, SetStateAction } from 'react';
 import ProductDetailResDescription from './ProductDetailResDescription';
 
-interface PropsType {
-  setDetailModalOpen: Dispatch<SetStateAction<boolean>>;
-}
-const ProductDetailResponse = ({ setDetailModalOpen }: PropsType) => {
+const ProductDetailResponse = () => {
+  const { setDetailModalOpen } = useModalOpenStore();
   const handleCloseModal = () => {
     setDetailModalOpen(false);
   };

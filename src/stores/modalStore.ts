@@ -11,7 +11,7 @@ export const useProductIdStore = create<ProductId>(set => ({
   setSelectedProductId: id => set({ selectedProductId: id }),
 }));
 
-// 모달 열고닫는 함수
+// 모달 열고닫는 상태
 // const [detailModalOpen, setDetailModalOpen] = useState(false);
 interface ModalOpenStore {
   detailModalOpen: boolean;
