@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 
-
+const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const SignUp = () => {
   const navigate = useNavigate()
 
@@ -66,7 +66,7 @@ const SignUp = () => {
   const handleSendAuthCode = async () => {
     const email = getValues('email'); // 폼에서 이메일 값 가져오기
     try {
-      const response = await axios.post(process.env.NEXT_PUBLIC_BASE_REQUEST_URL + authRequests.send_code, {
+      const response = await axios.post(VITE_BASE_REQUEST_URL + authRequests.send_code, {
         email,
       });
       console.log(response, '인증번호 전송 성공');
@@ -101,7 +101,7 @@ const SignUp = () => {
     const email = getValues('email');
     const code = getValues('code');
     try {
-      const response = await axios.post(process.env.NEXT_PUBLIC_BASE_REQUEST_URL + authRequests.verify_email, {
+      const response = await axios.post(VITE_BASE_REQUEST_URL + authRequests.verify_email, {
         email,
         code,
       });
@@ -123,7 +123,7 @@ const SignUp = () => {
   const handleClickSignUp = form.handleSubmit(async data => {
     // mock으로 한거라 나중에 수정해야함
     try {
-      const response = await axios.post(process.env.NEXT_PUBLIC_BASE_REQUEST_URL + authRequests.signUp, {
+      const response = await axios.post(VITE_BASE_REQUEST_URL + authRequests.signUp, {
         email: data.email,
         password1: data.password,
         password2: data.confirmPassword,
