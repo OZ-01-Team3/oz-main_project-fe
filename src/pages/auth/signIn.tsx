@@ -9,7 +9,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
-
+const { VITE_BASE_REQUEST_URL } = import.meta.env;
 
 // 소셜미디어 로그인 버튼
 const socialMedia = [
@@ -47,7 +47,7 @@ const SignIn = () => {
   //Sign In 버튼 눌렀을 때 api 호출하는 함수
   const handleClickSignIn = form.handleSubmit(async data => {
     try {
-      const response = await axios.post(process.env.NEXT_PUBLIC_BASE_REQUEST_URL + authRequests.login, {
+      const response = await axios.post(VITE_BASE_REQUEST_URL + authRequests.login, {
         email: data.email,
         password: data.password,
       });
@@ -88,7 +88,7 @@ const SignIn = () => {
         </div>
         <div className="mt-6 font-light">
           아직 회원이 아니신가요?
-          <Link to="sign-up">
+          <Link to="/sign-up">
             <button type="button" className="font-semibold ml-2">
               Sign in
             </button>
