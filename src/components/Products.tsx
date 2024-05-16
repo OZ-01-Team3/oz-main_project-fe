@@ -2,6 +2,7 @@ import { useModalOpenStore, useProductIdStore } from '@/stores/modalStore';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+
 interface product {
   id: number;
   image: string;
@@ -9,6 +10,17 @@ interface product {
   description: string;
   price: number;
 }
+const Products = () => {
+  const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
+  useEffect(() => {
+    if (detailModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [detailModalOpen]);
+
+  const { setSelectedProductId } = useProductIdStore();
 const Products = () => {
   const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
   useEffect(() => {
