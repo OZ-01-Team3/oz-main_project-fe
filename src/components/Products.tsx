@@ -2,7 +2,6 @@ import { useModalOpenStore, useProductIdStore } from '@/stores/modalStore';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-
 interface product {
   id: number;
   image: string;
