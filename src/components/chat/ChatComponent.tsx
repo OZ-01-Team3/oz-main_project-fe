@@ -2,7 +2,8 @@
 import { UserContext, UserType } from '@/App';
 import chatRequests from '@/api/chatRequests';
 import instance from '@/api/instance';
-import useChatRoomStore from '@/stores/chatRoomStore';
+import useChatRoomStore from '@/stores/useChatRoomStore';
+import useMessageStore from '@/stores/useMessageStore';
 import Message from '@/type';
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 import CommonButton from '../CommonButton';
@@ -17,14 +18,14 @@ interface ChatProps {
   setMessages: Dispatch<SetStateAction<Message[]>>;
 }
 
-const ChatComponent = ({ sendMessage, messages }: ChatProps) => {
+const ChatComponent = ({ sendMessage }: ChatProps) => {
   const [rentalModalOpen, setRentalModalOpen] = useState<boolean>(false);
   const [acceptModalOpen, setAcceptModalOpen] = useState<boolean>(false);
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const { userData } = useContext<UserType>(UserContext)
   const { chatRoomId } = useChatRoomStore()
-
+  const messages = useMessageStore((state => state.messages))
   useEffect(() => {
     fetchChatMessages()
   }, [chatRoomId])
@@ -33,7 +34,7 @@ const ChatComponent = ({ sendMessage, messages }: ChatProps) => {
     try {
       const response = await instance.get(chatRequests.chat + `${chatRoomId}/`);
       setChatMessages(response.data.messages);
-      console.log("채팅 메시지:", response.data.messages);
+      // console.log("채팅 메시지:", response.data.messages);
     } catch (error) {
       console.error('채팅 메시지 불러오기 에러', error);
     }
