@@ -39,6 +39,7 @@ const ChatLists = () => {
     }
     fetchChatListData()
   }, [])
+
   return (
     <>
       {chatList.map((data) => (

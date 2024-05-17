@@ -1,3 +1,4 @@
+
 import { useModalOpenStore } from '@/stores/modalStore';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { ModalPortal } from '../ModalPortal';
@@ -5,10 +6,12 @@ import ProductDetailResDescription from './ProductDetailResDescription';
 
 const ProductDetailResponse = () => {
   const { setDetailModalOpen } = useModalOpenStore();
+
   const handleCloseModal = () => {
     setDetailModalOpen(false);
   };
   return (
+
     <ModalPortal>
       <div className="w-full  flex flex-col overflow-y-scroll justify-center items-center h-screen  lg:hidden xl:hidden">
         {/* 헤더 */}
@@ -26,6 +29,7 @@ const ProductDetailResponse = () => {
         <button className="bg-mainBlack w-full text-mainWhite p-3  ">1:1 채팅</button>
       </div>
     </ModalPortal>
+
   );
 };
 

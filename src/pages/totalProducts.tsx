@@ -3,7 +3,7 @@ import Banner from '@/components/Banner';
 import EventBanner from '@/components/EventBanner';
 import Footer from '@/components/Footer';
 import PageNation from '@/components/PageNation';
-import ProductDetailModal from '@/components/ProductDetail/ProductDetailModal';
+import ProductDetailModal from '@/components/productDetail/ProductDetailModal';
 import Products from '@/components/Products';
 const category = ['전체', '아우터', '상의', '하의', '잡화', '신발'];
 const sort = ['전체', '대여많은순', '최신순', '가격낮은순', '가격높은순'];

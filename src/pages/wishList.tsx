@@ -1,6 +1,6 @@
 'use client';
 import Footer from '@/components/Footer';
-import ProductDetailModal from '@/components/ProductDetail/ProductDetailModal';
+import ProductDetailModal from '@/components/productDetail/ProductDetailModal';
 import Products from '@/components/Products';
 
 const WishList = () => {

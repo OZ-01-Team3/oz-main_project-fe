@@ -1,12 +1,21 @@
+
 import { useModalOpenStore, useProductIdStore } from '@/stores/modalStore';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ModalPortal } from '../ModalPortal';
+
 import ModalStyleButton from './ModalStyleButton';
 import ProductDetailResponse from './ProductDetailResponse';
 import ProductDetailsDescription from './ProductDetailsDescription';
+
+
+interface PropsType {
+  detailModalOpen: boolean;
+  selectedProductId: number;
+  setDetailModalOpen: Dispatch<SetStateAction<boolean>>;
+}
 
 interface productsDetailsType {
   id: number;
@@ -51,6 +60,7 @@ const ProductDetailModal = () => {
   }, [selectedProductId]);
 
   // fetchProductDetail id에 맞는 정보 불러오기
+
   const fetchProductDetail = async (selectedProductId: number) => {
     try {
       const response = await axios.get(`/api/v1/products/${selectedProductId}`);
@@ -60,6 +70,7 @@ const ProductDetailModal = () => {
       console.log(error);
     }
   };
+
   //  현재 경로에 따라서 all 이면 all 로 돌아오고 메인이면 메인으로 돌아가도록
   useEffect(() => {
     if (!willSelectedProductId) {
@@ -72,11 +83,13 @@ const ProductDetailModal = () => {
       }
     }
   }, [productId, willSelectedProductId, navigate, currentPath]);
+
   // 바깥이랑 x 눌렀을때 모달 닫히도록
   const outerBoxRef = useRef(null);
   // 모달 닫는 함수
   const handleCloseModal = () => {
     setDetailModalOpen(false);
+
     history.back();
   };
   return (
@@ -125,6 +138,7 @@ const ProductDetailModal = () => {
         )}
       </ModalPortal>
     </>
+
   );
 };
 

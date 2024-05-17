@@ -7,6 +7,7 @@ function SearchWord({ children }: PropsWithChildren) {
     className="ml-1 w-4 h-4 text-mainWhite cursor-pointer"
   />
 </button>;
+
 }
 
 export default SearchWord;

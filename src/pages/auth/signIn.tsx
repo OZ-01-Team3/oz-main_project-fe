@@ -1,15 +1,15 @@
 
-import authRequests from '@/api/authRequests';
+import { loginAPI } from '@/api/authRequests';
 import AuthInput from '@/components/AuthInput';
 import CommonButton from '@/components/CommonButton';
 import useUserStore from '@/stores/userStore';
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { z } from 'zod';
+import { z as zod } from 'zod';
 
-const { VITE_BASE_REQUEST_URL } = import.meta.env;
+
 
 // 소셜미디어 로그인 버튼
 const socialMedia = [
@@ -22,10 +22,10 @@ const SignIn = () => {
   const navigate = useNavigate();
   const setUser = useUserStore((state) => state.setUser)
   // 유효성 검증
-  const signInFormSchema = z.object({
+  const signInFormSchema = zod.object({
     // 이메일 형식 지정
-    email: z.string().email({ message: '이메일 형식이 아닙니다.' }),
-    password: z.string().min(1, { message: '비밀번호를 입력해주세요.' })
+    email: zod.string().email({ message: '이메일 형식이 아닙니다.' }),
+    password: zod.string().min(1, { message: '비밀번호를 입력해주세요.' })
   });
 
   //로그인 폼 상태 관리
@@ -43,20 +43,22 @@ const SignIn = () => {
     setError
   } = form;
 
+
+
   //Sign In 버튼 눌렀을 때 api 호출하는 함수
   const handleClickSignIn = form.handleSubmit(async data => {
     try {
-      const response = await axios.post(VITE_BASE_REQUEST_URL + authRequests.login, {
-        email: data.email,
-        password: data.password,
-      });
+      const response = await loginAPI(
+        data.email,
+        data.password,
+      );
       // Cookies.set('ac', response.data.access);
       // Cookies.set('rc', response.data.refresh);
       console.log(response, '로그인 성공');
       setUser(response.data.user.nickname)
-      navigate('/')
+      navigate('/', { replace: true })
     } catch (error) {
-      if ((error as AxiosError).response && (error as AxiosError).response?.status === 400) {
+      if ((error as AxiosError)?.response?.status === 400) {
         console.error('이메일 또는 비밀번호가 잘못되었습니다.', (error as AxiosError).response?.data);
         setError('email', { type: 'custom', message: '이메일 또는 비밀번호가 잘못되었습니다.' });
         setError('password', { type: 'custom', message: '이메일 또는 비밀번호가 잘못되었습니다.' });
