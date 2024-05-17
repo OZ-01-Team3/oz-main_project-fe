@@ -84,21 +84,24 @@ const Layout = () => {
 /** 로그인 한 유저만 접근 가능한 라우트*/
 const loggedRoutes = [
   <>
-    <Route path='/wish-list' element={<WishList />} />
-    <Route path="/mypage/*" element={
-      <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 md:px-6 flex mt-20">
-        <SideBar />
-        <Outlet />
-      </div>
-    }>
-      <Route path="member-info" element={<MemberInfo />} />
-      <Route path="sales-history" element={<SalesHistory />} />
-      <Route path="order-history" element={<OrderHistory />} />
-    </Route>
+    <Route element={<Layout />}>
+      <Route path='/wish-list' element={<WishList />} />
+      <Route path="/mypage/*" element={
+        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 md:px-6 flex mt-20">
+          <SideBar />
+          <Outlet />
+        </div>
+      }>
+        <Route path="member-info" element={<MemberInfo />} />
+        <Route path="sales-history" element={<SalesHistory />} />
+        <Route path="order-history" element={<OrderHistory />} />
+      </Route>
 
-    <Route path='/img-reg' element={<ImgReg />} />
-    <Route path='/chat' element={<Chat />} />
-    <Route path='/product-reg' element={<ProductReg />} />
+      <Route path='/img-reg' element={<ImgReg />} />
+      <Route path='/chat' element={<Chat />} />
+      <Route path='/product-reg' element={<ProductReg />} />
+
+    </Route>
   </>
 
 ]
@@ -150,7 +153,7 @@ function App() {
     queryFn: async () => {
       try {
         const response = await instance.get<GetMemberResponseType>(authRequests.userInfo)
-        console.log("전역 회원정보", response.data)
+        // console.log("전역 회원정보", response.data)
         return response.data
       } catch (error) {
         console.error("전역 유저정보 불러오기 에러", error)
