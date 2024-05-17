@@ -46,7 +46,7 @@ input[type='number'] {
 
 @font-face {
   font-family: 'Didot';
-  src: url('../public/fonts/Didot.otf');
+  src: url('/fonts/Didot.otf');
   display: 'swap';
 }
 @layer components {
