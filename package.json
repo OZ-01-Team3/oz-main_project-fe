@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "format": "prettier --check --ignore-path .gitignore .",
     "format:fix": "prettier --write --ignore-path .gitignore .",
-    "svgr": "npx @svgr/cli -d src/assets/svg --ignore-existing --typescript --no-dimensions public/svg"
+    "svgr": "npx @svgr/cli -d src/assets/svg --ignore-existing --typescript --no-dimensions public/svg",
+    "dev": "vite"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.19",

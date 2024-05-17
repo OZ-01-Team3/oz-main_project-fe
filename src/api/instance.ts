@@ -22,7 +22,9 @@ const tokenRefresh = async () => {
         'Content-Type': 'application/json',
       },
 
-      // rc: refreshToken,
+
+      rc: refreshToken,
+
     });
     // console.log("확잉용", response);
     cookies.set('accessToken', response.data.access);

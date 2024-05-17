@@ -1,6 +1,6 @@
-import { Outlet, Route, Routes } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
-import "react-toastify/dist/ReactToastify.css"
+import { Outlet, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { useQuery } from '@tanstack/react-query'
 import authRequests from './api/authRequests'
@@ -85,12 +85,10 @@ function App() {
     return <div>Error: {meError?.message}</div>;
 
 
-
-
   return (
     <>
       <ToastContainer
-        position='top-center'
+        position="top-center"
         autoClose={700}
         hideProgressBar
         newestOnTop={false}
@@ -99,29 +97,30 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme='colored'
+        theme="colored"
       />
       <Routes>
-        <Route path='/' element={<Layout />}>
+        <Route path="/" element={<Layout />}>
           <Route index element={<Main />} />
-          <Route path='/sign-in' element={<SignIn />} />
-          <Route path='/sign-up' element={<SignUp />} />
-          <Route path='/wish-list' element={<WishList />} />
-          <Route path='/mypage/member-info' element={<MemberInfo />} />
-          <Route path='/mypage/sales-history' element={<SalesHistory />} />
-          <Route path='/mypage/order-history' element={<OrderHistory />} />
-          <Route path='/mypage/order-history' element={<OrderHistory />} />
-          <Route path='/img-reg' element={<ImgReg />} />
-          <Route path='/chat' element={<Chat />} />
-          <Route path='/product-reg' element={<ProductReg />} />
-          <Route path='/search' element={<Search />} />
-          <Route path='/all' element={<TotalProducts />} />
-          <Route path='/wish' element={<WishList />} />
-        </Route>
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/wish-list" element={<WishList />} />
+          <Route path="/mypage/member-info" element={<MemberInfo />} />
+          <Route path="/mypage/sales-history" element={<SalesHistory />} />
+          <Route path="/mypage/order-history" element={<OrderHistory />} />
+          <Route path="/mypage/order-history" element={<OrderHistory />} />
+          <Route path="/img-reg" element={<ImgReg />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/product-reg" element={<ProductReg />} />
+          <Route path="/product/:productId" element={<ProductDetailModal />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/all" element={<TotalProducts />} />
+          <Route path="/wish" element={<WishList />} />
 
+        </Route>
       </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
