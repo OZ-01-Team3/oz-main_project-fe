@@ -2,6 +2,7 @@ import { useModalOpenStore, useProductIdStore } from '@/stores/modalStore';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ModalPortal } from '../ModalPortal';
 import ModalStyleButton from './ModalStyleButton';
 import ProductDetailResponse from './ProductDetailResponse';
@@ -37,15 +38,19 @@ const style = ['#모던', '#페미닌', '#가디건'];
 
 // 상품클릭 시 나오는 모달
 const ProductDetailModal = () => {
+  const { productId } = useParams(); // url에서 productId받아오기
+  const navigate = useNavigate();
+  const currentPath = location.pathname; // 현재 URL 경로를 가져오기
   const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
-  const { selectedProductId } = useProductIdStore();
-
+  const { selectedProductId, setWillSelectedProductId, willSelectedProductId } = useProductIdStore();
   const [productDetails, setProductDetails] = useState(initialProductDetails);
 
+  // selectedProductI 바뀔때마다 fetchProductDetail 바꿔주기
   useEffect(() => {
     fetchProductDetail(selectedProductId);
   }, [selectedProductId]);
 
+  // fetchProductDetail id에 맞는 정보 불러오기
   const fetchProductDetail = async (selectedProductId: number) => {
     try {
       const response = await axios.get(`/api/v1/products/${selectedProductId}`);
@@ -55,7 +60,18 @@ const ProductDetailModal = () => {
       console.log(error);
     }
   };
+  //  현재 경로에 따라서 all 이면 all 로 돌아오고 메인이면 메인으로 돌아가도록
+  useEffect(() => {
+    if (!willSelectedProductId) {
+      setWillSelectedProductId(Number(productId));
 
+      if (currentPath === '/all') {
+        navigate('/all', { replace: true });
+      } else if (currentPath === '/') {
+        navigate('/', { replace: true });
+      }
+    }
+  }, [productId, willSelectedProductId, navigate, currentPath]);
   // 바깥이랑 x 눌렀을때 모달 닫히도록
   const outerBoxRef = useRef(null);
   // 모달 닫는 함수
@@ -64,9 +80,9 @@ const ProductDetailModal = () => {
     history.back();
   };
   return (
-    detailModalOpen && (
-      <>
-        <ModalPortal>
+    <>
+      <ModalPortal>
+        {detailModalOpen && (
           <div
             className="flex w-full h-screen fixed inset-0 z-50 bg-modalBg justify-center items-center"
             ref={outerBoxRef}
@@ -106,9 +122,9 @@ const ProductDetailModal = () => {
               <ProductDetailsDescription productDetails={productDetails} />
             </div>
           </div>
-        </ModalPortal>
-      </>
-    )
+        )}
+      </ModalPortal>
+    </>
   );
 };
 

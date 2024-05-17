@@ -4,8 +4,19 @@ import Footer from '@/components/Footer';
 import ProductDetailModal from '@/components/ProductDetail/ProductDetailModal';
 import Products from '@/components/Products';
 import StyleModal from '@/components/StyleModal';
+import { useProductIdStore } from '@/stores/modalStore';
+import { useEffect } from 'react';
 
 const Main = () => {
+  const { willSelectedProductId, setSelectedProductId, setWillSelectedProductId } = useProductIdStore();
+
+  useEffect(() => {
+    if (willSelectedProductId) {
+      setWillSelectedProductId(null);
+      setSelectedProductId(willSelectedProductId);
+      history.pushState({}, '', `/product/${willSelectedProductId}`);
+    }
+  }, []);
   return (
     <div>
       <ProductDetailModal />

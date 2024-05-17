@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import authRequests from './api/authRequests';
 import instance from './api/instance';
 import Header from './components/Header';
+import ProductDetailModal from './components/ProductDetail/ProductDetailModal';
 import SignIn from './pages/auth/signIn';
 import SignUp from './pages/auth/signUp';
 import Chat from './pages/chat';
@@ -19,24 +20,6 @@ import Search from './pages/search';
 import TotalProducts from './pages/totalProducts';
 import WishList from './pages/wishList';
 import useUserStore from './stores/userStore';
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-
 interface GetMemberResponseType {
   age: number;
   email: string;
@@ -57,28 +40,10 @@ const Layout = () => {
     </>
   );
 };
-  );
-};
 
 const loggedRoutes = [
   <Route path="/" element={<Layout />}>
-  <Route path="/" element={<Layout />}>
     <Route index element={<Main />} />
-    <Route path="/sign-in" element={<SignIn />} />
-    <Route path="/sign-up" element={<SignUp />} />
-    <Route path="/wish-list" element={<WishList />} />
-    <Route path="/mypage/member-info" element={<MemberInfo />} />
-    <Route path="/mypage/sales-history" element={<SalesHistory />} />
-    <Route path="/mypage/order-history" element={<OrderHistory />} />
-    <Route path="/mypage/order-history" element={<OrderHistory />} />
-    <Route path="/img-reg" element={<ImgReg />} />
-    <Route path="/chat" element={<Chat />} />
-    <Route path="/product-reg" element={<ProductReg />} />
-    <Route path="/search" element={<Search />} />
-    <Route path="/all" element={<TotalProducts />} />
-    <Route path="/wish" element={<WishList />} />
-  </Route>,
-];
     <Route path="/sign-in" element={<SignIn />} />
     <Route path="/sign-up" element={<SignUp />} />
     <Route path="/wish-list" element={<WishList />} />
@@ -97,16 +62,11 @@ const loggedRoutes = [
 
 function App() {
   const setUser = useUserStore(state => state.setUser);
-  const setUser = useUserStore(state => state.setUser);
 
   const {
-   
     data: meData,
-   
     isLoading: isMeLoading,
-   
     error: meError,
- ,
   } = useQuery({
     queryKey: ['me'],
     queryFn: async () => {
@@ -115,18 +75,14 @@ function App() {
         console.log('전역 회원정보', response.data);
         setUser(response.data);
         return response.data;
-        const response = await instance.get(authRequests.userInfo);
-        console.log('전역 회원정보', response.data);
-        setUser(response.data);
-        return response.data;
       } catch (error) {
         console.error('전역 유저정보 불러오기 에러', error);
         throw error;
-        console.error('전역 유저정보 불러오기 에러', error);
-        throw error;
       }
-    },,
-  });;
+    },
+  });
+
+  //스토어에 저장하지 말고 context로 저장해둘것,,~
   if (isMeLoading) return <div>Loading...</div>;
   if (
     meError &&
@@ -138,7 +94,6 @@ function App() {
     <>
       <ToastContainer
         position="top-center"
-        position="top-center"
         autoClose={700}
         hideProgressBar
         newestOnTop={false}
@@ -148,26 +103,10 @@ function App() {
         draggable
         pauseOnHover
         theme="colored"
-        theme="colored"
       />
       <Routes>
         <Route path="/" element={<Layout />}>
-        <Route path="/" element={<Layout />}>
           <Route index element={<Main />} />
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/wish-list" element={<WishList />} />
-          <Route path="/mypage/member-info" element={<MemberInfo />} />
-          <Route path="/mypage/sales-history" element={<SalesHistory />} />
-          <Route path="/mypage/order-history" element={<OrderHistory />} />
-          <Route path="/mypage/order-history" element={<OrderHistory />} />
-          <Route path="/img-reg" element={<ImgReg />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/product-reg" element={<ProductReg />} />
-          <Route path="/product/:productId" element={<ProductDetailModal />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/all" element={<TotalProducts />} />
-          <Route path="/wish" element={<WishList />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/wish-list" element={<WishList />} />
@@ -186,8 +125,6 @@ function App() {
       </Routes>
     </>
   );
-  );
 }
 
-export default App;
 export default App;

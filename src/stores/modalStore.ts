@@ -4,11 +4,15 @@ import { create } from 'zustand';
 // 상품 아이디 저장하는 상태
 interface ProductId {
   selectedProductId: number;
+  willSelectedProductId: number | null;
   setSelectedProductId: (id: number) => void;
+  setWillSelectedProductId: (id: number | null) => void;
 }
 export const useProductIdStore = create<ProductId>(set => ({
   selectedProductId: 0,
+  willSelectedProductId: 0,
   setSelectedProductId: id => set({ selectedProductId: id }),
+  setWillSelectedProductId: id => set({ willSelectedProductId: id }),
 }));
 
 // 모달 열고닫는 상태
