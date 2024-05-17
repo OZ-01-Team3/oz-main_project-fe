@@ -1,11 +1,7 @@
-
+import { useModalOpenStore, useProductIdStore } from '@/stores/modalStore';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-interface ProductsProps {
-  setDetailModalOpen: Dispatch<SetStateAction<boolean>>;
-  setSelectedProductId: Dispatch<SetStateAction<number>>;
-}
+import { useEffect, useState } from 'react';
 interface product {
   id: number;
   image: string;
@@ -13,7 +9,6 @@ interface product {
   description: string;
   price: number;
 }
-
 const Products = () => {
   const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
   useEffect(() => {
@@ -36,14 +31,13 @@ const Products = () => {
         console.error('상품 불러오기 실패:', error);
       }
     };
-
     fetchProducts(); // 컴포넌트가 마운트된 후에 상품 데이터를 가져오는 함수 호출
   }, []);
 
-  const handleOpenStyleModal = (id: number) => {
+  const handleOpenModal = (id: number) => {
     setDetailModalOpen(true);
-    document.body.style.overflow = 'hidden';
     setSelectedProductId(id);
+    history.pushState({}, '', `/product/${id}`);
   };
 
   return (
@@ -55,7 +49,7 @@ const Products = () => {
           <div
             key={product.id}
             className="flex flex-col hover:cursor-pointer"
-            onClick={() => handleOpenStyleModal(product.id)}
+            onClick={() => handleOpenModal(product.id)}
           >
             <img src={product.image} className="aspect-[3/3.5] relative mb-2" />
             <div className="flex justify-between">

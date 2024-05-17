@@ -5,15 +5,12 @@ import Footer from '@/components/Footer';
 import PageNation from '@/components/PageNation';
 import ProductDetailModal from '@/components/productDetail/ProductDetailModal';
 import Products from '@/components/Products';
-import { useState } from 'react';
 const category = ['전체', '아우터', '상의', '하의', '잡화', '신발'];
 const sort = ['전체', '대여많은순', '최신순', '가격낮은순', '가격높은순'];
 const TotalProducts = () => {
-  const [detailModalOpen, setDetailModalOpen] = useState(false);
-
   return (
     <>
-      <ProductDetailModal detailModalOpen={detailModalOpen} setDetailModalOpen={setDetailModalOpen} />
+      <ProductDetailModal />
       <Banner />
       {/* 페이지 레이아웃 */}
       <div className="pt-32 w-2/3 ml-auto mr-auto ">
@@ -30,10 +27,10 @@ const TotalProducts = () => {
           ))}
         </select>
         <h1 className="text-4xl mb-20 font-didot text-center">ALL</h1>
-        <Products setDetailModalOpen={setDetailModalOpen} />
+        <Products />
         <EventBanner />
-        <Products setDetailModalOpen={setDetailModalOpen} />
-        <Products setDetailModalOpen={setDetailModalOpen} />
+        <Products />
+        <Products />
         {/* 페이지네이션 */}
         <PageNation />
       </div>

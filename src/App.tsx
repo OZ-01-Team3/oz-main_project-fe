@@ -1,6 +1,6 @@
-import { Outlet, Route, Routes } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
-import "react-toastify/dist/ReactToastify.css"
+import { Outlet, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { useQuery } from '@tanstack/react-query'
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
@@ -176,14 +176,11 @@ function App() {
     return <div>Error: {meError?.message}</div>;
 
 
-
-
   return (
     <>
       <UserContext.Provider
         value={{ setUserData, userData: userData }}
       >
-
         <ToastContainer
           position='top-center'
           autoClose={700}
@@ -201,7 +198,7 @@ function App() {
         </Routes>
       </UserContext.Provider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

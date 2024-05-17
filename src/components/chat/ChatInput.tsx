@@ -23,7 +23,6 @@ const ChatInput = ({ sendMessage }: ChatProps) => {
     if (inputMessage.trim() !== "" || imageBase64) {
       sendMessage(inputMessage.trim(), imageBase64);
     }
-
     setInputMessage(""); // 메시지 전송 후 입력 필드 초기화
     if (fileInputRef.current) fileInputRef.current.value = ''; // 파일 입력 초기화
   }
