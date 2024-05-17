@@ -3,6 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const axiosClient = axios.create({
   baseURL: VITE_BASE_REQUEST_URL,
+  withCredentials: true,
 });
 
 interface SignUpType {
@@ -18,16 +19,16 @@ interface SignUpType {
 // }
 
 const authRequests = {
-  signUp: '/accounts/signup/', // 회원가입
-  login: '/accounts/login/', //로그인
-  logout: '/accounts/logout/', // 로그아웃
-  userInfo: '/accounts/user/', // 회원 정보조회, 수정, 일부수정
+  signUp: '/users/signup/', // 회원가입
+  login: '/users/login/', //로그인
+  logout: '/users/logout/', // 로그아웃
+  userInfo: '/users/detail/', // 회원 정보조회, 수정, 일부수정
   // 토큰
-  userLeave: '/accounts/token/verify/', //access token 유효성 검사
-  refresh: '/accounts/token/refresh', // access token 재발급
+  userLeave: '/users/token/verify/', //access token 유효성 검사
+  refresh: '/users/token/refresh', // access token 재발급
   // 이메일 전송
-  sendCode: '/accounts/send-code/', // 이메일 코드 전송
-  verifyEmail: '/accounts/confirm-email/', // 이메일 인증
+  sendCode: '/users/send-code/', // 이메일 코드 전송
+  verifyEmail: '/users/confirm-email/', // 이메일 인증
 };
 
 //로그인
