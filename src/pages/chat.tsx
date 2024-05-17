@@ -52,10 +52,14 @@ const Chat = () => {
 
   //메시지 전송 함수
   const sendMessage = (message: string, image: string) => {
+    if (!message.trim() && !image) {
+      // 텍스트와 이미지가 모두 없는 경우 메시지를 보내지 않음
+      return;
+    }
     if (webSocket.current) {
       webSocket.current.send(JSON.stringify({
-        "message": message,
-        "image": image
+        message,
+        image,
       }));
       console.log("메세지 전송함수", message, "사진", image);
     }

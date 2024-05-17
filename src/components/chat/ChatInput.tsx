@@ -12,15 +12,17 @@ const ChatInput = ({ sendMessage }: ChatProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSend = async () => {
+    let imageBase64 = "";
     if (fileInputRef.current?.files?.[0]) {
       const file = fileInputRef.current.files[0];
-      // 파일을 Base64로 인코딩
-      const imageBase64 = await convertFileToBase64(file);
-      sendMessage(inputMessage, imageBase64); // 이미지 데이터도 함께 전송
+      imageBase64 = await convertFileToBase64(file);
     }
-    else {
-      sendMessage(inputMessage);
+
+    // 텍스트 메시지가 비어있지 않거나 이미지가 있는 경우에만 메시지 전송
+    if (inputMessage.trim() !== "" || imageBase64) {
+      sendMessage(inputMessage.trim(), imageBase64);
     }
+
     setInputMessage(""); // 메시지 전송 후 입력 필드 초기화
     if (fileInputRef.current) fileInputRef.current.value = ''; // 파일 입력 초기화
   }
