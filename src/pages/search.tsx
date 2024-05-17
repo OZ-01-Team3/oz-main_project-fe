@@ -1,6 +1,6 @@
 'use client';
-import History from '@/components/Search/History';
-import SearchBar from '@/components/Search/SearchBar';
+import History from '@/components/search/History';
+import SearchBar from '@/components/search/SearchBar';
 
 const Search = () => {
   return (

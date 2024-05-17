@@ -1,6 +1,6 @@
 
-import ChatComponent from '@/components/Chat/ChatComponent';
-import ChatLists from '@/components/Chat/ChatLists';
+import ChatComponent from '@/components/chat/ChatComponent';
+import ChatLists from '@/components/chat/ChatLists';
 import useChatRoomStore from '@/stores/chatRoomStore';
 import Message from '@/type';
 import { useEffect, useRef, useState } from 'react';

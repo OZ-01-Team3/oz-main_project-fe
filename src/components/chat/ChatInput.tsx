@@ -17,7 +17,8 @@ const ChatInput = ({ sendMessage }: ChatProps) => {
       // 파일을 Base64로 인코딩
       const imageBase64 = await convertFileToBase64(file);
       sendMessage(inputMessage, imageBase64); // 이미지 데이터도 함께 전송
-    } else {
+    }
+    else {
       sendMessage(inputMessage);
     }
     setInputMessage(""); // 메시지 전송 후 입력 필드 초기화

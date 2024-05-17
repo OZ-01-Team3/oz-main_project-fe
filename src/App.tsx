@@ -11,7 +11,7 @@ import SignUp from './pages/auth/signUp'
 import Chat from './pages/chat'
 import ImgReg from './pages/imgReg'
 import Main from './pages/main'
-import MemberInfo from './pages/mypage/\bmemberInfo'
+import MemberInfo from './pages/mypage/memberInfo'
 import OrderHistory from './pages/mypage/orderHistory'
 import SalesHistory from './pages/mypage/salesHistory'
 import ProductReg from './pages/productReg'
@@ -78,6 +78,8 @@ function App() {
       }
     }
   })
+
+  //스토어에 저장하지 말고 context로 저장해둘것,,~
   if (isMeLoading) return <div>Loading...</div>;
   if (meError && !["/", "/sign-in", "/sign-up", "/all", "/search", "/oauth2/redirect"].includes(window.location.pathname))
     return <div>Error: {meError?.message}</div>;
