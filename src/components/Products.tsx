@@ -13,7 +13,18 @@ interface product {
   description: string;
   price: number;
 }
-const Products = ({ setDetailModalOpen, setSelectedProductId }: ProductsProps) => {
+
+const Products = () => {
+  const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
+  useEffect(() => {
+    if (detailModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [detailModalOpen]);
+
+  const { setSelectedProductId } = useProductIdStore();
   const [products, setProducts] = useState<product[]>([]);
   useEffect(() => {
     const fetchProducts = async () => {
@@ -59,5 +70,6 @@ const Products = ({ setDetailModalOpen, setSelectedProductId }: ProductsProps) =
     </>
   );
 };
+
 
 export default Products;
