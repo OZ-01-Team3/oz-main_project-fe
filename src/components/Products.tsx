@@ -20,17 +20,6 @@ const Products = () => {
   }, [detailModalOpen]);
 
   const { setSelectedProductId } = useProductIdStore();
-const Products = () => {
-  const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
-  useEffect(() => {
-    if (detailModalOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  }, [detailModalOpen]);
-
-  const { setSelectedProductId } = useProductIdStore();
   const [products, setProducts] = useState<product[]>([]);
   useEffect(() => {
     const fetchProducts = async () => {
@@ -75,5 +64,6 @@ const Products = () => {
     </>
   );
 };
+
 
 export default Products;

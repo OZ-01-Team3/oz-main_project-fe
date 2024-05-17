@@ -1,64 +1,123 @@
 
 import ChatComponent from '@/components/chat/ChatComponent';
 import ChatLists from '@/components/chat/ChatLists';
-import useChatRoomStore from '@/stores/chatRoomStore';
+import useChatRoomStore from '@/stores/useChatRoomStore';
+import useMessageStore from '@/stores/useMessageStore';
 import Message from '@/type';
 import { useEffect, useRef, useState } from 'react';
 
-const Chat = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
-  let webSocket = useRef<WebSocket | null>(null);
-  const { chatRoomId } = useChatRoomStore()
 
-  //페이지 이동시 웹소켓 종료
-  useEffect(() => {
-    return () => {
-      webSocket.current?.close()
-    }
-  }, [])
+class ChatSocket {
+  webSocket: WebSocket | null = null;
+  constructor(chatRoomId) {
+    this.webSocket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${chatRoomId}/`)
 
-  // 컴포넌트 렌더링 될때마다 웹소켓 인스턴스 생성돼서 처음 마운트될때만 웹소켓 연결하기 위한.. 유즈이펙트.
-  useEffect(() => {
-    console.log("유즈이펙트안에 채팅아이디2", chatRoomId)
-    webSocket.current = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${chatRoomId}/`)
     // 웹소켓 연결
-    webSocket.current.onopen = function () {
+    this.webSocket.onopen = function () {
       console.log('웹소켓 연결 ^_^')
     }
     // 웹소켓 종료
-    webSocket.current.onclose = (error) => {
+    this.webSocket.onclose = (error) => {
       console.log('종료~', error)
     }
     // 웹 소켓 에러
-    webSocket.current.onerror = function (error) {
+    this.webSocket.onerror = function (error) {
       console.log('웹 소켓 에러', error);
     }
 
     // 웹소켓으로부터 메시지를 받았을 때 실행되는 함수
-    webSocket.current.onmessage = (event) => {
+    this.webSocket.onmessage = (event) => {
       const data = JSON.parse(event.data)
-      setMessages((prev) => [...prev, data]);
+      // setMessage((prev) => [...prev, data]);
+      useMessageStore.getState().addMessage(data)
       console.log("메세지 받았읍니다.", data)
     }
+  }
+  close() {
+    this.webSocket?.close();
+  }
 
-    window.addEventListener('beforeunload', () => {
-      webSocket.current?.close()
-    })
+  sendMessage(message) {
+    this.webSocket?.send(JSON.stringify(message))
+  }
+}
 
+const Chat = () => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  let webSocketRef = useRef<ChatSocket | null>(null);
+  const { chatRoomId } = useChatRoomStore()
+  //페이지 이동시 웹소켓 종료
+  useEffect(() => {
     return () => {
-      webSocket.current?.close()
+      webSocketRef.current?.close()
+    }
+  }, [])
+
+  // 컴포넌트 렌더링 될때마다 웹소켓 인스턴스 생성돼서 처음 마운트될때만 웹소켓 연결하기 위한.. 유즈이펙트.
+  // useEffect(() => {
+  //   console.log("유즈이펙트안에 채팅아이디2", chatRoomId)
+  // webSocket.current = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${chatRoomId}/`)
+  // // 웹소켓 연결
+  // webSocket.current.onopen = function () {
+  //   console.log('웹소켓 연결 ^_^')
+  // }
+  // // 웹소켓 종료
+  // webSocket.current.onclose = (error) => {
+  //   console.log('종료~', error)
+  // }
+  // // 웹 소켓 에러
+  // webSocket.current.onerror = function (error) {
+  //   console.log('웹 소켓 에러', error);
+  // }
+
+  // // 웹소켓으로부터 메시지를 받았을 때 실행되는 함수
+  // webSocket.current.onmessage = (event) => {
+  //   const data = JSON.parse(event.data)
+  //   setMessages((prev) => [...prev, data]);
+  //   console.log("메세지 받았읍니다.", data)
+  // }
+
+  // window.addEventListener('beforeunload', () => {
+  //   webSocket.current?.close()
+  // })
+
+  // return () => {
+  //   webSocket.current?.close()
+  // }
+  // }, [chatRoomId])
+
+  useEffect(() => {
+    if (chatRoomId) {
+      webSocketRef.current = new ChatSocket(chatRoomId);
+
+      window.addEventListener('beforeunload', () => {
+        webSocketRef.current?.close()
+      })
+
+      return () => {
+        webSocketRef.current?.close()
+      }
     }
   }, [chatRoomId])
 
   //메시지 전송 함수
   const sendMessage = (message: string, image: string) => {
-    if (webSocket.current) {
-      webSocket.current.send(JSON.stringify({
-        "message": message,
-        "image": image
-      }));
-      console.log("메세지 전송함수", message, "사진", image);
+    if (!message.trim() && !image) {
+      // 텍스트와 이미지가 모두 없는 경우 메시지를 보내지 않음
+      return;
     }
+    // if (webSocketRef.current) {
+    //   webSocketRef.current.sendMessage(JSON.stringify({
+    //     message,
+    //     image,
+    //   }));
+    //   console.log("메세지 전송함수", message, "사진", image);
+    // }
+
+
+
+    webSocketRef.current?.sendMessage({ message, image });
+    console.log("메세지 전송:", message, "사진:", image)
   }
 
 
@@ -75,7 +134,7 @@ const Chat = () => {
             <ChatLists />
           </div>
           {/* 채팅방 */}
-          <ChatComponent sendMessage={sendMessage} messages={messages} setMessages={setMessages} />
+          <ChatComponent sendMessage={sendMessage} />
         </div>
       </div>
     </>

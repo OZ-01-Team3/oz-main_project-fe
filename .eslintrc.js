@@ -27,7 +27,7 @@ module.exports = {
     indent: 'off',
     '@typescript-eslint/indent': 'off',
     semi: 'off',
-    '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'on',
     '@typescript-eslint/no-explicit-any': 'off',
     'react/react-in-jsx-scope': 'off',
   },

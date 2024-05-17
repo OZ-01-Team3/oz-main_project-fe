@@ -1,4 +1,3 @@
-'use client'
 
 import SalesProducts from "@/components/SalesProducts"
 

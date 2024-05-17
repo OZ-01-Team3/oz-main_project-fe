@@ -4,7 +4,7 @@ type InputProps = {
   children?: React.ReactNode;
   value?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  onBluer?: React.FocusEventHandler<HTMLInputElement>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
   name?: string;
   type?: 'text' | 'number' | 'password' | 'email' | 'tel';
   placeholder?: string;
@@ -12,9 +12,9 @@ type InputProps = {
   ref?: React.RefCallback<HTMLInputElement>;
 };
 
-// eslint-disable-next-line react/display-name
+
 const AuthInput = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ children, value, onChange, type, placeholder, min, name, onBluer }, ref) => {
+  ({ children, value, onChange, type, placeholder, min, name, onBlur }, ref) => {
     return (
       <div className="relative mt-6">
         <label className="absolute -top-2 left-2 inline-block bg-mainBlack px-1 text-base font-semibold text-mainWite">
@@ -29,7 +29,7 @@ const AuthInput = React.forwardRef<HTMLInputElement, InputProps>(
           placeholder={placeholder}
           min={min}
           name={name}
-          onBlur={onBluer}
+          onBlur={onBlur}
           ref={ref}
         />
       </div>

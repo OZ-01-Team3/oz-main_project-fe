@@ -11,20 +11,23 @@ const ChatInput = ({ sendMessage }: ChatProps) => {
   const [inputMessage, setInputMessage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+
   const handleSend = async () => {
+    let imageBase64 = "";
     if (fileInputRef.current?.files?.[0]) {
       const file = fileInputRef.current.files[0];
-      // 파일을 Base64로 인코딩
-      const imageBase64 = await convertFileToBase64(file);
-      sendMessage(inputMessage, imageBase64); // 이미지 데이터도 함께 전송
-    } else {
-      sendMessage(inputMessage);
+      imageBase64 = await convertFileToBase64(file);
+    }
+
+    // 텍스트 메시지가 비어있지 않거나 이미지가 있는 경우에만 메시지 전송
+    if (inputMessage.trim() !== "" || imageBase64) {
+      sendMessage(inputMessage.trim(), imageBase64);
     }
     setInputMessage(""); // 메시지 전송 후 입력 필드 초기화
     if (fileInputRef.current) fileInputRef.current.value = ''; // 파일 입력 초기화
   }
 
-  // 파일을 Base64로 인코딩하는 함수
+  // 파일을 Base64로 인코딩하는 순수함수
   const convertFileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -46,6 +49,13 @@ const ChatInput = ({ sendMessage }: ChatProps) => {
     fileInputRef.current?.click();
   }
 
+  /** 엔터 키 입력시 전송 */
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+      handleSend()
+    }
+  }
+
 
   return (
     <div className="flex items-center justify-between pb-1 ">
@@ -59,6 +69,7 @@ const ChatInput = ({ sendMessage }: ChatProps) => {
           className="block w-full rounded-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray placeholder:text-gray focus:ring-2 focus:ring-inset focus:ring-mainBlack sm:text-sm sm:leading-6"
           onChange={(e) => setInputMessage(e.target.value)}
           value={inputMessage}
+          onKeyDown={handleKeyPress}
         />
         <CommonButton
           className="w-10 h-10 bg-chatBg rounded-full flex justify-center items-center"

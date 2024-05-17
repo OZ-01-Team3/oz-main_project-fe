@@ -2,7 +2,6 @@
 import { loginAPI } from '@/api/authRequests';
 import AuthInput from '@/components/AuthInput';
 import CommonButton from '@/components/CommonButton';
-import useUserStore from '@/stores/userStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -20,7 +19,6 @@ const socialMedia = [
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const setUser = useUserStore((state) => state.setUser)
   // 유효성 검증
   const signInFormSchema = zod.object({
     // 이메일 형식 지정
@@ -55,7 +53,6 @@ const SignIn = () => {
       // Cookies.set('ac', response.data.access);
       // Cookies.set('rc', response.data.refresh);
       console.log(response, '로그인 성공');
-      setUser(response.data.user.nickname)
       navigate('/', { replace: true })
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 400) {

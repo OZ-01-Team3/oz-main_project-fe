@@ -1,16 +1,16 @@
 
+import { UserContext, UserType } from '@/App';
 import chatRequests from '@/api/chatRequests';
 import instance from '@/api/instance';
-import useChatRoomStore from '@/stores/chatRoomStore';
-import useUserStore from '@/stores/userStore';
+import useChatRoomStore from '@/stores/useChatRoomStore';
+import useMessageStore from '@/stores/useMessageStore';
 import Message from '@/type';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 import CommonButton from '../CommonButton';
 import ChatAcceptModal from './ChatAcceptModal';
 import ChatBubble from './ChatBubble';
 import ChatInput from './ChatInput';
 import ChatRentalModal from './ChatRentalModal';
-
 
 interface ChatProps {
   messages: Message[];
@@ -18,15 +18,14 @@ interface ChatProps {
   setMessages: Dispatch<SetStateAction<Message[]>>;
 }
 
-const ChatComponent = ({ sendMessage, messages }: ChatProps) => {
+const ChatComponent = ({ sendMessage }: ChatProps) => {
   const [rentalModalOpen, setRentalModalOpen] = useState<boolean>(false);
   const [acceptModalOpen, setAcceptModalOpen] = useState<boolean>(false);
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const { user } = useUserStore()
-  // const ac = Cookies.get('ac')
+  const { userData } = useContext<UserType>(UserContext)
   const { chatRoomId } = useChatRoomStore()
-
+  const messages = useMessageStore((state => state.messages))
   useEffect(() => {
     fetchChatMessages()
   }, [chatRoomId])
@@ -35,21 +34,12 @@ const ChatComponent = ({ sendMessage, messages }: ChatProps) => {
     try {
       const response = await instance.get(chatRequests.chat + `${chatRoomId}/`);
       setChatMessages(response.data.messages);
-      console.log("채팅 메시지:", response.data.messages);
+      // console.log("채팅 메시지:", response.data.messages);
     } catch (error) {
       console.error('채팅 메시지 불러오기 에러', error);
     }
   }
 
-  // const fetchUserData = async () => {
-  //   try {
-  //     const response = await instance.get(authRequests.userInfo)
-  //     setUser(response.data)
-  //     console.log("chatBubble에서 불러오는 회원정보", response)
-  //   } catch (error) {
-  //     console.error('회원정보 불러오기 에러', error)
-  //   }
-  // }
 
   console.log("실시간 채팅", messages)
 
@@ -57,12 +47,13 @@ const ChatComponent = ({ sendMessage, messages }: ChatProps) => {
   const getPartnerNickname = () => {
     if (chatMessages.length > 0) {
       // 대화 상대방의 닉네임을 가져오는 함수
-      const myNickname = user?.nickname;
+      const myNickname = userData?.nickname;
       const partnerNickname = chatMessages.find(message => message.nickname !== myNickname)?.nickname;
       return partnerNickname || ""; // 상대방 닉네임이 없으면 빈 문자열 반환
     }
     return "";
   };
+
 
 
   // 컴포넌트가 마운트되거나 채팅 메시지가 업데이트될 때 스크롤을 맨 아래로 이동

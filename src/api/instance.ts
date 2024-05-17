@@ -36,7 +36,7 @@ const tokenRefresh = async () => {
 // 요청이 전달되기 전에 작업 수행 혹은 요청 오류가 있는 함수를 받음
 instance.interceptors.request.use(
   config => {
-    const accessToken = cookies.get('accessToken');
+    const accessToken = cookies.get('ac');
 
     config.headers['Content-Type'] = 'application/json';
     // config.headers["Content-Type"] = "multipart/form-data";
@@ -62,7 +62,7 @@ instance.interceptors.response.use(
 
     if (error.response?.status === 401) {
       await tokenRefresh();
-      const new_accessToken = cookies.get('accessToken');
+      const new_accessToken = cookies.get('ac');
 
       error.config.headers['Authorization'] = `Bearer ${new_accessToken}`;
 
