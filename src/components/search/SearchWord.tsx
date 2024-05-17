@@ -1,12 +1,12 @@
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { PropsWithChildren } from 'react';
-import { XMarkIcon } from '@heroicons/react/24/outline'; 
 
 function SearchWord({ children }: PropsWithChildren) {
   return <button className={style}>{children}
-  <XMarkIcon
-    className="ml-1 w-4 h-4 text-mainWhite cursor-pointer"
-  />
-</button>;
+    <XMarkIcon
+      className="ml-1 w-4 h-4 text-mainWhite cursor-pointer"
+    />
+  </button>;
 }
 
 export default SearchWord;

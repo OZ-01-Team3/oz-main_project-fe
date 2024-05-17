@@ -1,17 +1,17 @@
 'use client';
 
-import authRequests from '@/api/authRequests';
+import { sendCodeAPI, signUpAPI, verifyEmailAPI } from '@/api/authRequests';
 import AuthInput from '@/components/AuthInput';
 import CommonButton from '@/components/CommonButton';
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { z } from 'zod';
+import { z as zod } from 'zod';
 
-const { VITE_BASE_REQUEST_URL } = import.meta.env;
+
 const SignUp = () => {
   const navigate = useNavigate()
 
@@ -20,12 +20,12 @@ const SignUp = () => {
   const [authCodeError, setAuthCodeError] = useState(false); // 인증코드 불일치 여부를 나타내는 상태
   const [emailVerified, setEmailVerified] = useState(false);// 이메일 인증이 완료되었을 때 화면에 표시될 문구 상태 
 
-  const signUpFormSchema = z
+  const signUpFormSchema = zod
     .object({
       // 이메일 형식 지정
-      email: z.string().email({ message: '이메일 형식이 아닙니다.' }),
-      code: z.string().min(1, { message: '인증코드를 입력해주세요.' }),
-      password: z // 비밀번호 형식 지정
+      email: zod.string().email({ message: '이메일 형식이 아닙니다.' }),
+      code: zod.string().min(1, { message: '인증코드를 입력해주세요.' }),
+      password: zod // 비밀번호 형식 지정
         .string()
         .regex(
           /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,20}$/,
@@ -33,9 +33,9 @@ const SignUp = () => {
         )
         .min(8, { message: '비밀번호는 8자 이상이어야 합니다.' })
         .max(20, { message: '비밀번호는 20자 이하여야 합니다.' }),
-      confirmPassword: z.string(),
-      nickname: z.string().min(1, { message: '닉네임은 필수 입력값입니다.' }),
-      phone: z.string().regex(/^(\d{3}-\d{3,4}-\d{4})$/, '전화번호 형식이 유효하지 않습니다.'),
+      confirmPassword: zod.string(),
+      nickname: zod.string().min(1, { message: '닉네임은 필수 입력값입니다.' }),
+      phone: zod.string().regex(/^(\d{3}-\d{3,4}-\d{4})$/, '전화번호 형식이 유효하지 않습니다.'),
     })
     .refine(data => data.password === data.confirmPassword, {
       path: ['confirmPassword'],
@@ -66,9 +66,9 @@ const SignUp = () => {
   const handleSendAuthCode = async () => {
     const email = getValues('email'); // 폼에서 이메일 값 가져오기
     try {
-      const response = await axios.post(VITE_BASE_REQUEST_URL + authRequests.send_code, {
+      const response = await sendCodeAPI(
         email,
-      });
+      );
       console.log(response, '인증번호 전송 성공');
       toast.success('인증번호가 전송되었습니다');
       setAuthCodeSent(true); // 인증코드 전송 완료 상태로 설정
@@ -101,10 +101,10 @@ const SignUp = () => {
     const email = getValues('email');
     const code = getValues('code');
     try {
-      const response = await axios.post(VITE_BASE_REQUEST_URL + authRequests.verify_email, {
+      const response = await verifyEmailAPI(
         email,
         code,
-      });
+      );
       console.log(response, '인증성공');
       setAuthCodeError(false); // 올바른 인증 코드인 경우 에러 상태 해제
       setEmailVerified(true); // 이메일 인증이 완료됐음을 상태에 설정
@@ -123,7 +123,7 @@ const SignUp = () => {
   const handleClickSignUp = form.handleSubmit(async data => {
     // mock으로 한거라 나중에 수정해야함
     try {
-      const response = await axios.post(VITE_BASE_REQUEST_URL + authRequests.signUp, {
+      const response = await signUpAPI({
         email: data.email,
         password1: data.password,
         password2: data.confirmPassword,
@@ -131,7 +131,7 @@ const SignUp = () => {
         phone: data.password,
       });
       console.log(response, '회원가입성공');
-      navigate('/sign-in')
+      navigate('/sign-in', { replace: true })
     } catch (error) {
       //에러처리인데 이미 있는 회원이면.. 무슨코드 내려주는지 모르겟서잉...
       if ((error as AxiosError).response && (error as AxiosError).response?.status === 409) {
