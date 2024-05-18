@@ -1,10 +1,7 @@
-
 import CommonButton from '@/components/CommonButton';
 import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-
 import React, { ChangeEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 const dragStyle = {
   box: 'bg-[#ebe9e935] w-full h-[230px] flex flex-col items-center justify-center rounded-lg  border border-dashed border-[#FF5634] py-10 mt-5 mb-3 ',
@@ -22,7 +19,7 @@ interface FileType {
   imageUrl: string; // 파일에 대한 미리보기 이미지 URL
 }
 
-const ImgReg = () => {
+const ImageRegistration = () => {
   const [fileList, setFileList] = useState<FileType[]>([]); // 파일 및 이미지 URL 상태
   const [isDragging, setIsDragging] = useState<boolean>(false); // 드래그 상태
   const navigate = useNavigate();
@@ -66,8 +63,8 @@ const ImgReg = () => {
     if (newFileList.length > 5) {
       newFileList.splice(5); // 최대 5장까지 제한
       toast.error('사진은 최대 다섯 장까지 등록할 수 있습니다.');
+      return;
     }
-
     setFileList(newFileList);
   };
   // fileList 업데이트
@@ -85,7 +82,10 @@ const ImgReg = () => {
   };
   // 사진등록하는 함수
   const handleSubmitProductImg = async () => {
-    if (fileList.length === 0) toast.error('사진을 한장 이상 등록해주세요!');
+    if (fileList.length === 0) {
+      toast.error('사진을 한장 이상 등록해주세요!');
+      return;
+    }
     try {
       const formData = new FormData();
 
@@ -94,12 +94,8 @@ const ImgReg = () => {
         formData.append('file', item.file); // 'images'는 서버에서 받는 필드명으로 수정해야함
         console.log(item.file);
       });
-
-      // 서버로 이미지 파일 전송
-      const response = await axios.post('/api/v1/products/img', formData);
-
-      console.log(response.data.contents, '상품 등록 성공');
-      navigate('/product-reg');
+      //** 등록한 이미지 product-reg로 보내기 */
+      navigate('/product-reg', { state: fileList });
     } catch (error) {
       console.error('상품 등록 실패:', error);
     }
@@ -155,4 +151,4 @@ const ImgReg = () => {
   );
 };
 
-export default ImgReg;
+export default ImageRegistration;
