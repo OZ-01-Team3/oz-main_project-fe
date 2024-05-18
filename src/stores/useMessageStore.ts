@@ -6,7 +6,7 @@ interface Message {
   message: string;
   nickname: string;
   status: boolean;
-  timeStamp: string;
+  timestamp: string;
 }
 
 interface ChatListMessage {

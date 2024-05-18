@@ -10,7 +10,7 @@
     "format": "prettier --check --ignore-path .gitignore .",
     "format:fix": "prettier --write --ignore-path .gitignore .",
     "svgr": "npx @svgr/cli -d src/assets/svg --ignore-existing --typescript --no-dimensions public/svg",
-    "dev": "vite"
+    "dev": "vite --host 0.0.0.0 --port 3000"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.19",

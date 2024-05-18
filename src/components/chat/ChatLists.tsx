@@ -5,7 +5,7 @@ import useMessageStore from "@/stores/useMessageStore";
 import { useQuery } from "@tanstack/react-query";
 import ChatLIst from './ChatList';
 
-interface ChatInfo {
+interface ChatInfoDto {
   id: number;
   user_info: {
     nickname: string;
@@ -20,6 +20,7 @@ interface ChatInfo {
     text: string;
     timestamp: string;
   };
+  unreadChat_count: number;
 }
 
 
@@ -73,7 +74,7 @@ const ChatLists = () => {
           time={data.last_message?.timestamp}
           product="https://image.msscdn.net/images/goods_img/20240102/3771106/3771106_17041841891976_320.jpg"
           profile="https://i.pinimg.com/564x/2a/58/e3/2a58e3d012bb65932a7c38d7381f29ee.jpg"
-          notification="2"
+          notification={data.unread_chat_count}
         />
       ))}
     </>

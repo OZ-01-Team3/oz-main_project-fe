@@ -38,10 +38,12 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
 
   /** messages 배열이 업데이트 될때마다 실행되는 useEffect */
   useEffect(() => {
+    // chatId와 일치하는 메시지만 필터링
+    const relevantMessages = messages.filter((message) => message.chatroom === id);
     // 가장 최근의 채팅만 표시하기 위해 messages 배열이 비어있지 않은 경우에만 실행
     if (messages && messages.length > 0) {
       // 가장 최근의 채팅을 가져옴
-      const latestMessage = messages[messages.length - 1];
+      const latestMessage = relevantMessages[relevantMessages.length - 1];
       // 최근 메세지가 있으면서 message 속성이 있는 경우
       if (latestMessage && latestMessage.message) {
         setDisplayContent(latestMessage.message.length > 30 ? `${latestMessage.message.substring(0, 30)}...` : latestMessage.message);
@@ -49,12 +51,13 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
 
       } else {
         setDisplayContent(content.length > 30 ? `${content.substring(0, 30)}...` : content);
-        setFormattedTime(formatTime(latestMessage.time));
+        // setFormattedTime(formatTime(latestMessage.timestamp));
       }
     } else {
       setDisplayContent(content.length > 30 ? `${content.substring(0, 30)}...` : content);
+      setFormattedTime(formatTime(time));
     }
-  }, [messages, content]);
+  }, [messages, content, chatId]);
 
 
 
