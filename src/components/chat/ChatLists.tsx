@@ -45,7 +45,7 @@ const ChatLists = () => {
     queryFn: async () => {
       try {
         const response = await chatListAPI();
-        console.log("갖고와", response.data)
+        console.log("이거는 api에서내려오는 채팅리스트", response.data)
         return response.data
 
       } catch (error) {
@@ -54,7 +54,7 @@ const ChatLists = () => {
     }
   })
 
-  console.log("채팅리스트에 메세지", messages)
+  console.log("채팅리스트에 메세진데 이거는 실시간", messages)
 
 
 

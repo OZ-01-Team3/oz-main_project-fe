@@ -25,7 +25,7 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const { userData } = useContext<UserType>(UserContext)
   const { chatRoomId } = useChatRoomStore()
-  const messages = useMessageStore((state => state.messages))
+  const messages = useMessageStore(state => state.messages.filter(message => message.chatroom === chatRoomId));
   useEffect(() => {
     fetchChatMessages()
   }, [chatRoomId])
@@ -34,14 +34,14 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
     try {
       const response = await instance.get(chatRequests.chat + `${chatRoomId}/`);
       setChatMessages(response.data.messages);
-      // console.log("채팅 메시지:", response.data.messages);
+      console.log("채팅 메시지:", response.data.messages);
     } catch (error) {
       console.error('채팅 메시지 불러오기 에러', error);
     }
   }
 
 
-  console.log("실시간 채팅", messages)
+  console.log("chatComponents에서 받아오는 실시간 메세지", messages)
 
   // 대화 상대방의 닉네임 가져오기
   const getPartnerNickname = () => {
@@ -63,6 +63,9 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [chatMessages, messages]);
+
+
+
 
   return (
     <>
@@ -142,7 +145,7 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
                         content={data.text}
                         time={data.timestamp}
                         subject={data.nickname}
-                        img={data.image || ''}
+                        img={data.image}
                         profile_img={`https://i.pinimg.com/564x/9d/d4/52/9dd45271b020a094a12bfeee12b39f65.jpg`}
                         read={data.status}
                       />
@@ -154,7 +157,7 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
                       content={data.message}
                       time={data.timestamp}
                       subject={data.nickname}
-                      img={data.image_url}
+                      img={data.image}
                       profile_img={`https://i.pinimg.com/564x/9d/d4/52/9dd45271b020a094a12bfeee12b39f65.jpg`}
                       read={data.status}
                     />

@@ -3,8 +3,7 @@ import ChatComponent from '@/components/chat/ChatComponent';
 import ChatLists from '@/components/chat/ChatLists';
 import useChatRoomStore from '@/stores/useChatRoomStore';
 import useMessageStore from '@/stores/useMessageStore';
-import Message from '@/type';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 
 class ChatSocket {
@@ -30,7 +29,7 @@ class ChatSocket {
       const data = JSON.parse(event.data)
       // setMessage((prev) => [...prev, data]);
       useMessageStore.getState().addMessage(data)
-      console.log("메세지 받았읍니다.", data)
+      console.log("온메세지에서 실시간 메세지 받았읍니다.", data)
     }
   }
   close() {
@@ -43,7 +42,6 @@ class ChatSocket {
 }
 
 const Chat = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
   let webSocketRef = useRef<ChatSocket | null>(null);
   const { chatRoomId } = useChatRoomStore()
   //페이지 이동시 웹소켓 종료

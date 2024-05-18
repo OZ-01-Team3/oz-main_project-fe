@@ -12,7 +12,7 @@ interface ChatListProps {
   time: string;
   product: string;
   profile?: string;
-  notification?: string;
+  notification?: string | number;
 }
 const UserResponseCss = 'flex flex-col items-start justify-center w-72 pr-1  h-18 md:mr-0 ml-1 md:h-20 pt-2';
 const ProductResCss = 'w-16 h-16 aspect-[1/1] border-gray rounded-md border ';
@@ -70,7 +70,7 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
         <div className={`sm:hidden md:${UserResponseCss}  `}>
           <div className="flex flex-row items-center">
             <p className=" h-5 overflow-hidden  font-semibold mr-1">{user}</p>
-            {notification !== '0' && (
+            {notification !== 0 && (
               <p className="bg-[#D80C18] w-4 h-4 rounded-full flex justify-center items-center text-mainWhite text-[10px]">
                 {notification}
               </p>
