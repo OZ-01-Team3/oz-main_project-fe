@@ -19,10 +19,12 @@ export const useProductIdStore = create<ProductId>(set => ({
 // const [detailModalOpen, setDetailModalOpen] = useState(false);
 interface ModalOpenStore {
   detailModalOpen: boolean;
-  setDetailModalOpen: (prev: boolean) => void;
+  fromPath: string;
+  setDetailModalOpen: (isOpen: boolean, path?: string) => void;
 }
 
 export const useModalOpenStore = create<ModalOpenStore>(set => ({
   detailModalOpen: false,
-  setDetailModalOpen: () => set(state => ({ detailModalOpen: !state.detailModalOpen })),
+  fromPath: '', // 모달이 열릴 때의 경로를 저장할 상태
+  setDetailModalOpen: (isOpen: boolean, path = '') => set({ detailModalOpen: isOpen, fromPath: path }),
 }));

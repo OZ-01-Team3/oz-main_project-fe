@@ -1,4 +1,4 @@
-import { useModalOpenStore, useProductIdStore } from '@/stores/modalStore';
+import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -9,6 +9,7 @@ interface product {
   description: string;
   price: number;
 }
+
 const Products = () => {
   const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
   useEffect(() => {
@@ -18,7 +19,6 @@ const Products = () => {
       document.body.style.overflow = '';
     }
   }, [detailModalOpen]);
-
   const { setSelectedProductId } = useProductIdStore();
   const [products, setProducts] = useState<product[]>([]);
   useEffect(() => {
@@ -64,6 +64,4 @@ const Products = () => {
     </>
   );
 };
-
-
 export default Products;

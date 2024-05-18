@@ -1,25 +1,29 @@
 import Banner from '@/components/Banner';
 import EventBanner from '@/components/EventBanner';
 import Footer from '@/components/Footer';
-import ProductDetailModal from '@/components/productDetail/ProductDetailModal';
 import Products from '@/components/Products';
 import StyleModal from '@/components/StyleModal';
-import { useProductIdStore } from '@/stores/modalStore';
+import ProductDetailModal from '@/components/productDetail/ProductDetailModal';
+import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
 import { useEffect } from 'react';
 
 const Main = () => {
   const { willSelectedProductId, setSelectedProductId, setWillSelectedProductId } = useProductIdStore();
+  const { setDetailModalOpen, detailModalOpen } = useModalOpenStore();
 
   useEffect(() => {
+    localStorage.setItem('pathname', window.location.pathname);
     if (willSelectedProductId) {
       setWillSelectedProductId(null);
+      setDetailModalOpen(true, window.location.pathname);
+      console.log(window.location.pathname);
       setSelectedProductId(willSelectedProductId);
       history.pushState({}, '', `/product/${willSelectedProductId}`);
     }
   }, []);
   return (
     <div>
-      <ProductDetailModal />
+      {detailModalOpen && <ProductDetailModal />}
       <StyleModal />
       <Banner />
       <div className="pt-32 w-2/3 ml-auto mr-auto ">
