@@ -3,7 +3,6 @@ import axios, { AxiosResponse } from 'axios';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const axiosClient = axios.create({
   baseURL: VITE_BASE_REQUEST_URL,
-  withCredentials: true,
 });
 
 interface SignUpType {

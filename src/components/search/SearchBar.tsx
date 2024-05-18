@@ -1,9 +1,8 @@
 
-import React, { FC, useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
-const SearchBar  = () => {
-   return (
+const SearchBar = () => {
+  return (
     <>
       <div className="flex justify-between border-b-2 pr-1 border-b-mainWhite items-center w-full  h-12 search text-center relative focus:bg-mainBlack">
         <input
@@ -17,7 +16,7 @@ const SearchBar  = () => {
           className="w-6  h-6 text-mainWhite  clear-search cursor-pointer "
         />
       </div>
-
+    </>
   );
 };
 export default SearchBar;
