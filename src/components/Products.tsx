@@ -1,21 +1,21 @@
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
-import { HeartIcon } from '@heroicons/react/24/outline';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Cookies } from 'react-cookie';
+
+import { HeartIcon as OutlineHeartIcon } from '@heroicons/react/24/outline';
+import { HeartIcon as FilledHeartIcon } from '@heroicons/react/24/solid'; //빨간하트
+
 interface product {
   id: number;
   image: string;
   title: string;
   description: string;
   price: number;
+  isFavorite: boolean;
 }
-
-
 
 const Products = () => {
   const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
-  const cookies = new Cookies()
-  const csrfToken = cookies.get('csrftoken');
   useEffect(() => {
     if (detailModalOpen) {
       document.body.style.overflow = 'hidden';
@@ -25,19 +25,31 @@ const Products = () => {
   }, [detailModalOpen]);
   const { setSelectedProductId } = useProductIdStore();
   const [products, setProducts] = useState<product[]>([]);
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     try {
-  //       const response = await axios.get('/api/v1/products');
-  //       console.log(response.data); // 받은 데이터를 로그로 출력
-  //       console.log("가지고오니?", csrfToken); // 받은 데이터를 로그로 출력
-  //       setProducts(response.data.items); // 받은 데이터의 items 배열을 상품 목록으로 설정
-  //     } catch (error) {
-  //       console.error('상품 불러오기 실패:', error);
-  //     }
-  //   };
-  //   fetchProducts(); // 컴포넌트가 마운트된 후에 상품 데이터를 가져오는 함수 호출
-  // }, []);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('/api/v1/products');
+        console.log(response.data);
+        const updatedProducts = response.data.items.map((item: product) => ({
+          ...item, // 불변성관리 위해 item 복사해서 isFavorite:false 속성추가해준것!
+          isFavorite: false,
+        }));
+        setProducts(updatedProducts); // isFavorite 상태 있는 것을 products로 사용하기 위해 해줌
+      } catch (error) {
+        console.error('상품 불러오기 실패:', error);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  // 아이디 받아서 일치하면 isFavorite 바꿔주기
+  const toggleFavorite = (id: number) => {
+    // products 받아서 맵 돌리고 선택한 아이디랑 같으면 isFavorite의 값 토글해주기
+    setProducts(currentProducts =>
+      currentProducts.map(product => (product.id === id ? { ...product, isFavorite: !product.isFavorite } : product))
+    );
+  };
 
   const handleOpenModal = (id: number) => {
     setDetailModalOpen(true);
@@ -47,9 +59,7 @@ const Products = () => {
 
   return (
     <>
-      {/* 8개 상품 컨테이너*/}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-x-8 gap-y-12 w-full pb-10">
-        {/* 각각의 상품 하나하나 */}
         {products.map(product => (
           <div
             key={product.id}
@@ -59,7 +69,23 @@ const Products = () => {
             <img src={product.image} className="aspect-[3/3.5] relative mb-2" />
             <div className="flex justify-between">
               <p className="font-bold text-base">{product.title}</p>
-              <HeartIcon className="w-6 h-6" />
+              {product.isFavorite ? (
+                <FilledHeartIcon
+                  className="w-6 h-6 text-red-500 hover:scale-110"
+                  onClick={event => {
+                    event.stopPropagation();
+                    toggleFavorite(product.id);
+                  }}
+                />
+              ) : (
+                <OutlineHeartIcon
+                  className="w-6 h-6 hover:scale-110"
+                  onClick={event => {
+                    event.stopPropagation();
+                    toggleFavorite(product.id);
+                  }}
+                />
+              )}
             </div>
             <p className="text-sm">{product.description}</p>
             <p className="text-sm">{product.price.toLocaleString()}</p>
