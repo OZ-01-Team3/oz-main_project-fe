@@ -2,6 +2,7 @@
 import chatData from '@/chatData';
 import { ChatBubbleOvalLeftEllipsisIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CommonButton from './CommonButton';
 
 interface ChatNotificationProps {
@@ -10,6 +11,7 @@ interface ChatNotificationProps {
 }
 
 const ChatNotification = ({ isOpen, onClose }: ChatNotificationProps) => {
+  const navigate = useNavigate();
   // 헤더에서 알림버튼 눌렀을때 뒤에꺼 스크롤 안되게
   useEffect(() => {
     if (isOpen) {
@@ -32,7 +34,7 @@ const ChatNotification = ({ isOpen, onClose }: ChatNotificationProps) => {
             <CommonButton className="border border-mainBlack text-mainBlack rounded-full py-1 px-1.5 w-16 text-center focus:bg-mainBlack focus:text-mainWhite hover:bg-mainBlack hover:text-mainWhite cursor-pointer mr-1.5">
               전체
             </CommonButton>
-            <CommonButton className="border border-mainBlack text-mainBlack rounded-full py-1 px-1.5 w-16 text-center focus:bg-mainBlack focus:text-mainWhite hover:bg-mainBlack hover:text-mainWhite cursor-pointer ">
+            <CommonButton className="border border-mainBlack text-mainBlack rounded-full py-1 px-1.5 w-16 text-center focus:bg-mainBlack focus:text-mainWhite hover:bg-mainBlack hover:text-mainWhite cursor-pointer " onClick={() => navigate('/chat')}>
               채팅
             </CommonButton>
           </div>
