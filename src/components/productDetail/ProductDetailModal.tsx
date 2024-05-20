@@ -4,36 +4,28 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ModalPortal } from '../ModalPortal';
+import { product } from '../Products';
 import ModalStyleButton from './ModalStyleButton';
 import ProductDetailResponse from './ProductDetailResponse';
 import ProductDetailsDescription from './ProductDetailsDescription';
 
-export interface productsDetailsType {
-  id: number;
-  image: string;
-  title: string;
-  brand: string;
-  size: string;
-  date: string;
-  status: string;
-  style: string[];
-  description: string;
-  price: string;
-}
-
-export const initialProductDetails: productsDetailsType = {
+export const initialProduct: product = {
   id: 0,
-  image: '',
-  title: '',
   brand: '',
-  size: '',
-  date: '',
-  status: '',
-  style: [],
+  condition: '',
   description: '',
-  price: '',
+  purchase_date: '',
+  purchase_price: 0,
+  name: '',
+  rental_fee: 0,
+  size: '',
+  views: 0,
+  product_category: 0,
+  amount: 0,
+  region: '',
+  images: [],
+  isFavorite: false,
 };
-
 const style = ['#모던', '#페미닌', '#가디건'];
 
 // 상품클릭 시 나오는 모달
@@ -43,8 +35,9 @@ const ProductDetailModal = () => {
 
   const { setDetailModalOpen, fromPath } = useModalOpenStore();
   const { selectedProductId, setWillSelectedProductId } = useProductIdStore();
-  const [productDetails, setProductDetails] = useState(initialProductDetails);
+  const [productDetails, setProductDetails] = useState(initialProduct);
   const prevPath = localStorage.getItem('pathname');
+
   // * 아이템을 선택해서 모달이 띄워지는게 아니라, 새로고침시 띄워질 경우,
   //  현재 경로에 따라서 all 이면 all 로 돌아오고 메인이면 메인으로 돌아가도록
   // ! 새로고침하면 fromPath 상태 다 날아감.. => localStorage 에 저장?

@@ -10,7 +10,7 @@ export interface product {
   brand: string;
   condition: string;
   description: string;
-  purchase_date: Date;
+  purchase_date: string;
   purchase_price: number;
   name: string;
   rental_fee: number;

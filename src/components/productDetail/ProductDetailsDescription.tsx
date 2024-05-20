@@ -1,21 +1,12 @@
+import { useNavigate } from 'react-router-dom';
+import { product } from '../Products';
 import ProductDetailTitle from './ProductDetailTitle';
-interface productsDetailsType {
-  id: number;
-  image: string;
-  title: string;
-  brand: string;
-  size: string;
-  date: string;
-  status: string;
-  style: string[];
-  description: string;
-  price: string;
-}
 interface ProductDetailsDescriptionProps {
-  productDetails: productsDetailsType;
+  productDetails: product;
 }
 // 모달 오른쪽 부분 상세설명
 const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescriptionProps) => {
+  const navigate = useNavigate();
   return (
     <div className="w-1/2  pb-20 sm:w-full">
       <div
@@ -25,12 +16,12 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
         <h1 className="text-3xl font-bold mb-6 ">{productDetails.title}</h1>
         <ProductDetailTitle title="사이즈" detail={productDetails.size} />
         <ProductDetailTitle title="브랜드" detail={productDetails.brand} />
-        <ProductDetailTitle title="구매시기" detail={productDetails.date} />
+        <ProductDetailTitle title="구매시기" detail={productDetails.purchase_date} />
         <ProductDetailTitle
           title="상품상태"
           detail={
             <>
-              {productDetails.status}
+              {productDetails.condition}
               <br />
               <span className="text-xs">(사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음)</span>
             </>
@@ -62,6 +53,12 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
         </div>
       </div>
       <button className="bg-mainBlack w-full text-mainWhite p-3 mt-3">1:1 채팅</button>
+      <button
+        className="bg-mainBlack w-full text-mainWhite p-3 mt-3"
+        onClick={() => navigate('img-reg', { state: productDetails.id })}
+      >
+        수정하기
+      </button>
     </div>
   );
 };
