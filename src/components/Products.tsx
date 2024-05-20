@@ -1,16 +1,25 @@
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 
+import { FileType } from '@/pages/imgRegistration';
 import { HeartIcon as OutlineHeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as FilledHeartIcon } from '@heroicons/react/24/solid'; //빨간하트
-
-interface product {
+import axios from 'axios';
+export interface product {
   id: number;
-  image: string;
-  title: string;
+  brand: string;
+  condition: string;
   description: string;
-  price: number;
+  purchase_date: Date;
+  purchase_price: number;
+  name: string;
+  rental_fee: number;
+  size: string;
+  views: 0;
+  product_category: number;
+  amount: number;
+  region: string;
+  images: FileType[];
   isFavorite: boolean;
 }
 
@@ -30,6 +39,7 @@ const Products = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('/api/v1/products');
+        // const response = await instance.get(productRequests.products);
         console.log(response.data);
         const updatedProducts = response.data.items.map((item: product) => ({
           ...item, // 불변성관리 위해 item 복사해서 isFavorite:false 속성추가해준것!
@@ -67,6 +77,10 @@ const Products = () => {
             onClick={() => handleOpenModal(product.id)}
           >
             <img src={product.image} className="aspect-[3/3.5] relative mb-2" />
+            {/* {product.images.map(item => (
+              <img src={item.imageUrl} className="aspect-[3/3.5] relative mb-2" />
+            ))} */}
+
             <div className="flex justify-between">
               <p className="font-bold text-base">{product.title}</p>
               {product.isFavorite ? (
@@ -88,7 +102,7 @@ const Products = () => {
               )}
             </div>
             <p className="text-sm">{product.description}</p>
-            <p className="text-sm">{product.price.toLocaleString()}</p>
+            <p className="text-sm">{product.rental_fee}</p>
           </div>
         ))}
       </div>

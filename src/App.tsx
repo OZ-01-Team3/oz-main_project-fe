@@ -2,10 +2,7 @@ import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { useQuery } from '@tanstack/react-query';
-import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
-import authRequests from './api/authRequests';
-import instance from './api/instance';
+import { Dispatch, ReactNode, SetStateAction, createContext, useState } from 'react';
 import Header from './components/Header';
 import SideBar from './components/SideNav';
 import ProductDetailModal from './components/productDetail/ProductDetailModal';
@@ -19,6 +16,8 @@ import OrderHistory from './pages/mypage/orderHistory';
 import SalesHistory from './pages/mypage/salesHistory';
 
 import { Cookies, useCookies } from 'react-cookie';
+import ImageUpdate from './pages/ImageUpdate';
+import ProductUpdate from './pages/ProductUpdate';
 import ProductRegistration from './pages/mypage/productRegistration';
 import Search from './pages/search';
 import TotalProducts from './pages/totalProducts';
@@ -111,10 +110,13 @@ const loggedRoutes = [
       <Route path="order-history" element={<OrderHistory />} />
     </Route>
 
-    <Route path="/img-reg" element={<ImgRegistration />} />
-    <Route path="/chat" element={<Chat />} />
-    <Route path="/product-reg" element={<ProductRegistration />} />
-  </Route>,
+      <Route path="/img-reg" element={<ImgRegistration />} />
+      <Route path="/chat" element={<Chat />} />
+      <Route path="/product-reg" element={<ProductRegistration />} />
+      <Route path="/img-update" element={<ImageUpdate />} />
+      <Route path="/product-update" element={<ProductUpdate />} />
+    </Route>
+  </>,
 ];
 /** 모든 유저가 접근 가능한 라우트 */
 const commonRoutes = [
@@ -177,19 +179,19 @@ function App() {
     enabled: !!accessToken
   });
 
-  //회원 정보가 있으면 상태 업데이트
-  useEffect(() => {
-    if (meData) {
-      setUserData(meData);
-    }
-  }, [meData]);
+  // //회원 정보가 있으면 상태 업데이트
+  // useEffect(() => {
+  //   if (meData) {
+  //     setUserData(meData);
+  //   }
+  // }, [meData]);
 
-  if (isMeLoading) return <div>Loading...</div>;
-  if (
-    meError &&
-    !['/', '/sign-in', '/sign-up', '/all', '/search', '/oauth2/redirect'].includes(window.location.pathname)
-  )
-    return <div>Error: {meError?.message}</div>;
+  // if (isMeLoading) return <div>Loading...</div>;
+  // if (
+  //   meError &&
+  //   !['/', '/sign-in', '/sign-up', '/all', '/search', '/oauth2/redirect'].includes(window.location.pathname)
+  // )
+  //   return <div>Error: {meError?.message}</div>;
 
   return (
     <>

@@ -1,51 +1,30 @@
 import instance from '@/api/instance';
-import { productRequests } from '@/api/productRequest';
 import CommonButton from '@/components/CommonButton';
 import axios from 'axios';
 import { ChangeEventHandler, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { productStatusOptions } from './mypage/productRegistration';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const sizes = ['S', 'M', 'L', 'XL'];
 // const hardCategories = ['전체', '아우터', '상의', '하의', '잡화', '신발'];
 // const setCategories = [0, 1, 2, 3, 4, 5];
-export const productStatusOptions = [
-  { id: 1, label: '새 상품 (미사용)', description: '사용하지 않은 상품' },
-  { id: 2, label: '사용감 없음', description: '사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음' },
-  { id: 3, label: '사용감 적음', description: '눈에 띄는 흔적이나 얼룩이 약간 있음' },
-  { id: 4, label: '사용감 많음', description: '눈에 띄는 흔적이나 얼룩이 많이 있음' },
-];
-interface locationState {
-  file: File;
-  id: number;
-  imageUrl: string;
-}
+// interface locationState {
+//   file: File;
+//   id: number;
+//   imageUrl: string;
+// }
 
 interface category {
   id: number;
   name: string;
 }
-
-// const productRegistrationSchema = zod.object({
-//   name: zod.string().min(1, '상품명을 입력해주세요').max(30, '상품명은 30자 이내로 입력해주세요'),
-//   purchasing_price: zod.string().min(1, '구매가를 입력해주세요'),
-//   rental_fee: zod.string().min(1, '대여비를 입력해주세요'),
-//   size: zod.string().min(1, '사이즈를 선택해주세요'),
-//   brand: zod.string().min(1, '브랜드를 입력해주세요'),
-//   product_category: zod.string().min(1, '카테고리를 선택해주세요'),
-//   purchase_date: zod.string().min(1, '구매시기를 선택해주세요'),
-//   condition: zod.string().min(1, '상품 상태를 선택해주세요'),
-//   description: zod.string().min(1, '상품 설명을 입력해주세요'),
-//   amount: zod.string().min(1, '수량을 입력해주세요'),
-//   region: zod.string().min(1, '거래지역을 입력해주세요'),
-// });
-
-const ProductRegistration = () => {
+const ProductUpdate = () => {
   const [productNameLength, setProductNameLength] = useState<number>(0);
   const [categories, setCategories] = useState<category[]>([]);
 
-  // img-reg 에서 보낸 사진 배열 받아오기
+  // img-reg 에서 보낸 정보 가져오기
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -56,17 +35,19 @@ const ProductRegistration = () => {
       toast.error('사진을 등록해주세요!');
       return;
     }
-
     handleGetCategories();
   }, []);
 
+  const prevProductInformation = location.state;
+  console.log(prevProductInformation);
+
   //**받아온 사진 배열에서 사진파일배열만 보내기 */
-  const registeredImages = (location.state as locationState[]).map((item, idx) => {
-    console.log(`index: ${idx}`);
-    console.log(item.file);
-    return item.file;
-  });
-  console.log(registeredImages);
+  //   const registeredImages = (location.state as locationState[]).map((item, idx) => {
+  //     console.log(`index: ${idx}`);
+  //     console.log(item.file);
+  //     return item.file;
+  //   });
+  //   console.log(registeredImages);
   const handleProductNameMaxLength: ChangeEventHandler<HTMLInputElement> = e => {
     const value = e.target.value;
     if (value.length <= 30) {
@@ -81,25 +62,25 @@ const ProductRegistration = () => {
   const form = useForm({
     // resolver: zodResolver(productRegistrationSchema),
     defaultValues: {
-      name: '',
-      purchase_price: '',
-      rental_fee: '',
-      size: '',
-      brand: '',
-      product_category: '',
-      purchase_date: '',
-      condition: '',
-      description: '',
-      // tag: '',
-      amount: '',
-      region: '',
-      images: '',
+      name: prevProductInformation.name,
+      purchase_price: prevProductInformation.purchase_price,
+      rental_fee: prevProductInformation.rental_fee,
+      size: prevProductInformation.size,
+      brand: prevProductInformation.brand,
+      product_category: prevProductInformation.product_category,
+      purchase_date: prevProductInformation.purchase_date,
+      condition: prevProductInformation.condition,
+      description: prevProductInformation.description,
+      // tag: prevProductInformation.,
+      amount: prevProductInformation.amount,
+      region: prevProductInformation.region,
+      images: prevProductInformation.images,
     },
     mode: 'onChange',
   });
   const {
     register,
-    //formState: { errors },
+    // formState: { errors },
     handleSubmit,
   } = form;
 
@@ -113,14 +94,7 @@ const ProductRegistration = () => {
       console.log(error);
     }
   };
-
-  //? 이렇게 하나하나 다 append 해줘야만하는건가 ...
-  const handleClickReg = handleSubmit(async data => {
-    // if (Object.keys(errors).length > 0) {
-    //   alert('모든 필수 항목을 입력해주세요!');
-    //   return;
-    // }
-
+  const handleUpdateProduct = handleSubmit(async data => {
     try {
       const formData = new FormData();
       formData.append('name', data.name);
@@ -134,49 +108,44 @@ const ProductRegistration = () => {
       formData.append('description', data.description);
       formData.append('amount', data.amount);
       formData.append('region', data.region);
-
-      // registeredImages 파일을 formData에 추가
-      registeredImages.forEach((image, index) => {
-        formData.append(`image`, image);
-        console.log(image);
-      });
+      formData.append('images', data.images);
 
       for (const pair of formData.entries()) {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
-      const response = await instance.post(productRequests.products, formData);
 
-      console.log('상품 등록 성공', response);
+      const response = await instance.put(`/products/${prevProductInformation.id}`, formData);
+      console.log(response);
+      toast.success('상품정보가 수정되었습니다.');
     } catch (error) {
       console.log(error);
+      toast.error('상품정보 수정에 실패했습니다.');
     }
     console.log(data);
   });
+
+  const handleDeleteProduct = async (id: number) => {
+    if (!window.confirm('상품을 삭제하시겠습니까? 다시 되돌릴 수 없습니다.')) {
+      return;
+    }
+    try {
+      const response = await instance.delete(`/products/${id}`);
+      console.log(response);
+      toast.success('상품이 성공적으로 삭제되었습니다.');
+      navigate('/img-reg'); // 상품 삭제 후 이미지 등록 페이지로 이동
+    } catch (error) {
+      console.log(error);
+      toast.error('상품 삭제에 실패했습니다.');
+    }
+  };
   return (
-    <div className="lg:w-[700px] w-[900px] md:w-[500px] sm:w-[350px] sm:text-sm m-auto ">
+    <div className="lg:w-[700px] w-[900px] md:w-[500px] sm:w-[350px] sm:text-sm m-auto">
       <FormProvider {...form}>
-        <form className="w-full" onSubmit={handleClickReg}>
+        <form className="w-full md:mb-20 sm:mb-20" onSubmit={handleUpdateProduct}>
           <p className="text-left text-3xl mt-28">상품 정보</p>
           <hr className="w-full ml-auto mr-auto mt-6 mb-7 text-hrGray" />
-
-          {/* Input fields */}
           <div>
             {/* 상품명 */}
-            {/* //? 이거 Input 값이 안들어와... */}
-            {/* <TextField type="text" label="상품명" placeholder="상품명을 입력하세요" />
-            <TextField
-              type="number"
-              label="구매가"
-              placeholder="상품을 구매하신 금액을 입력하세요"
-              {...register('purchasing_price')}
-            />
-            <TextField
-              {...register('name')}
-              type="number"
-              label="대여비"
-              placeholder="대여비를 입력하세요"
-              {...register('rental_fee')}
-            /> */}
             <div className="mb-4">
               <div className="flex items-center justify-center w-full">
                 <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">상품명</span>
@@ -360,12 +329,16 @@ const ProductRegistration = () => {
           </div>
 
           {/* Submit Button */}
-          <div className="text-right md:mb-48 ">
+          <div className="flex w-full justify-between items-center">
             <CommonButton
-              type="submit"
-              className="align-middle w-44 rounded-lg bg-mainWhite px-auto py-3.5  font-semibold  text-mainBlack  my-10 "
+              type="button"
+              onClick={() => handleDeleteProduct(prevProductInformation.id)}
+              className="align-middle w-44 sm:w-32  rounded-lg bg-gray px-auto py-3.5  font-semibold  text-mainBlack  my-10 hover:scale-105"
             >
-              등록하기
+              삭제하기
+            </CommonButton>
+            <CommonButton className="align-middle w-44 sm:w-32 rounded-lg bg-mainWhite px-auto py-3.5  font-semibold  text-mainBlack  my-10 hover:scale-105">
+              저장하기
             </CommonButton>
           </div>
         </form>
@@ -374,4 +347,4 @@ const ProductRegistration = () => {
   );
 };
 
-export default ProductRegistration;
+export default ProductUpdate;

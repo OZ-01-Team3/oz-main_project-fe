@@ -1,25 +1,30 @@
+import instance from '@/api/instance';
 import CommonButton from '@/components/CommonButton';
+import { product } from '@/components/Products';
+import { initialProduct } from '@/components/productDetail/ProductDetailModal';
 import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-export const dragStyle = {
-  box: 'bg-[#ebe9e935] w-full h-[230px] flex flex-col items-center justify-center rounded-lg  border border-dashed border-[#FF5634] py-10 mt-5 mb-3 ',
-  img: 'mx-auto h-60 w-6h-60 text-gray-300 text-mainBlack',
-  text: 'mt-5 text-mainBlack ',
-};
-export const style = {
-  box: ' w-full  h-[230px] flex flex-col items-center justify-center rounded-lg  hover:cursor-pointer border border-dashed border-mainWhite py-10 mt-5 mb-3',
-  img: 'mx-auto h-60 w-6h-60 text-gray-300   ',
-  text: 'mt-5',
-};
-export interface FileType {
-  id: number; // 파일들의 고유값 id
-  file: File;
-  imageUrl: string; // 파일에 대한 미리보기 이미지 URL
-}
+import { FileType, dragStyle, style } from './imgRegistration';
 
-const ImageRegistration = () => {
+const ImageUpdate = () => {
+  //이전 정보 저장하는 state
+  const [prevProductInformation, setPrevProductInformation] = useState<product>(initialProduct);
+
+  // 수정페이지 접속하면 이전에 사용자가 등록한 이미지 불러오기
+  // id는 클릭했을때 상품에서 가져오기..(https 수정할 것 !)
+  useEffect(() => {
+    fetchProductImage(id);
+  }, []);
+  const fetchProductImage = async (id: number) => {
+    const response = await instance.get(`/products/${id}`);
+    console.log('상품정보 가져오기 성공', response);
+    setPrevProductInformation(response.data.results);
+    setFileList(prevProductInformation.images); //이미지만 가져와서 원래 상태에 넣어주기
+  };
+
+  //이미지 수정
   const [fileList, setFileList] = useState<FileType[]>([]); // 파일 및 이미지 URL 상태
   const [isDragging, setIsDragging] = useState<boolean>(false); // 드래그 상태
   const navigate = useNavigate();
@@ -66,19 +71,32 @@ const ImageRegistration = () => {
       return;
     }
     setFileList(newFileList);
+    setPrevProductInformation({
+      ...prevProductInformation,
+      images: newFileList,
+    });
   };
   // fileList 업데이트
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
     if (file) {
       const imageUrl = URL.createObjectURL(file);
+      const updatedFileList = [...fileList, { id: fileList.length, file, imageUrl }];
       setFileList([...fileList, { id: fileList.length, file, imageUrl }]);
+      setPrevProductInformation({
+        ...prevProductInformation,
+        images: updatedFileList,
+      });
     }
   };
   // 사진 미리보기 X 누르면 지우는 함수
   const handleDeleteImage = (id: number) => {
     const filteredList = fileList.filter(item => item.id !== id);
     setFileList(filteredList);
+    setPrevProductInformation({
+      ...prevProductInformation,
+      images: filteredList,
+    });
   };
   // 사진등록하는 함수
   const handleSubmitProductImg = async () => {
@@ -94,8 +112,9 @@ const ImageRegistration = () => {
         formData.append('file', item.file); // 'images'는 서버에서 받는 필드명으로 수정해야함
         console.log(item.file);
       });
+
       //** 등록한 이미지 product-reg로 보내기 */
-      navigate('/product-reg', { state: fileList });
+      navigate('/product-update', { state: prevProductInformation });
     } catch (error) {
       console.error('상품 등록 실패:', error);
     }
@@ -151,4 +170,4 @@ const ImageRegistration = () => {
   );
 };
 
-export default ImageRegistration;
+export default ImageUpdate;
