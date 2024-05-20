@@ -2,9 +2,11 @@
 import { UserContext, UserType } from '@/App';
 import chatRequests from '@/api/chatRequests';
 import instance from '@/api/instance';
+import productDetailData from '@/productDetailData';
 import useChatRoomStore from '@/stores/useChatRoomStore';
 import useMessageStore from '@/stores/useMessageStore';
 import Message from '@/type';
+import { EllipsisVerticalIcon } from '@heroicons/react/16/solid';
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 import CommonButton from '../CommonButton';
 import ChatAcceptModal from './ChatAcceptModal';
@@ -22,10 +24,11 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
   const [rentalModalOpen, setRentalModalOpen] = useState<boolean>(false);
   const [acceptModalOpen, setAcceptModalOpen] = useState<boolean>(false);
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const { userData } = useContext<UserType>(UserContext)
   const { chatRoomId } = useChatRoomStore()
-  const messages = useMessageStore((state => state.messages))
+  const messages = useMessageStore(state => state.messages.filter(message => message.chatroom === chatRoomId));
   useEffect(() => {
     fetchChatMessages()
   }, [chatRoomId])
@@ -34,14 +37,14 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
     try {
       const response = await instance.get(chatRequests.chat + `${chatRoomId}/`);
       setChatMessages(response.data.messages);
-      // console.log("채팅 메시지:", response.data.messages);
+      console.log("채팅 메시지:", response.data.messages);
     } catch (error) {
       console.error('채팅 메시지 불러오기 에러', error);
     }
   }
 
 
-  console.log("실시간 채팅", messages)
+  console.log("chatComponents에서 받아오는 실시간 메세지", messages)
 
   // 대화 상대방의 닉네임 가져오기
   const getPartnerNickname = () => {
@@ -64,6 +67,16 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
     }
   }, [chatMessages, messages]);
 
+
+
+
+  // 드롭다운 메뉴 표시 상태를 토글하는 함수
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
+
+
   return (
     <>
       {chatRoomId ? (
@@ -80,26 +93,39 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
             <div className="flex w-full flex-col justify-between h-screen overflow-y-scroll scrollbar-hide ">
               <div className="flex flex-col">
                 {/* 사용자 정보 */}
-                <div className={`sm:hidden ${userResCss}`}>
-                  <div className="w-10 aspect-[1/1] mr-2 border-mainBlack rounded-full border ">
-                    <img
-                      src="https://i.pinimg.com/564x/2a/58/e3/2a58e3d012bb65932a7c38d7381f29ee.jpg"
-                      className="w-full h-full object-cover rounded-full"
-                      alt="프로필 이미지"
-                    />
+                <div className={`sm:hidden ${userResCss} relative`}>
+                  <div className="flex items-center mx-auto">
+                    <div className="w-10 aspect-[1/1] mr-2 border-mainBlack rounded-full border ">
+                      <img
+                        src="https://i.pinimg.com/564x/2a/58/e3/2a58e3d012bb65932a7c38d7381f29ee.jpg"
+                        className="w-full h-full object-cover rounded-full"
+                        alt="프로필 이미지"
+                      />
+                    </div>
+                    <div className="text-2xl my-3">{getPartnerNickname()}</div>
                   </div>
-                  <div className="text-2xl my-3">{getPartnerNickname()}</div>
+                  <div className='absolute right-0'>
+                    <button onClick={toggleDropdown}>
+                      <EllipsisVerticalIcon className='w-4' />
+                    </button>
+                    {showDropdown && (
+                      <div className="dropdown-menu absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
+                        <CommonButton className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">채팅방 나가기</CommonButton>
+
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="flex justify-between items-center">
                   {/* 상품정보 */}
-                  {/* {productsDetails.map(item => (
-                    <div className="flex flex-row justify-left items-center h-16 my-3" key={item.id}> */}
-                  {/* 상품이미지 */}
-                  {/* <div className=" h-20 w-20 border-mainBlack flex justify-center items-center overflow-hidden">
+                  {productDetailData.map(item => (
+                    <div className="flex flex-row justify-left items-center h-16 my-3" key={item.id}>
+                      {/* 상품이미지 */}
+                      <div className=" h-20 w-20 border-mainBlack flex justify-center items-center overflow-hidden">
                         <img src={item.image} alt="상품이미지 " className="object-cover w-20 " />
-                      </div> */}
-                  {/* 상품상세정보 */}
-                  {/* <div className="flex flex-col justify-center w-1/3 ml-3 h-14 sm:w-full md:w-full">
+                      </div>
+                      {/* 상품상세정보 */}
+                      <div className="flex flex-col justify-center w-1/3 ml-3 h-14 sm:w-full md:w-full">
                         <p className="text-sm font-semibold">{item.title}</p>
 
                         <p className=" text-xs font-base text-subGray">
@@ -108,7 +134,7 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
                         <p className="text-sm">대여비 {item.price}</p>
                       </div>
                     </div>
-                  ))} */}
+                  ))}
                   <div>
                     <CommonButton
                       className="bg-mainBlack text-mainWhite w-32 h-9 flex text-sm justify-center items-center mb-2 rounded-md p-1 sm:w-24 cursor-pointer "
@@ -142,7 +168,7 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
                         content={data.text}
                         time={data.timestamp}
                         subject={data.nickname}
-                        img={data.image || ''}
+                        img={data.image}
                         profile_img={`https://i.pinimg.com/564x/9d/d4/52/9dd45271b020a094a12bfeee12b39f65.jpg`}
                         read={data.status}
                       />
@@ -154,7 +180,7 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
                       content={data.message}
                       time={data.timestamp}
                       subject={data.nickname}
-                      img={data.image_url}
+                      img={data.image}
                       profile_img={`https://i.pinimg.com/564x/9d/d4/52/9dd45271b020a094a12bfeee12b39f65.jpg`}
                       read={data.status}
                     />

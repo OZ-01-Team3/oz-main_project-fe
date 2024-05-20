@@ -2,7 +2,7 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
 import { BellIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ChatNotification from './ChatNotification';
 import MobileNave from './MobileNav';
 
@@ -14,7 +14,7 @@ interface MenuItem {
 }
 const Header = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false); // pc 상태
-
+  const navigate = useNavigate();
   //pc 알림
   const handleToggleNotification = () => {
     setIsNotificationOpen(!isNotificationOpen);
@@ -36,7 +36,7 @@ const Header = () => {
     <>
       <nav className="w-full flex justify-between items-center h-24 p-4 bg-mainBlack">
         <div className="flex-1"></div>
-        <div className="font-didot text-5xl  text-mainWhite text-center md:text-left">Coaty Closet</div>
+        <div className="font-didot text-5xl  text-mainWhite text-center md:text-left cursor-pointer" onClick={() => navigate('/')}>Coaty Closet</div>
         <div className=" lg:hidden  xl:hidden flex items-center justify-end flex-1">
           <button onClick={handleToggleNotification}>
             <BellIcon className="w-6 h-6 text-mainWhite" />
