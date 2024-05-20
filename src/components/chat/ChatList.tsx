@@ -3,7 +3,7 @@ import useMessageStore from "@/stores/useMessageStore";
 import { useEffect, useState } from "react";
 
 interface ChatListProps {
-  id: number
+  id: number;
   user: string;
   chatId: number;
   content: string;
@@ -99,7 +99,7 @@ const formatTime = (timestamp: number | string) => {
   const day = hour * 24;
 
   if (diff < minute) {
-    return "방금";
+    return '방금';
   } else if (diff < hour) {
     const minutesAgo = Math.floor(diff / minute);
     return `${minutesAgo}분 전`;

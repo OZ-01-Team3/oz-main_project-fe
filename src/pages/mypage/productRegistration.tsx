@@ -10,7 +10,7 @@ const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const sizes = ['S', 'M', 'L', 'XL'];
 // const hardCategories = ['전체', '아우터', '상의', '하의', '잡화', '신발'];
 // const setCategories = [0, 1, 2, 3, 4, 5];
-const productStatusOptions = [
+export const productStatusOptions = [
   { id: 1, label: '새 상품 (미사용)', description: '사용하지 않은 상품' },
   { id: 2, label: '사용감 없음', description: '사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음' },
   { id: 3, label: '사용감 적음', description: '눈에 띄는 흔적이나 얼룩이 약간 있음' },
@@ -65,6 +65,7 @@ const ProductRegistration = () => {
     console.log(item.file);
     return item.file;
   });
+  console.log(registeredImages);
   const handleProductNameMaxLength: ChangeEventHandler<HTMLInputElement> = e => {
     const value = e.target.value;
     if (value.length <= 30) {
@@ -91,12 +92,13 @@ const ProductRegistration = () => {
       // tag: '',
       amount: '',
       region: '',
+      images: '',
     },
     mode: 'onChange',
   });
   const {
     register,
-    formState: { errors },
+    //formState: { errors },
     handleSubmit,
   } = form;
 
@@ -135,7 +137,12 @@ const ProductRegistration = () => {
       // registeredImages 파일을 formData에 추가
       registeredImages.forEach((image, index) => {
         formData.append(`image${index}`, image);
+        console.log(image);
       });
+
+      for (const pair of formData.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+      }
       const response = await instance.post(productRequests.products, formData);
       console.log('상품 등록 성공', response);
     } catch (error) {
@@ -318,7 +325,7 @@ const ProductRegistration = () => {
                   type="text"
                   className="shadow appearance-none border rounded w-full md:w-8/12 py-3 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
                   placeholder="ex) 긱시크 (최대 5개) "
-                  // {...register('tag')}
+                // {...register('tag')}
                 />
               </div>
             </div>
@@ -354,7 +361,7 @@ const ProductRegistration = () => {
           </div>
 
           {/* Submit Button */}
-          <div className="text-right">
+          <div className="text-right md:mb-48 ">
             <CommonButton
               type="submit"
               className="align-middle w-44 rounded-lg bg-mainWhite px-auto py-3.5  font-semibold  text-mainBlack  my-10 "
