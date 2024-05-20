@@ -2,6 +2,7 @@
 import { create } from 'zustand';
 
 interface MessageDto {
+  last_message: string;
   image: string;
   message: string;
   nickname: string;

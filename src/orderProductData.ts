@@ -5,6 +5,8 @@ const orderProducts = [
     title: '옷정리합니다',
     rental: '2024.05.01',
     return: '2024.05.08',
+    description: '설명',
+    price: '6000',
   },
   {
     id: 2,

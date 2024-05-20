@@ -8,7 +8,7 @@ import { useEffect, useRef } from 'react';
 
 class ChatSocket {
   webSocket: WebSocket | null = null;
-  constructor(chatRoomId) {
+  constructor(chatRoomId: number | null) {
     this.webSocket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${chatRoomId}/`)
 
     // 웹소켓 연결

@@ -21,7 +21,7 @@ const SalesProducts = () => {
                 </h4>
               </div>
               <div className="mt-1 text-sm text-subGray">{product.description}</div>
-              <div className="mt-1 text-sm text-subGray">{product.price.toLocaleString()}</div>
+              <div className="mt-1 text-sm text-subGray">{product.price?.toLocaleString()}</div>
             </div>
             <div className="mt-2 flex flex-1 items-start  flex-col">
               <ul role="list" className="space-y-6">
