@@ -1,4 +1,4 @@
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -18,6 +18,7 @@ import MemberInfo from './pages/mypage/memberInfo';
 import OrderHistory from './pages/mypage/orderHistory';
 import SalesHistory from './pages/mypage/salesHistory';
 
+import { Cookies } from 'react-cookie';
 import ProductRegistration from './pages/mypage/productRegistration';
 import Search from './pages/search';
 import TotalProducts from './pages/totalProducts';
@@ -47,7 +48,7 @@ interface UserContextType {
 
 /** 유저 정보를 전역관리하기 위한 컨텍스트 */
 export const UserContext = createContext<UserContextType>({
-  setUserData: () => {},
+  setUserData: () => { },
   userData: {
     pk: -1,
     age: 0,
@@ -144,6 +145,8 @@ function App() {
     profile: '',
     region: '',
   });
+  const cookies = new Cookies()
+  const accessToken = cookies.get("ac");
   //로그인한 회원 정보 불러오기
   const {
     data: meData,
@@ -161,6 +164,7 @@ function App() {
         throw error;
       }
     },
+    enabled: !!accessToken
   });
 
   //회원 정보가 있으면 상태 업데이트
@@ -192,7 +196,22 @@ function App() {
           pauseOnHover
           theme="colored"
         />
-        <Routes>{[...loggedRoutes, ...commonRoutes]}</Routes>
+        <Routes>
+          {!isMeLoading && userData?.pk !== -1 ? (
+            <>
+              {...loggedRoutes}
+              <Route path='*' element={<Navigate to='/' replace />} />
+            </>
+
+          ) : (
+            <>
+              {...commonRoutes}
+              <Route path='*' element={<Navigate to='/' replace />} />
+            </>
+          )}
+          // {[...loggedRoutes, ...commonRoutes]}
+
+        </Routes>
       </UserContext.Provider>
     </>
   );

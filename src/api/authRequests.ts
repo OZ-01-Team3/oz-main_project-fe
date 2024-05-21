@@ -1,9 +1,15 @@
 import axios, { AxiosResponse } from 'axios';
+import { Cookies } from 'react-cookie';
 
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
+const cookies = new Cookies();
+const csrfToken = cookies.get('csrfToken');
 const axiosClient = axios.create({
   baseURL: VITE_BASE_REQUEST_URL,
   withCredentials: true,
+  // headers: {
+  //   'X-CSRFToken': csrfToken,
+  // },
 });
 
 interface SignUpType {
