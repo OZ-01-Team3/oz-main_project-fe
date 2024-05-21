@@ -1,7 +1,7 @@
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
 import { HeartIcon } from '@heroicons/react/24/outline';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { Cookies } from 'react-cookie';
 interface product {
   id: number;
   image: string;
@@ -10,8 +10,12 @@ interface product {
   price: number;
 }
 
+
+
 const Products = () => {
   const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
+  const cookies = new Cookies()
+  const csrfToken = cookies.get('csrftoken');
   useEffect(() => {
     if (detailModalOpen) {
       document.body.style.overflow = 'hidden';
@@ -21,18 +25,19 @@ const Products = () => {
   }, [detailModalOpen]);
   const { setSelectedProductId } = useProductIdStore();
   const [products, setProducts] = useState<product[]>([]);
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('/api/v1/products');
-        console.log(response.data); // 받은 데이터를 로그로 출력
-        setProducts(response.data.items); // 받은 데이터의 items 배열을 상품 목록으로 설정
-      } catch (error) {
-        console.error('상품 불러오기 실패:', error);
-      }
-    };
-    fetchProducts(); // 컴포넌트가 마운트된 후에 상품 데이터를 가져오는 함수 호출
-  }, []);
+  // useEffect(() => {
+  //   const fetchProducts = async () => {
+  //     try {
+  //       const response = await axios.get('/api/v1/products');
+  //       console.log(response.data); // 받은 데이터를 로그로 출력
+  //       console.log("가지고오니?", csrfToken); // 받은 데이터를 로그로 출력
+  //       setProducts(response.data.items); // 받은 데이터의 items 배열을 상품 목록으로 설정
+  //     } catch (error) {
+  //       console.error('상품 불러오기 실패:', error);
+  //     }
+  //   };
+  //   fetchProducts(); // 컴포넌트가 마운트된 후에 상품 데이터를 가져오는 함수 호출
+  // }, []);
 
   const handleOpenModal = (id: number) => {
     setDetailModalOpen(true);

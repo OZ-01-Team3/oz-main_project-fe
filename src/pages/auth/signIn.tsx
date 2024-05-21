@@ -43,7 +43,7 @@ const SignIn = () => {
   } = form;
 
   const cookies = new Cookies()
-  const csrfToken = cookies.get('csrfToken');
+
   //Sign In 버튼 눌렀을 때 api 호출하는 함수
   const handleClickSignIn = form.handleSubmit(async data => {
     try {
@@ -51,18 +51,17 @@ const SignIn = () => {
         data.email,
         data.password,
       );
-      // Cookies.set('ac', response.data.access);
-      // Cookies.set('rc', response.data.refresh);
+      cookies.set('ac', response.data.access);
+      cookies.set('rf', response.data.refresh);
+
       console.log(response, '로그인 성공');
       navigate('/', { replace: true })
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 400) {
-        console.log("못가지고 오는데>?>?/", csrfToken)
         console.error('이메일 또는 비밀번호가 잘못되었습니다.', (error as AxiosError).response?.data);
         setError('email', { type: 'custom', message: '이메일 또는 비밀번호가 잘못되었습니다.' });
         setError('password', { type: 'custom', message: '이메일 또는 비밀번호가 잘못되었습니다.' });
       } else {
-        console.log("못가지고 오는데>?>?/", csrfToken)
         console.error('사용자 등록 오류:', error);
       }
     }

@@ -145,8 +145,9 @@ function App() {
     profile: '',
     region: '',
   });
-  const cookies = new Cookies()
-  const accessToken = cookies.get("ac");
+
+  const cookies = new Cookies();
+  const accessToken = cookies.get('ac');
   //로그인한 회원 정보 불러오기
   const {
     data: meData,
@@ -157,7 +158,7 @@ function App() {
     queryFn: async () => {
       try {
         const response = await instance.get<GetMemberResponseType>(authRequests.userInfo);
-        // console.log("전역 회원정보", response.data)
+        console.log("전역 회원정보", response.data)
         return response.data;
       } catch (error) {
         console.error('전역 유저정보 불러오기 에러', error);
@@ -196,21 +197,19 @@ function App() {
           pauseOnHover
           theme="colored"
         />
+        {/* <Routes>{[...loggedRoutes, ...commonRoutes]}</Routes> */}
         <Routes>
           {!isMeLoading && userData?.pk !== -1 ? (
             <>
-              {...loggedRoutes}
+              {loggedRoutes}
               <Route path='*' element={<Navigate to='/' replace />} />
             </>
-
           ) : (
             <>
-              {...commonRoutes}
+              {commonRoutes}
               <Route path='*' element={<Navigate to='/' replace />} />
             </>
           )}
-          // {[...loggedRoutes, ...commonRoutes]}
-
         </Routes>
       </UserContext.Provider>
     </>
@@ -218,3 +217,4 @@ function App() {
 }
 
 export default App;
+
