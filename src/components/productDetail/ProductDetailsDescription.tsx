@@ -11,9 +11,9 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
     <div className="w-1/2  pb-20 sm:w-full">
       <div
         className="w-full aspect-[3/3.5] h-full overflow-y-scroll sm:overflow-visible scrollbar-hide text-mainBlack"
-        key={productDetails.id}
+        key={productDetails.uuid}
       >
-        <h1 className="text-3xl font-bold mb-6 ">{productDetails.title}</h1>
+        <h1 className="text-3xl font-bold mb-6 ">{productDetails.name}</h1>
         <ProductDetailTitle title="사이즈" detail={productDetails.size} />
         <ProductDetailTitle title="브랜드" detail={productDetails.brand} />
         <ProductDetailTitle title="구매시기" detail={productDetails.purchase_date} />
@@ -55,7 +55,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
       <button className="bg-mainBlack w-full text-mainWhite p-3 mt-3">1:1 채팅</button>
       <button
         className="bg-mainBlack w-full text-mainWhite p-3 mt-3"
-        onClick={() => navigate('img-reg', { state: productDetails.id })}
+        onClick={() => navigate(`/img-update/${productDetails.uuid}`, { state: productDetails.uuid })}
       >
         수정하기
       </button>

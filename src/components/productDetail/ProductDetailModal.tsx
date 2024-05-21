@@ -1,6 +1,6 @@
+import instance from '@/api/instance';
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ModalPortal } from '../ModalPortal';
@@ -8,9 +8,9 @@ import { product } from '../Products';
 import ModalStyleButton from './ModalStyleButton';
 import ProductDetailResponse from './ProductDetailResponse';
 import ProductDetailsDescription from './ProductDetailsDescription';
-
+const { VITE_BASE_REQUEST_URL } = import.meta.env;
 export const initialProduct: product = {
-  id: 0,
+  uuid: 0,
   brand: '',
   condition: '',
   description: '',
@@ -35,7 +35,7 @@ const ProductDetailModal = () => {
 
   const { setDetailModalOpen, fromPath } = useModalOpenStore();
   const { selectedProductId, setWillSelectedProductId } = useProductIdStore();
-  const [productDetails, setProductDetails] = useState(initialProduct);
+  const [productDetails, setProductDetails] = useState<product>(initialProduct);
   const prevPath = localStorage.getItem('pathname');
 
   // * 아이템을 선택해서 모달이 띄워지는게 아니라, 새로고침시 띄워질 경우,
@@ -61,9 +61,10 @@ const ProductDetailModal = () => {
   // fetchProductDetail id에 맞는 정보 불러오기
   const fetchProductDetail = async (selectedProductId: number) => {
     try {
-      const response = await axios.get(`/api/v1/products/${selectedProductId}`);
+      const response = await instance.get(VITE_BASE_REQUEST_URL + `/products/${selectedProductId}/`);
       // console.log(response.data);
       setProductDetails(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -82,51 +83,47 @@ const ProductDetailModal = () => {
 
   return (
     <>
-      {
+      {productDetails && (
         <ModalPortal>
-          {
-            <div
-              className="flex w-full h-screen fixed inset-0 z-50 bg-modalBg justify-center items-center"
-              ref={outerBoxRef}
-              onClick={e => {
-                if (e.target === outerBoxRef.current) {
-                  handleCloseModal();
-                }
-              }}
-            >
-              <ProductDetailResponse productDetails={productDetails} />
-              {/* 모달 컨텐츠 */}
-              <div className="flex flex-row justify-center pl-10 pr-10 bg-mainWhite h-[565.5px] w-[950px] lg:w-[730px] md:w-[620px] sm:w-full sm:h-full sm:flex-col pt-10 pb-5 rounded-lg relative lg:h-[500px] md:h-[400px] sm:overflow-y-scroll sm:justify-start sm:items-center sm:hidden md:hidden">
-                {/* 닫기 버튼 */}
-                <XMarkIcon
-                  className="w-6 h-6 text-mainBlack absolute right-5 top-5 cursor-pointer"
-                  onClick={handleCloseModal}
-                />
-                {/* 사진 영역 */}
-                <div className="w-1/2 pr-10 flex flex-col sm:w-full sm:pr-0 sm:justify-center sm:items-center">
-                  <img
-                    src="https://image.msscdn.net/images/goods_img/20240117/3800972/3800972_17071843073582_500.jpg"
-                    className="w-96 h-[410px]"
-                    alt="상품 이미지"
-                  />
-                  <div className="flex flex-row justify-between text-mainBlack mt-2 mb-2 pl-2 pr-2">
-                    <div className="text-lg font-semibold">대여비</div>
-                    <div className="text-base">8,000(1일)</div>
-                  </div>
-                  <div className="pl-2 pr-2">
-                    {/* 스타일 버튼들 */}
-                    {style.map(product => (
-                      <ModalStyleButton key={product}>{product}</ModalStyleButton>
-                    ))}
-                  </div>
+          <div
+            className="flex w-full h-screen fixed inset-0 z-50 bg-modalBg justify-center items-center"
+            ref={outerBoxRef}
+            onClick={e => {
+              if (e.target === outerBoxRef.current) {
+                handleCloseModal();
+              }
+            }}
+          >
+            <ProductDetailResponse productDetails={productDetails} />
+            {/* 모달 컨텐츠 */}
+            <div className="flex flex-row justify-center pl-10 pr-10 bg-mainWhite h-[565.5px] w-[950px] lg:w-[730px] md:w-[620px] sm:w-full sm:h-full sm:flex-col pt-10 pb-5 rounded-lg relative lg:h-[500px] md:h-[400px] sm:overflow-y-scroll sm:justify-start sm:items-center sm:hidden md:hidden">
+              {/* 닫기 버튼 */}
+              <XMarkIcon
+                className="w-6 h-6 text-mainBlack absolute right-5 top-5 cursor-pointer"
+                onClick={handleCloseModal}
+              />
+              {/* 사진 영역 */}
+              <div className="w-1/2 pr-10 flex flex-col sm:w-full sm:pr-0 sm:justify-center sm:items-center">
+                {productDetails.images.length > 0 && (
+                  <img src={productDetails.images[0].image} className="w-96 h-[410px]" alt="상품 이미지" />
+                )}
+                <div className="flex flex-row justify-between text-mainBlack mt-2 mb-2 pl-2 pr-2">
+                  <div className="text-lg font-semibold">대여비</div>
+                  <div className="text-base">{productDetails.rental_fee.toLocaleString()}(1일)</div>
                 </div>
-                {/* 상세 설명 영역 */}
-                <ProductDetailsDescription productDetails={productDetails} />
+                <div className="pl-2 pr-2">
+                  {/* 스타일 버튼들 */}
+                  {style.map(product => (
+                    <ModalStyleButton key={product}>{product}</ModalStyleButton>
+                  ))}
+                </div>
               </div>
+              {/* 상세 설명 영역 */}
+              <ProductDetailsDescription productDetails={productDetails} />
             </div>
-          }
+          </div>
         </ModalPortal>
-      }
+      )}
     </>
   );
 };
