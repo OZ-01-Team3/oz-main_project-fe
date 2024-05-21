@@ -1,10 +1,16 @@
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
 import { useEffect, useState } from 'react';
 
-import { FileType } from '@/pages/imgRegistration';
+import instance from '@/api/instance';
+import { productRequests } from '@/api/productRequest';
+import { useCurrentPageStore, useTotalPageStore } from '@/stores/usePageStore';
 import { HeartIcon as OutlineHeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as FilledHeartIcon } from '@heroicons/react/24/solid'; //빨간하트
-import axios from 'axios';
+
+interface image {
+  id: number;
+  image: string;
+}
 export interface product {
   id: number;
   brand: string;
@@ -19,11 +25,13 @@ export interface product {
   product_category: number;
   amount: number;
   region: string;
-  images: FileType[];
+  images: image[];
   isFavorite: boolean;
 }
 
 const Products = () => {
+  const { currentPage } = useCurrentPageStore();
+  const { setTotalPages } = useTotalPageStore();
   const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
   useEffect(() => {
     if (detailModalOpen) {
@@ -36,22 +44,25 @@ const Products = () => {
   const [products, setProducts] = useState<product[]>([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProducts = async (page: number) => {
       try {
-        const response = await axios.get('/api/v1/products');
-        // const response = await instance.get(productRequests.products);
+        const response = await instance.get(`${productRequests.products}?page=${page}`);
         console.log(response.data);
-        const updatedProducts = response.data.items.map((item: product) => ({
-          ...item, // 불변성관리 위해 item 복사해서 isFavorite:false 속성추가해준것!
+        console.log(page);
+        const updatedProducts = response.data.results.map((item: product) => ({
+          ...item,
           isFavorite: false,
         }));
-        setProducts(updatedProducts); // isFavorite 상태 있는 것을 products로 사용하기 위해 해줌
+        setProducts(updatedProducts);
+        const totalProducts = response.data.count;
+        setTotalPages(Math.ceil(totalProducts / 24));
+        console.log(Math.ceil(totalProducts / 24));
       } catch (error) {
         console.error('상품 불러오기 실패:', error);
       }
     };
-    fetchProducts();
-  }, []);
+    fetchProducts(currentPage);
+  }, [currentPage]);
 
   // 아이디 받아서 일치하면 isFavorite 바꿔주기
   const toggleFavorite = (id: number) => {
@@ -76,13 +87,11 @@ const Products = () => {
             className="flex flex-col hover:cursor-pointer"
             onClick={() => handleOpenModal(product.id)}
           >
-            <img src={product.image} className="aspect-[3/3.5] relative mb-2" />
-            {/* {product.images.map(item => (
-              <img src={item.imageUrl} className="aspect-[3/3.5] relative mb-2" />
-            ))} */}
-
+            {product.images.length > 0 && (
+              <img src={product.images[0].image} className="aspect-[3/3.5] relative mb-2" />
+            )}
             <div className="flex justify-between">
-              <p className="font-bold text-base">{product.title}</p>
+              <p className="font-bold text-base">{product.name}</p>
               {product.isFavorite ? (
                 <FilledHeartIcon
                   className="w-6 h-6 text-red-500 hover:scale-110"

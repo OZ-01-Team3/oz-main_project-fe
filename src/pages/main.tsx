@@ -31,7 +31,6 @@ const Main = () => {
         <Products />
         <hr className=" w-3/4 ml-auto mr-auto mt-10 mb-20 text-mainWhite " />
         <p className="text-2xl mb-4 font-didot">NEW</p>
-        <Products />
         <hr className=" w-3/4 ml-auto mr-auto mt-10 mb-20 text-mainWhite " />
         <EventBanner />
       </div>
