@@ -10,6 +10,9 @@ interface VitePluginSvgrOptions {
   };
 }
 export default defineConfig({
+  // server: {
+  //   https: true,
+  // },
   plugins: [
     react(),
     svgr({
@@ -18,6 +21,8 @@ export default defineConfig({
         icon: true,
       },
     } as VitePluginSvgrOptions),
+    // basicSsl(),
+    // mkcert({ certFileName: './localhost.pem', keyFileName: './localhost-key.pem' }),
   ],
 
   resolve: {

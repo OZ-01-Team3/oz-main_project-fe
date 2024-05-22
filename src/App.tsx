@@ -1,4 +1,4 @@
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -18,6 +18,7 @@ import MemberInfo from './pages/mypage/memberInfo';
 import OrderHistory from './pages/mypage/orderHistory';
 import SalesHistory from './pages/mypage/salesHistory';
 
+import { Cookies, useCookies } from 'react-cookie';
 import ProductRegistration from './pages/mypage/productRegistration';
 import Search from './pages/search';
 import TotalProducts from './pages/totalProducts';
@@ -47,7 +48,7 @@ interface UserContextType {
 
 /** 유저 정보를 전역관리하기 위한 컨텍스트 */
 export const UserContext = createContext<UserContextType>({
-  setUserData: () => {},
+  setUserData: () => { },
   userData: {
     pk: -1,
     age: 0,
@@ -71,6 +72,14 @@ export const useUserContext = () => {
   return context;
 };
 
+/** PrivateRoute 컴포넌트 */
+const PrivateRoute = ({ children }) => {
+  const [cookies] = useCookies(['ac']);
+  const accessToken = cookies.ac;
+
+  return accessToken ? children : <Navigate to="/sign-in" />;
+};
+
 const Layout = () => {
   return (
     <>
@@ -82,28 +91,26 @@ const Layout = () => {
 
 /** 로그인 한 유저만 접근 가능한 라우트*/
 const loggedRoutes = [
-  <>
-    <Route element={<Layout />}>
-      <Route path="/wish-list" element={<WishList />} />
-      <Route
-        path="/mypage/*"
-        element={
-          <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 md:px-6 flex mt-20">
-            <SideBar />
-            <Outlet />
-          </div>
-        }
-      >
-        <Route path="member-info" element={<MemberInfo />} />
-        <Route path="sales-history" element={<SalesHistory />} />
-        <Route path="order-history" element={<OrderHistory />} />
-      </Route>
-
-      <Route path="/img-reg" element={<ImgRegistration />} />
-      <Route path="/chat" element={<Chat />} />
-      <Route path="/product-reg" element={<ProductRegistration />} />
+  <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
+    <Route path="/wish-list" element={<WishList />} />
+    <Route
+      path="/mypage/*"
+      element={
+        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 md:px-6 flex mt-20">
+          <SideBar />
+          <Outlet />
+        </div>
+      }
+    >
+      <Route path="member-info" element={<MemberInfo />} />
+      <Route path="sales-history" element={<SalesHistory />} />
+      <Route path="order-history" element={<OrderHistory />} />
     </Route>
-  </>,
+
+    <Route path="/img-reg" element={<ImgRegistration />} />
+    <Route path="/chat" element={<Chat />} />
+    <Route path="/product-reg" element={<ProductRegistration />} />
+  </Route>,
 ];
 /** 모든 유저가 접근 가능한 라우트 */
 const commonRoutes = [
@@ -144,6 +151,8 @@ function App() {
     profile: '',
     region: '',
   });
+  const cookies = new Cookies();
+  const accessToken = cookies.get('ac')
   //로그인한 회원 정보 불러오기
   const {
     data: meData,
@@ -161,6 +170,7 @@ function App() {
         throw error;
       }
     },
+    enabled: !!accessToken
   });
 
   //회원 정보가 있으면 상태 업데이트

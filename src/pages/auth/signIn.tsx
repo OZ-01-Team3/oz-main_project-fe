@@ -4,6 +4,7 @@ import AuthInput from '@/components/AuthInput';
 import CommonButton from '@/components/CommonButton';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
+import { Cookies } from 'react-cookie';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { z as zod } from 'zod';
@@ -41,7 +42,7 @@ const SignIn = () => {
     setError
   } = form;
 
-
+  const cookies = new Cookies()
 
   //Sign In 버튼 눌렀을 때 api 호출하는 함수
   const handleClickSignIn = form.handleSubmit(async data => {
@@ -50,8 +51,9 @@ const SignIn = () => {
         data.email,
         data.password,
       );
-      // Cookies.set('ac', response.data.access);
-      // Cookies.set('rc', response.data.refresh);
+      cookies.set('ac', response.data.access);
+      cookies.set('rf', response.data.refresh);
+
       console.log(response, '로그인 성공');
       navigate('/', { replace: true })
     } catch (error) {

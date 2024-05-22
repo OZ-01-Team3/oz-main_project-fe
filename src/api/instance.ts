@@ -14,17 +14,15 @@ const cookies = new Cookies();
 
 const tokenRefresh = async () => {
   try {
-    const refreshToken = cookies.get('rc');
+    const refreshToken = cookies.get('rf');
 
     const response = await axios.post(VITE_BASE_REQUEST_URL + authRequests.refresh, {
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-        'Content-Type': 'application/json',
-      },
+      // headers: {
+      //   Authorization: `Bearer ${refreshToken}`,
+      //   'Content-Type': 'application/json',
+      // },
 
-
-      rc: refreshToken,
-
+      rf: refreshToken,
     });
     // console.log("확잉용", response);
     cookies.set('accessToken', response.data.access);
@@ -37,7 +35,6 @@ const tokenRefresh = async () => {
 instance.interceptors.request.use(
   config => {
     const accessToken = cookies.get('ac');
-
     config.headers['Content-Type'] = 'application/json';
     // config.headers["Content-Type"] = "multipart/form-data";
     config.headers.Authorization = `Bearer ${accessToken}`;

@@ -26,6 +26,7 @@ interface category {
   id: number;
   name: string;
 }
+
 // const productRegistrationSchema = zod.object({
 //   name: zod.string().min(1, '상품명을 입력해주세요').max(30, '상품명은 30자 이내로 입력해주세요'),
 //   purchasing_price: zod.string().min(1, '구매가를 입력해주세요'),
@@ -136,7 +137,7 @@ const ProductRegistration = () => {
 
       // registeredImages 파일을 formData에 추가
       registeredImages.forEach((image, index) => {
-        formData.append(`image${index}`, image);
+        formData.append(`image`, image);
         console.log(image);
       });
 
@@ -144,6 +145,7 @@ const ProductRegistration = () => {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
       const response = await instance.post(productRequests.products, formData);
+
       console.log('상품 등록 성공', response);
     } catch (error) {
       console.log(error);

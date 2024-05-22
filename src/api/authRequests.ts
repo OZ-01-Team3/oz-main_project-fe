@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
+
 const axiosClient = axios.create({
   baseURL: VITE_BASE_REQUEST_URL,
   withCredentials: true,
@@ -25,7 +26,7 @@ const authRequests = {
   userInfo: '/users/detail/', // 회원 정보조회, 수정, 일부수정
   // 토큰
   userLeave: '/users/token/verify/', //access token 유효성 검사
-  refresh: '/users/token/refresh', // access token 재발급
+  refresh: '/users/token/refresh/', // access token 재발급
   // 이메일 전송
   sendCode: '/users/send-code/', // 이메일 코드 전송
   verifyEmail: '/users/confirm-email/', // 이메일 인증
