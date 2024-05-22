@@ -37,7 +37,7 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
   /** messages 배열이 업데이트 될때마다 실행되는 useEffect */
   useEffect(() => {
     // chatId와 일치하는 메시지만 필터링
-    const relevantMessages = messages.filter((message) => message.last_message?.chatroom === id);
+    const relevantMessages = messages.filter((message) => message.chatroom === chatId);
     console.log("Relevant Messages:", relevantMessages);
 
     // 가장 최근의 채팅만 표시하기 위해 messages 배열이 비어있지 않은 경우에만 실행

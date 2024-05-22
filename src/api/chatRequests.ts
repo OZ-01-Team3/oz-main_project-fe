@@ -7,4 +7,8 @@ const chatRequests = {
 export const chatListAPI = () => {
   return instance.get(chatRequests.chat);
 };
+
+export const chatRoomDeleteAPI = () => {
+  return instance.delete(chatRequests.chat);
+};
 export default chatRequests;

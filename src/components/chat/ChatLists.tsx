@@ -22,6 +22,7 @@ interface ChatInfoDto {
   unread_chat_count: number;
 }
 
+
 const ChatLists = () => {
   const messages = useMessageStore((state) => state.messages);
 
@@ -30,6 +31,7 @@ const ChatLists = () => {
     queryFn: async () => {
       try {
         const response = await chatListAPI();
+
         console.log("이거는 api에서내려오는 채팅리스트", response.data);
         return response.data;
       } catch (error) {

@@ -7,13 +7,16 @@ import useChatRoomStore from '@/stores/useChatRoomStore';
 import useMessageStore from '@/stores/useMessageStore';
 import Message from '@/type';
 import { EllipsisVerticalIcon } from '@heroicons/react/16/solid';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
+import { Cookies } from 'react-cookie';
 import CommonButton from '../CommonButton';
 import ChatAcceptModal from './ChatAcceptModal';
 import ChatBubble from './ChatBubble';
 import ChatInput from './ChatInput';
 import ChatRentalModal from './ChatRentalModal';
-
+const { VITE_BASE_REQUEST_URL } = import.meta.env;
 interface ChatProps {
   messages: Message[];
   sendMessage: (message: string) => void;
@@ -42,6 +45,7 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
       console.error('채팅 메시지 불러오기 에러', error);
     }
   }
+
 
 
   console.log("chatComponents에서 받아오는 실시간 메세지", messages)
@@ -75,13 +79,43 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
     setShowDropdown(!showDropdown);
   };
 
+  const cookies = new Cookies()
+  const csrfToken = cookies.get('csrftoken')
 
+  const queryClient = useQueryClient();
+  const handleDeleteChatRoom = useMutation({
+    mutationFn: (chatRoomId: number) => instance.delete(VITE_BASE_REQUEST_URL + chatRequests.chat + chatRoomId + `/`, {
+      headers: {
+        "X-CSRFToken": csrfToken
+      }
+    }),
+    onSuccess: () => {
+      console.log("삭제성공")
+      queryClient.invalidateQueries({ queryKey: ['chatList'] });
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        console.error("Axios 에러 응답 데이터:", error.response?.data);
+        console.error("Axios 에러 응답 상태:", error.response?.status);
+      } else {
+        console.error("일반 에러:", error);
+      }
+    },
+    onSettled: () => {
+      console.log("결과에 관계없이 무언가 실행됨", chatRoomId);
+      queryClient.invalidateQueries({ queryKey: ['chatList'] });
+    }
+  })
+
+  const deleteChatRoom = () => {
+    if (chatRoomId) {
+      handleDeleteChatRoom.mutate(chatRoomId);
+    }
+  };
 
   return (
     <>
       {chatRoomId ? (
-
-
         <>
           {/* 대여신청하기, 수락하기 어떤 버튼 눌렀느냐에 따라서 다른 모달 보여주기 */}
           {rentalModalOpen ? (
@@ -110,7 +144,7 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
                     </button>
                     {showDropdown && (
                       <div className="dropdown-menu absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
-                        <CommonButton className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">채팅방 나가기</CommonButton>
+                        <CommonButton className="block px-4 py-2 text-sm text-gray-700" onClick={deleteChatRoom}>채팅방 나가기</CommonButton>
 
                       </div>
                     )}
