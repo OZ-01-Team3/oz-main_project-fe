@@ -5,14 +5,14 @@ import instance from '@/api/instance';
 import { productRequests } from '@/api/productRequest';
 import { useCurrentPageStore, useTotalPageStore } from '@/stores/usePageStore';
 import { HeartIcon as OutlineHeartIcon } from '@heroicons/react/24/outline';
-import { HeartIcon as FilledHeartIcon } from '@heroicons/react/24/solid'; //빨간하트
+import { HeartIcon as FilledHeartIcon } from '@heroicons/react/24/solid';
 
 interface image {
   id: number;
   image: string;
 }
 export interface product {
-  id: number;
+  uuid: number;
   brand: string;
   condition: string;
   description: string;
@@ -28,7 +28,6 @@ export interface product {
   images: image[];
   isFavorite: boolean;
 }
-
 const Products = () => {
   const { currentPage } = useCurrentPageStore();
   const { setTotalPages } = useTotalPageStore();
@@ -68,7 +67,7 @@ const Products = () => {
   const toggleFavorite = (id: number) => {
     // products 받아서 맵 돌리고 선택한 아이디랑 같으면 isFavorite의 값 토글해주기
     setProducts(currentProducts =>
-      currentProducts.map(product => (product.id === id ? { ...product, isFavorite: !product.isFavorite } : product))
+      currentProducts.map(product => (product.uuid === id ? { ...product, isFavorite: !product.isFavorite } : product))
     );
   };
 
@@ -83,9 +82,9 @@ const Products = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-x-8 gap-y-12 w-full pb-10">
         {products.map(product => (
           <div
-            key={product.id}
+            key={product.uuid}
             className="flex flex-col hover:cursor-pointer"
-            onClick={() => handleOpenModal(product.id)}
+            onClick={() => handleOpenModal(product.uuid)}
           >
             {product.images.length > 0 && (
               <img src={product.images[0].image} className="aspect-[3/3.5] relative mb-2" />
@@ -97,7 +96,7 @@ const Products = () => {
                   className="w-6 h-6 text-red-500 hover:scale-110"
                   onClick={event => {
                     event.stopPropagation();
-                    toggleFavorite(product.id);
+                    toggleFavorite(product.uuid);
                   }}
                 />
               ) : (
@@ -105,13 +104,13 @@ const Products = () => {
                   className="w-6 h-6 hover:scale-110"
                   onClick={event => {
                     event.stopPropagation();
-                    toggleFavorite(product.id);
+                    toggleFavorite(product.uuid);
                   }}
                 />
               )}
             </div>
             <p className="text-sm">{product.description}</p>
-            <p className="text-sm">{product.rental_fee}</p>
+            <p className="text-sm">{product.rental_fee.toLocaleString()}</p>
           </div>
         ))}
       </div>
