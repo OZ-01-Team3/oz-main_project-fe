@@ -18,7 +18,7 @@ import MemberInfo from './pages/mypage/memberInfo';
 import OrderHistory from './pages/mypage/orderHistory';
 import SalesHistory from './pages/mypage/salesHistory';
 
-import { Cookies } from 'react-cookie';
+import { Cookies, useCookies } from 'react-cookie';
 import ProductRegistration from './pages/mypage/productRegistration';
 import Search from './pages/search';
 import TotalProducts from './pages/totalProducts';
@@ -72,6 +72,14 @@ export const useUserContext = () => {
   return context;
 };
 
+/** PrivateRoute 컴포넌트 */
+const PrivateRoute = ({ children }) => {
+  const [cookies] = useCookies(['ac']);
+  const accessToken = cookies.ac;
+
+  return accessToken ? children : <Navigate to="/sign-in" />;
+};
+
 const Layout = () => {
   return (
     <>
@@ -83,28 +91,26 @@ const Layout = () => {
 
 /** 로그인 한 유저만 접근 가능한 라우트*/
 const loggedRoutes = [
-  <>
-    <Route element={<Layout />}>
-      <Route path="/wish-list" element={<WishList />} />
-      <Route
-        path="/mypage/*"
-        element={
-          <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 md:px-6 flex mt-20">
-            <SideBar />
-            <Outlet />
-          </div>
-        }
-      >
-        <Route path="member-info" element={<MemberInfo />} />
-        <Route path="sales-history" element={<SalesHistory />} />
-        <Route path="order-history" element={<OrderHistory />} />
-      </Route>
-
-      <Route path="/img-reg" element={<ImgRegistration />} />
-      <Route path="/chat" element={<Chat />} />
-      <Route path="/product-reg" element={<ProductRegistration />} />
+  <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
+    <Route path="/wish-list" element={<WishList />} />
+    <Route
+      path="/mypage/*"
+      element={
+        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 md:px-6 flex mt-20">
+          <SideBar />
+          <Outlet />
+        </div>
+      }
+    >
+      <Route path="member-info" element={<MemberInfo />} />
+      <Route path="sales-history" element={<SalesHistory />} />
+      <Route path="order-history" element={<OrderHistory />} />
     </Route>
-  </>,
+
+    <Route path="/img-reg" element={<ImgRegistration />} />
+    <Route path="/chat" element={<Chat />} />
+    <Route path="/product-reg" element={<ProductRegistration />} />
+  </Route>,
 ];
 /** 모든 유저가 접근 가능한 라우트 */
 const commonRoutes = [
@@ -145,9 +151,8 @@ function App() {
     profile: '',
     region: '',
   });
-
   const cookies = new Cookies();
-  const accessToken = cookies.get('ac');
+  const accessToken = cookies.get('ac')
   //로그인한 회원 정보 불러오기
   const {
     data: meData,
@@ -158,7 +163,7 @@ function App() {
     queryFn: async () => {
       try {
         const response = await instance.get<GetMemberResponseType>(authRequests.userInfo);
-        console.log("전역 회원정보", response.data)
+        // console.log("전역 회원정보", response.data)
         return response.data;
       } catch (error) {
         console.error('전역 유저정보 불러오기 에러', error);
@@ -197,24 +202,10 @@ function App() {
           pauseOnHover
           theme="colored"
         />
-        {/* <Routes>{[...loggedRoutes, ...commonRoutes]}</Routes> */}
-        <Routes>
-          {!isMeLoading && userData?.pk !== -1 ? (
-            <>
-              {loggedRoutes}
-              <Route path='*' element={<Navigate to='/' replace />} />
-            </>
-          ) : (
-            <>
-              {commonRoutes}
-              <Route path='*' element={<Navigate to='/' replace />} />
-            </>
-          )}
-        </Routes>
+        <Routes>{[...loggedRoutes, ...commonRoutes]}</Routes>
       </UserContext.Provider>
     </>
   );
 }
 
 export default App;
-
