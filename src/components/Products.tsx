@@ -1,11 +1,8 @@
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
-import { useEffect, useState } from 'react';
-
-import instance from '@/api/instance';
-import { productRequests } from '@/api/productRequest';
-import { useCurrentPageStore, useTotalPageStore } from '@/stores/usePageStore';
 import { HeartIcon as OutlineHeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as FilledHeartIcon } from '@heroicons/react/24/solid';
+
+import { useEffect } from 'react';
 
 interface image {
   id: number;
@@ -34,9 +31,12 @@ interface lender {
   email: string;
   nickname: string;
 }
-const Products = () => {
-  const { currentPage } = useCurrentPageStore();
-  const { setTotalPages } = useTotalPageStore();
+export interface ProductProps {
+  products: product[];
+  setProducts: (products: product[]) => void;
+}
+
+const Products = ({ products, setProducts }: ProductProps) => {
   const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
   useEffect(() => {
     if (detailModalOpen) {
@@ -46,28 +46,6 @@ const Products = () => {
     }
   }, [detailModalOpen]);
   const { setSelectedProductId } = useProductIdStore();
-  const [products, setProducts] = useState<product[]>([]);
-
-  useEffect(() => {
-    const fetchProducts = async (page: number) => {
-      try {
-        const response = await instance.get(`${productRequests.products}?page=${page}`);
-        console.log(response.data);
-        console.log(page);
-        const updatedProducts = response.data.results.map((item: product) => ({
-          ...item,
-          isFavorite: false,
-        }));
-        setProducts(updatedProducts);
-        const totalProducts = response.data.count;
-        setTotalPages(Math.ceil(totalProducts / 24));
-        console.log(Math.ceil(totalProducts / 24));
-      } catch (error) {
-        console.error('상품 불러오기 실패:', error);
-      }
-    };
-    fetchProducts(currentPage);
-  }, [currentPage]);
 
   // 아이디 받아서 일치하면 isFavorite 바꿔주기
   const toggleFavorite = (id: string) => {
@@ -85,7 +63,7 @@ const Products = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-x-8 gap-y-12 w-full pb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-x-8 gap-y-12 w-full pb-10 ">
         {products.map(product => (
           <div
             key={product.uuid}
@@ -93,13 +71,13 @@ const Products = () => {
             onClick={() => handleOpenModal(product.uuid)}
           >
             {product.images.length > 0 && (
-              <div className="aspect-[3/3.5] h-72 bg-red-200 relative mb-2 ">
-                <img src={product.images[0].image} className="w-full h-full object-cover" />
+              <div className="aspect-[3/3.5] bg-red-200 relative mb-2 ">
+                <img src={product.images[0].image} className="w-full h-full object-cover  aspect-[3/3.5]" />
               </div>
             )}
 
             <div className="flex justify-between">
-              <p className="font-bold text-base">{product.name}</p>
+              <p className="font-bold text-base w-5/6">{product.name}</p>
               {product.isFavorite ? (
                 <FilledHeartIcon
                   className="w-6 h-6 text-red-500 hover:scale-110"
@@ -119,7 +97,6 @@ const Products = () => {
               )}
             </div>
             <p className="text-sm font-thin mt-1">
-              {' '}
               {product.description.length > 39 ? `${product.description.substring(0, 39)}...` : product.description}
             </p>
             <p className="text-sm mt-1">{product.rental_fee.toLocaleString()}</p>

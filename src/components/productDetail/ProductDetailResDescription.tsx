@@ -41,16 +41,15 @@ const ProductDetailResDescription = ({ productDetails }: ProductDetailResponsePr
               <ModalStyleButton key={idx}>{product}</ModalStyleButton>
             ))}
           </div>
-          <h1 className="text-3xl font-bold  text-center mb-4 w-96 ">{productDetails.title}</h1>
+          <h1 className="text-3xl font-bold  text-center mb-4 w-96 ">{productDetails.name}</h1>
           <div className="flex flex-row justify-between text-mainBlack mb-2 pl-2 pr-2"></div>
         </div>
         <div className="w-[400px] m-auto">
-          <ProductDetailTitle title="상품명" detail={productDetails.name} />
           <ProductDetailTitle title="대여비" detail={productDetails.rental_fee.toLocaleString()} />
           <ProductDetailTitle title="브랜드" detail={productDetails.brand} />
           <ProductDetailTitle title="사이즈" detail={productDetails.size} />
           <ProductDetailTitle title="구매시기" detail={productDetails.purchase_date} />
-          <ProductDetailTitle title="상품상태" detail={productDetails.status} />
+          <ProductDetailTitle title="상품상태" detail={productDetails.condition} />
           <ProductDetailTitle title="상세설명" detail={productDetails.description} />
         </div>
         <div className=" m-auto  w-[400px] mt-20 pb-2">

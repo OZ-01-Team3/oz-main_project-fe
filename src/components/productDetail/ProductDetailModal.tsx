@@ -9,8 +9,13 @@ import ModalStyleButton from './ModalStyleButton';
 import ProductDetailResponse from './ProductDetailResponse';
 import ProductDetailsDescription from './ProductDetailsDescription';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
+const lender = {
+  age: 24,
+  email: 'test@gmail.com',
+  nickname: '닉네임',
+};
 export const initialProduct: product = {
-  uuid: 0,
+  uuid: 'uuid',
   brand: '',
   condition: '',
   description: '',
@@ -25,13 +30,15 @@ export const initialProduct: product = {
   region: '',
   images: [],
   isFavorite: false,
+  lender: lender,
 };
+
 const style = ['#모던', '#페미닌', '#가디건'];
 
 // 상품클릭 시 나오는 모달
 const ProductDetailModal = () => {
   const { productId } = useParams(); // url에서 productId받아오기
-  console.log('useParamsfproductId', productId);
+  console.log('useParamsProductId', productId);
 
   const navigate = useNavigate();
   const { setDetailModalOpen } = useModalOpenStore();
@@ -49,20 +56,27 @@ const ProductDetailModal = () => {
   };
   console.log(currentImageIndex);
 
-  // * 아이템을 선택해서 모달이 띄워지는게 아니라, 새로고침시 띄워질 경우,
+  //  아이템을 선택해서 모달이 띄워지는게 아니라, 새로고침시 띄워질 경우,
   //  현재 경로에 따라서 all 이면 all 로 돌아오고 메인이면 메인으로 돌아가도록
-  // ! 새로고침하면 fromPath 상태 다 날아감.. => localStorage 에 저장?
+  //  새로고침하면 fromPath 상태 다 날아감.. => localStorage 에 저장!
   useEffect(() => {
     console.log('uuid', selectedProductId);
-
+    console.log('prevPath', prevPath);
     if (!selectedProductId) {
       setWillSelectedProductId(productId);
       console.log(productId);
       setDetailModalOpen(true);
+
+      if (prevPath === '/') {
+        navigate('/', { replace: true });
+      }
       if (prevPath === '/all') {
         navigate('/all', { replace: true });
+      }
+      if (prevPath === '/search') {
+        navigate('/search', { replace: true });
       } else {
-        navigate('/', { replace: true });
+        navigate('/all', { replace: true });
       }
     }
   }, [productId, selectedProductId, setDetailModalOpen, setWillSelectedProductId]);
@@ -72,7 +86,7 @@ const ProductDetailModal = () => {
     fetchProductDetail(selectedProductId);
   }, [selectedProductId]);
   // fetchProductDetail id에 맞는 정보 불러오기
-  const fetchProductDetail = async (selectedProductId: string) => {
+  const fetchProductDetail = async (selectedProductId: string | null) => {
     try {
       const response = await instance.get(VITE_BASE_REQUEST_URL + `/products/${selectedProductId}/`);
       // console.log(response.data);

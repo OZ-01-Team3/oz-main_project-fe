@@ -1,4 +1,5 @@
 import { UserContext, UserType } from '@/App';
+import { productStatusOptions } from '@/pages/mypage/productRegistration';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { product } from '../Products';
@@ -9,12 +10,15 @@ interface ProductDetailsDescriptionProps {
 // 모달 오른쪽 부분 상세설명
 const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescriptionProps) => {
   const { userData } = useContext<UserType>(UserContext);
-  console.log('전역유저', userData);
-  const logInUser = userData.email;
-
-  console.log('상품등록한유저정보', productDetails);
-  const productRegUser = productDetails.lender;
   const navigate = useNavigate();
+
+  const logInUser = userData.email; //로그인한 유저
+  const productRegUser = productDetails.lender.email; //상품 등록한 유저
+
+  // 상품 상태가 '4' 이렇게 숫자로 오는데, 이를 해당하는 id의 상태로 변환해주기
+  const filteredStatus = productStatusOptions.find(
+    productStatusOptions => productStatusOptions.id === Number(productDetails.condition)
+  );
   return (
     <div className="w-1/2  pb-20 sm:w-full">
       <div
@@ -29,9 +33,9 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
           title="상품상태"
           detail={
             <>
-              {productDetails.condition}
+              {filteredStatus && filteredStatus.label}
               <br />
-              <span className="text-xs">(사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음)</span>
+              <span className="text-xs">{filteredStatus && filteredStatus.description}</span>
             </>
           }
         />
@@ -44,7 +48,6 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
           {/* 옷장주인 박스 */}
           <div className="flex flex-row w-full justify-between items-center mb-3">
             <div className="flex flex-row ">
-              {' '}
               <img
                 src="https://image.msscdn.net/images/goods_img/20240117/3800972/3800972_17071843073582_500.jpg"
                 className="w-14 h-14 aspect-[1/1] mr-2"
@@ -60,13 +63,17 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
           </div>
         </div>
       </div>
-      <button
-        className="bg-mainBlack w-full text-mainWhite p-3 mt-3"
-        onClick={() => navigate(`/img-update/${productDetails.uuid}`, { state: productDetails.uuid })}
-      >
-        수정하기
-      </button>
-      <button className="bg-mainBlack w-full text-mainWhite p-3 mt-3">1:1 채팅</button>
+      {/* 현재 로그인 한 사용자와 상품을 등록한 사용자가 동일하면, 수정하기, 다르면 1:1 채팅버튼 */}
+      {logInUser === productRegUser ? (
+        <button
+          className="bg-mainBlack w-full text-mainWhite p-3 mt-3"
+          onClick={() => navigate(`/img-update/${productDetails.uuid}`, { state: productDetails.uuid })}
+        >
+          수정하기
+        </button>
+      ) : (
+        <button className="bg-mainBlack w-full text-mainWhite p-3 mt-3">1:1 채팅</button>
+      )}
     </div>
   );
 };
