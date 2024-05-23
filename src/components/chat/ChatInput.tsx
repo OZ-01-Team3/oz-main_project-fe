@@ -1,10 +1,9 @@
-
-import { UserContext } from '@/App';
+import { UserContext, UserType } from '@/App';
 import { XMarkIcon } from '@heroicons/react/16/solid';
 import { CameraIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import { useContext, useRef, useState } from 'react';
+import Resizer from 'react-image-file-resizer';
 import CommonButton from '../CommonButton';
-
 interface ChatProps {
   sendMessage: (message: string, image?: string) => void;
 }
@@ -35,17 +34,18 @@ const ChatInput = ({ sendMessage }: ChatProps) => {
   // 파일을 Base64로 인코딩하는 순수함수
   const convertFileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64String = reader.result?.toString();
-        if (base64String) {
-          resolve(base64String);
-        } else {
-          reject(new Error("Failed to convert file to Base64"));
-        }
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file); // 파일을 Base64로 인코딩
+      Resizer.imageFileResizer(
+        file, // 원본 파일
+        800, // 최대 가로 너비
+        800, // 최대 세로 높이
+        'JPEG', // 변환할 이미지 포맷
+        100, // 품질
+        0, // 회전
+        (uri) => {
+          resolve(uri as string);
+        },
+        'base64' // 출력 타입
+      );
     });
   }
 
