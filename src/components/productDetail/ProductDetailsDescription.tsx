@@ -1,3 +1,5 @@
+import { UserContext, UserType } from '@/App';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { product } from '../Products';
 import ProductDetailTitle from './ProductDetailTitle';
@@ -6,6 +8,12 @@ interface ProductDetailsDescriptionProps {
 }
 // 모달 오른쪽 부분 상세설명
 const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescriptionProps) => {
+  const { userData } = useContext<UserType>(UserContext);
+  console.log('전역유저', userData);
+  const logInUser = userData.email;
+
+  console.log('상품등록한유저정보', productDetails);
+  const productRegUser = productDetails.lender;
   const navigate = useNavigate();
   return (
     <div className="w-1/2  pb-20 sm:w-full">
@@ -52,13 +60,13 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
           </div>
         </div>
       </div>
-      <button className="bg-mainBlack w-full text-mainWhite p-3 mt-3">1:1 채팅</button>
       <button
         className="bg-mainBlack w-full text-mainWhite p-3 mt-3"
         onClick={() => navigate(`/img-update/${productDetails.uuid}`, { state: productDetails.uuid })}
       >
         수정하기
       </button>
+      <button className="bg-mainBlack w-full text-mainWhite p-3 mt-3">1:1 채팅</button>
     </div>
   );
 };

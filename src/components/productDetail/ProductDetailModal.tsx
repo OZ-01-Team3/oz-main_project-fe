@@ -1,6 +1,6 @@
 import instance from '@/api/instance';
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ModalPortal } from '../ModalPortal';
@@ -31,21 +31,34 @@ const style = ['#모던', '#페미닌', '#가디건'];
 // 상품클릭 시 나오는 모달
 const ProductDetailModal = () => {
   const { productId } = useParams(); // url에서 productId받아오기
-  const navigate = useNavigate();
+  console.log('useParamsfproductId', productId);
 
-  const { setDetailModalOpen, fromPath } = useModalOpenStore();
+  const navigate = useNavigate();
+  const { setDetailModalOpen } = useModalOpenStore();
   const { selectedProductId, setWillSelectedProductId } = useProductIdStore();
   const [productDetails, setProductDetails] = useState<product>(initialProduct);
   const prevPath = localStorage.getItem('pathname');
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handleNextImage = () => {
+    setCurrentImageIndex(prevIndex => (prevIndex + 1) % productDetails.images.length);
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex(prevIndex => (prevIndex - 1 + productDetails.images.length) % productDetails.images.length);
+  };
+  console.log(currentImageIndex);
 
   // * 아이템을 선택해서 모달이 띄워지는게 아니라, 새로고침시 띄워질 경우,
   //  현재 경로에 따라서 all 이면 all 로 돌아오고 메인이면 메인으로 돌아가도록
   // ! 새로고침하면 fromPath 상태 다 날아감.. => localStorage 에 저장?
   useEffect(() => {
-    console.log(fromPath);
+    console.log('uuid', selectedProductId);
+
     if (!selectedProductId) {
-      setWillSelectedProductId(Number(productId));
-      setDetailModalOpen(true, window.location.pathname);
+      setWillSelectedProductId(productId);
+      console.log(productId);
+      setDetailModalOpen(true);
       if (prevPath === '/all') {
         navigate('/all', { replace: true });
       } else {
@@ -59,11 +72,12 @@ const ProductDetailModal = () => {
     fetchProductDetail(selectedProductId);
   }, [selectedProductId]);
   // fetchProductDetail id에 맞는 정보 불러오기
-  const fetchProductDetail = async (selectedProductId: number) => {
+  const fetchProductDetail = async (selectedProductId: string) => {
     try {
       const response = await instance.get(VITE_BASE_REQUEST_URL + `/products/${selectedProductId}/`);
       // console.log(response.data);
       setProductDetails(response.data);
+      setCurrentImageIndex(0);
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -103,10 +117,25 @@ const ProductDetailModal = () => {
                 onClick={handleCloseModal}
               />
               {/* 사진 영역 */}
-              <div className="w-1/2 pr-10 flex flex-col sm:w-full sm:pr-0 sm:justify-center sm:items-center">
-                {productDetails.images.length > 0 && (
-                  <img src={productDetails.images[0].image} className="w-96 h-[410px]" alt="상품 이미지" />
-                )}
+              <div className="w-1/2 pr-10 flex flex-col sm:w-full sm:pr-0 sm:justify-center sm:items-center relative  ">
+                <ChevronLeftIcon
+                  onClick={handlePrevImage}
+                  className="absolute w-7 h-7 -left-6 top-48 text-mainBlack cursor-pointer"
+                />
+                <ChevronRightIcon
+                  onClick={handleNextImage}
+                  className="absolute  w-7 h-7 right-4 top-48 text-mainBlack cursor-pointer"
+                />
+
+                <div className="w-full h-[410px] overscroll-x-none flex ">
+                  {productDetails.images.length > 0 && (
+                    <img
+                      src={productDetails.images[currentImageIndex].image}
+                      className="w-full h-full object-contain "
+                      alt="상품 이미지"
+                    />
+                  )}
+                </div>
                 <div className="flex flex-row justify-between text-mainBlack mt-2 mb-2 pl-2 pr-2">
                   <div className="text-lg font-semibold">대여비</div>
                   <div className="text-base">{productDetails.rental_fee.toLocaleString()}(1일)</div>

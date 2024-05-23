@@ -12,7 +12,7 @@ interface image {
   image: string;
 }
 export interface product {
-  uuid: number;
+  uuid: string;
   brand: string;
   condition: string;
   description: string;
@@ -27,6 +27,12 @@ export interface product {
   region: string;
   images: image[];
   isFavorite: boolean;
+  lender: lender;
+}
+interface lender {
+  age?: number;
+  email: string;
+  nickname: string;
 }
 const Products = () => {
   const { currentPage } = useCurrentPageStore();
@@ -64,14 +70,14 @@ const Products = () => {
   }, [currentPage]);
 
   // 아이디 받아서 일치하면 isFavorite 바꿔주기
-  const toggleFavorite = (id: number) => {
+  const toggleFavorite = (id: string) => {
     // products 받아서 맵 돌리고 선택한 아이디랑 같으면 isFavorite의 값 토글해주기
     setProducts(currentProducts =>
       currentProducts.map(product => (product.uuid === id ? { ...product, isFavorite: !product.isFavorite } : product))
     );
   };
 
-  const handleOpenModal = (id: number) => {
+  const handleOpenModal = (id: string) => {
     setDetailModalOpen(true);
     setSelectedProductId(id);
     history.pushState({}, '', `/product/${id}`);
@@ -87,8 +93,11 @@ const Products = () => {
             onClick={() => handleOpenModal(product.uuid)}
           >
             {product.images.length > 0 && (
-              <img src={product.images[0].image} className="aspect-[3/3.5] relative mb-2" />
+              <div className="aspect-[3/3.5] h-72 bg-red-200 relative mb-2 ">
+                <img src={product.images[0].image} className="w-full h-full object-cover" />
+              </div>
             )}
+
             <div className="flex justify-between">
               <p className="font-bold text-base">{product.name}</p>
               {product.isFavorite ? (
@@ -109,8 +118,11 @@ const Products = () => {
                 />
               )}
             </div>
-            <p className="text-sm">{product.description}</p>
-            <p className="text-sm">{product.rental_fee.toLocaleString()}</p>
+            <p className="text-sm font-thin mt-1">
+              {' '}
+              {product.description.length > 39 ? `${product.description.substring(0, 39)}...` : product.description}
+            </p>
+            <p className="text-sm mt-1">{product.rental_fee.toLocaleString()}</p>
           </div>
         ))}
       </div>

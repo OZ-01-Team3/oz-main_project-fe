@@ -2,27 +2,27 @@ import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { productsDetailsType } from './ProductDetailModal';
+import { product } from '../Products';
 import ProductDetailResDescription from './ProductDetailResDescription';
 export interface ProductDetailResponseProps {
-  productDetails: productsDetailsType;
+  productDetails: product;
 }
 const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) => {
   const { productId } = useParams(); // url에서 productId받아오기
   const navigate = useNavigate();
 
-  const { setDetailModalOpen, fromPath } = useModalOpenStore();
+  const { setDetailModalOpen } = useModalOpenStore();
   const { selectedProductId, setWillSelectedProductId } = useProductIdStore();
 
   const prevPath = localStorage.getItem('pathname');
+
   // * 아이템을 선택해서 모달이 띄워지는게 아니라, 새로고침시 띄워질 경우,
   //  현재 경로에 따라서 all 이면 all 로 돌아오고 메인이면 메인으로 돌아가도록
   // ! 새로고침하면 fromPath 상태 다 날아감.. => localStorage 에 저장?
   useEffect(() => {
-    console.log(fromPath);
     if (!selectedProductId) {
-      setWillSelectedProductId(Number(productId));
-      setDetailModalOpen(true, window.location.pathname);
+      setWillSelectedProductId(productId);
+      setDetailModalOpen(true);
       if (prevPath === '/all') {
         navigate('/all', { replace: true });
       } else {
@@ -57,6 +57,13 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
           <ProductDetailResDescription productDetails={productDetails} />
         </div>
         <button className="bg-mainBlack w-full text-mainWhite p-3  ">1:1 채팅</button>
+
+        <button
+          className="bg-mainBlack w-full text-mainWhite p-3  "
+          onClick={() => navigate(`/img-update/${productDetails.uuid}`, { state: productDetails.uuid })}
+        >
+          수정하기
+        </button>
       </div>
     </>
   );
