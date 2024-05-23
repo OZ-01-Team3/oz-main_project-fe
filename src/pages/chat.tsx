@@ -44,6 +44,7 @@ class ChatSocket {
 const Chat = () => {
   let webSocketRef = useRef<ChatSocket | null>(null);
   const { chatRoomId } = useChatRoomStore()
+
   //페이지 이동시 웹소켓 종료
   useEffect(() => {
     return () => {
@@ -101,7 +102,7 @@ const Chat = () => {
             <ChatLists />
           </div>
           {/* 채팅방 */}
-          <ChatComponent sendMessage={sendMessage} />
+          <ChatComponent sendMessage={sendMessage} webSocketRef={webSocketRef} />
         </div>
       </div>
     </>

@@ -23,9 +23,10 @@ interface ChatProps {
   messages: Message[];
   sendMessage: (message: string) => void;
   setMessages: Dispatch<SetStateAction<Message[]>>;
+  webSocketRef: React.MutableRefObject<ChatSocket | null>;
 }
 
-const ChatComponent = ({ sendMessage }: ChatProps) => {
+const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
   const [rentalModalOpen, setRentalModalOpen] = useState<boolean>(false);
   const [acceptModalOpen, setAcceptModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
@@ -121,6 +122,7 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
 
   const deleteChatRoom = () => {
     if (chatRoomId) {
+      webSocketRef.current?.close() //채팅방 종료
       handleDeleteChatRoom.mutate(chatRoomId);
     }
   };
