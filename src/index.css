@@ -34,16 +34,12 @@ input[type='checkbox'] {
 input[type='radio'] {
   box-shadow: none !important;
 }
-/* 화살표 없애기 */
-input[type='number'] {
-  -moz-appearance: textfield;
+/* input type number 일떄 옆에 뜨는 화살표 없애기 */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
-/* @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-} */
-
 @font-face {
   font-family: 'Didot';
   src: url('/fonts/Didot.otf');

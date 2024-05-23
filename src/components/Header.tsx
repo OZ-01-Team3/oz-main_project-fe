@@ -41,13 +41,14 @@ const Header = () => {
   const mainMenuItems: MenuItem[] = [
     { label: '알림', onClick: handleToggleNotification },
     { label: '마이페이지', path: '/mypage/member-info' },
+    { label: '상품등록', path: '/img-reg' },
     isLoggedIn ? { label: '로그아웃', onClick: handleLogout } : { label: '로그인', path: '/sign-in' },
   ];
 
   const subMenuItems: MenuItem[] = [
     { label: 'WishList', path: '/wish-list' },
     { label: 'MyCloset', path: '/404' },
-    { label: '', Icon: () => <MagnifyingGlassIcon className="w-6" /> },
+    { label: '', path: '/search', Icon: () => <MagnifyingGlassIcon className="w-6" /> },
   ];
 
   return (
