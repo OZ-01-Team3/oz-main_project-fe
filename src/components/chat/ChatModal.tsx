@@ -34,7 +34,7 @@ const ChatModal = ({ closeModal, buttonText, modalTitle, onButtonClick, children
           onClick={handleCloseModal}
         />
         <div className="flex justify-center items-center mb-5">
-          <div className="h-11 w-11 mr-3 flex justify-center items-center border-gray rounded-md border">
+          <div className="h-11 w-11 mr-3 flex justify-center items-center border-customGray rounded-md border">
             <img
               src="https://image.msscdn.net/images/goods_img/20240507/4108579/4108579_17151337802676_320.jpg"
               alt="상품이미지"

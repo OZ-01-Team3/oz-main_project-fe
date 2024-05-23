@@ -5,57 +5,78 @@ import instance from '@/api/instance';
 import productDetailData from '@/productDetailData';
 import useChatRoomStore from '@/stores/useChatRoomStore';
 import useMessageStore from '@/stores/useMessageStore';
+import useUserInfoStore from '@/stores/useUserInfoStore';
 import Message from '@/type';
 import { EllipsisVerticalIcon } from '@heroicons/react/16/solid';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
+import { Cookies } from 'react-cookie';
 import CommonButton from '../CommonButton';
 import ChatAcceptModal from './ChatAcceptModal';
 import ChatBubble from './ChatBubble';
+import ChatDeleteModal from './ChatDeleteModal';
 import ChatInput from './ChatInput';
 import ChatRentalModal from './ChatRentalModal';
-
+const { VITE_BASE_REQUEST_URL } = import.meta.env;
 interface ChatProps {
   messages: Message[];
   sendMessage: (message: string) => void;
   setMessages: Dispatch<SetStateAction<Message[]>>;
+  webSocketRef: React.MutableRefObject<ChatSocket | null>;
 }
 
-const ChatComponent = ({ sendMessage }: ChatProps) => {
+const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
   const [rentalModalOpen, setRentalModalOpen] = useState<boolean>(false);
   const [acceptModalOpen, setAcceptModalOpen] = useState<boolean>(false);
-  const [chatMessages, setChatMessages] = useState<Message[]>([]);
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  // const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const { userData } = useContext<UserType>(UserContext)
   const { chatRoomId } = useChatRoomStore()
+  const { nickname } = useUserInfoStore()
   const messages = useMessageStore(state => state.messages.filter(message => message.chatroom === chatRoomId));
-  useEffect(() => {
-    fetchChatMessages()
-  }, [chatRoomId])
 
-  const fetchChatMessages = async () => {
-    try {
-      const response = await instance.get(chatRequests.chat + `${chatRoomId}/`);
-      setChatMessages(response.data.messages);
-      console.log("채팅 메시지:", response.data.messages);
-    } catch (error) {
-      console.error('채팅 메시지 불러오기 에러', error);
-    }
-  }
+  const cookies = new Cookies()
+  const csrfToken = cookies.get('csrftoken')
+
+  const queryClient = useQueryClient();
+
+
+  // useEffect(() => {
+  //   fetchChatMessages()
+  // }, [chatRoomId])
+
+  // const fetchChatMessages = async () => {
+  //   if (chatRoomId !== null) {
+  //     try {
+  //       const response = await instance.get(chatRequests.chat + `${chatRoomId}/`);
+  //       setChatMessages(response.data.messages);
+  //       console.log("채팅 메시지:", response.data.messages);
+  //     } catch (error) {
+  //       console.error('채팅 메시지 불러오기 에러', error);
+  //     }
+  //   } else {
+  //     // chatRoomId가 null일 때의 처리 로직 (옵션)
+  //     console.log("chatRoomId가 null입니다. API 요청을 생략합니다.");
+  //   }
+  // }
+
+  const { data: chatMessages, isLoading: isChatMessageLoading, error: ChatMessageError } = useQuery({
+    queryKey: ['chatMessage'],
+    queryFn: async () => {
+      if (!chatRoomId) {
+        throw new Error("채팅방이 없습니다.");
+      }
+      const response = await instance.get(`${chatRequests.chat}${chatRoomId}/`);
+      return response.data.messages;
+    },
+    enabled: !!chatRoomId
+  });
 
 
   console.log("chatComponents에서 받아오는 실시간 메세지", messages)
-
-  // 대화 상대방의 닉네임 가져오기
-  const getPartnerNickname = () => {
-    if (chatMessages.length > 0) {
-      // 대화 상대방의 닉네임을 가져오는 함수
-      const myNickname = userData?.nickname;
-      const partnerNickname = chatMessages.find(message => message.nickname !== myNickname)?.nickname;
-      return partnerNickname || ""; // 상대방 닉네임이 없으면 빈 문자열 반환
-    }
-    return "";
-  };
 
 
 
@@ -69,18 +90,55 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
 
 
 
-
   // 드롭다운 메뉴 표시 상태를 토글하는 함수
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
 
 
+  const handleDeleteChatRoom = useMutation({
+    mutationFn: (chatRoomId: number) => instance.delete(VITE_BASE_REQUEST_URL + chatRequests.chat + chatRoomId + `/`, {
+      headers: {
+        "X-CSRFToken": csrfToken
+      }
+    }),
+    onSuccess: () => {
+      console.log("삭제성공")
+      queryClient.invalidateQueries({ queryKey: ['chatList'] });
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        console.error("Axios 에러 응답 데이터:", error.response?.data);
+        console.error("Axios 에러 응답 상태:", error.response?.status);
+      } else {
+        console.error("일반 에러:", error);
+      }
+    },
+    onSettled: () => {
+      console.log("결과에 관계없이 무언가 실행됨", chatRoomId);
+      queryClient.invalidateQueries({ queryKey: ['chatList'] });
+    }
+  })
+
+  const deleteChatRoom = () => {
+    if (chatRoomId) {
+      webSocketRef.current?.close() //채팅방 종료
+      handleDeleteChatRoom.mutate(chatRoomId);
+    }
+  };
+
+  console.log("상대방이름", nickname)
+
+  if (isChatMessageLoading) return <div>Loading...</div>;
+  if (ChatMessageError) return <div>Error: {ChatMessageError.message}</div>;
+  if (!chatRoomId || (chatMessages && chatMessages.length === 0)) return <div className="flex flex-col justify-center items-center pl-10 relative w-full  ">접속중인 채팅방이 없습니다.</div>;
 
   return (
     <>
-      {chatRoomId ? (
-
+      {deleteModalOpen && (
+        <ChatDeleteModal setOpen={setDeleteModalOpen} deleteChatRoom={deleteChatRoom} />
+      )}
+      <>
 
         <>
           {/* 대여신청하기, 수락하기 어떤 버튼 눌렀느냐에 따라서 다른 모달 보여주기 */}
@@ -102,7 +160,7 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
                         alt="프로필 이미지"
                       />
                     </div>
-                    <div className="text-2xl my-3">{getPartnerNickname()}</div>
+                    <div className="text-2xl my-3">{nickname}</div>
                   </div>
                   <div className='absolute right-0'>
                     <button onClick={toggleDropdown}>
@@ -110,7 +168,7 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
                     </button>
                     {showDropdown && (
                       <div className="dropdown-menu absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
-                        <CommonButton className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">채팅방 나가기</CommonButton>
+                        <CommonButton className="block px-4 py-2 text-sm text-gray-700" onClick={() => setDeleteModalOpen(true)}>채팅방 나가기</CommonButton>
 
                       </div>
                     )}
@@ -192,10 +250,9 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
             </div>
           </div>
         </>
-      ) : (
-        <div className="flex flex-col justify-center items-center pl-10 relative w-full  ">현재 접속 중인 채팅방이 없습니다.</div>
-      )}
 
+
+      </>
     </>
   );
 };

@@ -1,9 +1,9 @@
-
+import { UserContext, UserType } from '@/App';
 import { XMarkIcon } from '@heroicons/react/16/solid';
 import { CameraIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
+import Resizer from 'react-image-file-resizer';
 import CommonButton from '../CommonButton';
-
 interface ChatProps {
   sendMessage: (message: string, image?: string) => void;
 }
@@ -11,6 +11,7 @@ interface ChatProps {
 const ChatInput = ({ sendMessage }: ChatProps) => {
   const [inputMessage, setInputMessage] = useState("");
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const { userData } = useContext<UserType>(UserContext)
   const fileInputRef = useRef<HTMLInputElement>(null);
 
 
@@ -23,7 +24,7 @@ const ChatInput = ({ sendMessage }: ChatProps) => {
 
     // 텍스트 메시지가 비어있지 않거나 이미지가 있는 경우에만 메시지 전송
     if (inputMessage.trim() !== "" || imageBase64) {
-      sendMessage(inputMessage.trim(), imageBase64);
+      sendMessage(inputMessage.trim(), imageBase64, userData?.nickname);
     }
     setInputMessage(""); // 메시지 전송 후 입력 필드 초기화
     setPreviewImage(null); // 메시지 전송 후 미리보기 초기화
@@ -33,17 +34,18 @@ const ChatInput = ({ sendMessage }: ChatProps) => {
   // 파일을 Base64로 인코딩하는 순수함수
   const convertFileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64String = reader.result?.toString();
-        if (base64String) {
-          resolve(base64String);
-        } else {
-          reject(new Error("Failed to convert file to Base64"));
-        }
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file); // 파일을 Base64로 인코딩
+      Resizer.imageFileResizer(
+        file, // 원본 파일
+        800, // 최대 가로 너비
+        800, // 최대 세로 높이
+        'JPEG', // 변환할 이미지 포맷
+        100, // 품질
+        0, // 회전
+        (uri) => {
+          resolve(uri as string);
+        },
+        'base64' // 출력 타입
+      );
     });
   }
 
@@ -95,7 +97,7 @@ const ChatInput = ({ sendMessage }: ChatProps) => {
         <div className="flex flex-row justify-between rounded-full w-full">
           <input
             placeholder="메시지를 입력하세요."
-            className="block w-full rounded-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray placeholder:text-gray focus:ring-2 focus:ring-inset focus:ring-mainBlack sm:text-sm sm:leading-6"
+            className="block w-full rounded-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-customGray placeholder:text-gray focus:ring-2 focus:ring-inset focus:ring-mainBlack sm:text-sm sm:leading-6"
             onChange={(e) => setInputMessage(e.target.value)}
             value={inputMessage}
             onKeyDown={handleKeyPress}

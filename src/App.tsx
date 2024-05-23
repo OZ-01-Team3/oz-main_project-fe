@@ -3,7 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { useQuery } from '@tanstack/react-query';
-import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
+import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
 import authRequests from './api/authRequests';
 import instance from './api/instance';
 import Header from './components/Header';
@@ -24,6 +24,10 @@ import Search from './pages/search';
 import TotalProducts from './pages/totalProducts';
 import WishList from './pages/wishList';
 
+/** PrivateRoute 타입 정의*/
+interface PrivateRouteProps {
+  children: ReactNode
+}
 /**사용자 타입 정의 */
 export interface UserType {
   userData: {
@@ -73,7 +77,7 @@ export const useUserContext = () => {
 };
 
 /** PrivateRoute 컴포넌트 */
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const [cookies] = useCookies(['ac']);
   const accessToken = cookies.ac;
 
