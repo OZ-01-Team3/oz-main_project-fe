@@ -51,38 +51,7 @@ const Chat = () => {
     }
   }, [])
 
-  // 컴포넌트 렌더링 될때마다 웹소켓 인스턴스 생성돼서 처음 마운트될때만 웹소켓 연결하기 위한.. 유즈이펙트.
-  // useEffect(() => {
-  //   console.log("유즈이펙트안에 채팅아이디2", chatRoomId)
-  // webSocket.current = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${chatRoomId}/`)
-  // // 웹소켓 연결
-  // webSocket.current.onopen = function () {
-  //   console.log('웹소켓 연결 ^_^')
-  // }
-  // // 웹소켓 종료
-  // webSocket.current.onclose = (error) => {
-  //   console.log('종료~', error)
-  // }
-  // // 웹 소켓 에러
-  // webSocket.current.onerror = function (error) {
-  //   console.log('웹 소켓 에러', error);
-  // }
 
-  // // 웹소켓으로부터 메시지를 받았을 때 실행되는 함수
-  // webSocket.current.onmessage = (event) => {
-  //   const data = JSON.parse(event.data)
-  //   setMessages((prev) => [...prev, data]);
-  //   console.log("메세지 받았읍니다.", data)
-  // }
-
-  // window.addEventListener('beforeunload', () => {
-  //   webSocket.current?.close()
-  // })
-
-  // return () => {
-  //   webSocket.current?.close()
-  // }
-  // }, [chatRoomId])
 
   useEffect(() => {
     if (chatRoomId) {
@@ -99,7 +68,7 @@ const Chat = () => {
   }, [chatRoomId])
 
   //메시지 전송 함수
-  const sendMessage = (message: string, image: string) => {
+  const sendMessage = (message: string, image: string, sender: string) => {
     if (!message.trim() && !image) {
       // 텍스트와 이미지가 모두 없는 경우 메시지를 보내지 않음
       return;
@@ -114,8 +83,8 @@ const Chat = () => {
 
 
 
-    webSocketRef.current?.sendMessage({ message, image });
-    console.log("메세지 전송:", message, "사진:", image)
+    webSocketRef.current?.sendMessage({ message, image, sender });
+    console.log("메세지 전송:", message, "사진:", image, "보내는 사람", sender)
   }
 
 

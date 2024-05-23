@@ -1,7 +1,8 @@
 
+import { UserContext } from '@/App';
 import { XMarkIcon } from '@heroicons/react/16/solid';
 import { CameraIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import CommonButton from '../CommonButton';
 
 interface ChatProps {
@@ -11,6 +12,7 @@ interface ChatProps {
 const ChatInput = ({ sendMessage }: ChatProps) => {
   const [inputMessage, setInputMessage] = useState("");
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const { userData } = useContext<UserType>(UserContext)
   const fileInputRef = useRef<HTMLInputElement>(null);
 
 
@@ -23,7 +25,7 @@ const ChatInput = ({ sendMessage }: ChatProps) => {
 
     // 텍스트 메시지가 비어있지 않거나 이미지가 있는 경우에만 메시지 전송
     if (inputMessage.trim() !== "" || imageBase64) {
-      sendMessage(inputMessage.trim(), imageBase64);
+      sendMessage(inputMessage.trim(), imageBase64, userData?.nickname);
     }
     setInputMessage(""); // 메시지 전송 후 입력 필드 초기화
     setPreviewImage(null); // 메시지 전송 후 미리보기 초기화
