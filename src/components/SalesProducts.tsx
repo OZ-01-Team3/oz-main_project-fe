@@ -33,7 +33,7 @@ const SalesProducts = () => {
                     <span className="font-medium mr-2">섹시다이너마이트</span>
                     <p>2024.05.10 ~ 2024.05.14</p>
                     <div className="flex items-center gap-1 ml-2 md:ml-0 sm:ml-0 ">
-                      <div className="flex-none py-0.5 text-sm leading-5 text-gray">대여중</div>
+                      <div className="flex-none py-0.5 text-sm leading-5 text-customGray">대여중</div>
                       <svg className="h-1.5 w-1.5 fill-green-500" viewBox="0 0 6 6" aria-hidden="true">
                         <circle cx={3} cy={3} r={3} />
                       </svg>

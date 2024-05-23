@@ -14,7 +14,7 @@ interface ChatListProps {
 }
 
 const UserResponseCss = 'flex flex-col items-start justify-center w-72 pr-1  h-18 md:mr-0 ml-1 md:h-20 pt-2';
-const ProductResCss = 'w-16 h-16 aspect-[1/1] border-gray rounded-md border ';
+const ProductResCss = 'w-16 h-16 aspect-[1/1] border-customGray rounded-md border ';
 
 const ChatList = ({ chatId, id, user, content, time, profile, product, notification }: ChatListProps) => {
   const [formattedTime, setFormattedTime] = useState(formatTime(time));

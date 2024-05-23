@@ -128,7 +128,7 @@ const Chat = () => {
         {/* 반반 나누는 레이아웃 */}
         <div className="flex  w-full h-[calc(100%-70px)] md:flex-row 2xl:flex-row ">
           {/* 채팅목록 */}
-          <div className="w-2/5 pl-3 pr-5 border-r-[1px] border-gray overflow-y-scroll scrollbar-hide sm:w-28 sm:px-2  ">
+          <div className="w-2/5 pl-3 pr-5 border-r-[1px] border-customGray overflow-y-scroll scrollbar-hide sm:w-28 sm:px-2  ">
             <ChatLists />
           </div>
           {/* 채팅방 */}
