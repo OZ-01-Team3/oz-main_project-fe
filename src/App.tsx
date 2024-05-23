@@ -2,30 +2,35 @@ import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { Dispatch, ReactNode, SetStateAction, createContext, useState } from 'react';
+import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
 import Header from './components/Header';
 import SideBar from './components/SideNav';
 import ProductDetailModal from './components/productDetail/ProductDetailModal';
 import SignIn from './pages/auth/signIn';
 import SignUp from './pages/auth/signUp';
 import Chat from './pages/chat';
-import ImgRegistration from './pages/imgRegistration';
 import Main from './pages/main';
 import MemberInfo from './pages/mypage/memberInfo';
 import OrderHistory from './pages/mypage/orderHistory';
 import SalesHistory from './pages/mypage/salesHistory';
+import ImgRegistration from './pages/products/imgRegistration';
 
+import { useQuery } from '@tanstack/react-query';
 import { Cookies, useCookies } from 'react-cookie';
-import ImageUpdate from './pages/ImageUpdate';
-import ProductUpdate from './pages/ProductUpdate';
+import { NotificationProvider } from './NotificationContext';
+import authRequests from './api/authRequests';
+import instance from './api/instance';
+
 import ProductRegistration from './pages/mypage/productRegistration';
+import ImageUpdate from './pages/products/ImageUpdate';
+import ProductUpdate from './pages/products/ProductUpdate';
+import TotalProducts from './pages/products/totalProducts';
 import Search from './pages/search';
-import TotalProducts from './pages/totalProducts';
 import WishList from './pages/wishList';
 
 /** PrivateRoute 타입 정의*/
 interface PrivateRouteProps {
-  children: ReactNode
+  children: ReactNode;
 }
 /**사용자 타입 정의 */
 export interface UserType {
@@ -51,7 +56,7 @@ interface UserContextType {
 
 /** 유저 정보를 전역관리하기 위한 컨텍스트 */
 export const UserContext = createContext<UserContextType>({
-  setUserData: () => { },
+  setUserData: () => {},
   userData: {
     pk: -1,
     age: 0,
@@ -94,7 +99,13 @@ const Layout = () => {
 
 /** 로그인 한 유저만 접근 가능한 라우트*/
 const loggedRoutes = [
-  <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
+  <Route
+    element={
+      <PrivateRoute>
+        <Layout />
+      </PrivateRoute>
+    }
+  >
     <Route path="/wish-list" element={<WishList />} />
     <Route
       path="/mypage/*"
@@ -110,13 +121,12 @@ const loggedRoutes = [
       <Route path="order-history" element={<OrderHistory />} />
     </Route>
 
-      <Route path="/img-reg" element={<ImgRegistration />} />
-      <Route path="/chat" element={<Chat />} />
-      <Route path="/product-reg" element={<ProductRegistration />} />
-      <Route path="/img-update" element={<ImageUpdate />} />
-      <Route path="/product-update" element={<ProductUpdate />} />
-    </Route>
-  </>,
+    <Route path="/img-reg" element={<ImgRegistration />} />
+    <Route path="/chat" element={<Chat />} />
+    <Route path="/product-reg" element={<ProductRegistration />} />
+    <Route path="/img-update/:productId" element={<ImageUpdate />} />
+    <Route path="/product-update/:productId" element={<ProductUpdate />} />
+  </Route>,
 ];
 /** 모든 유저가 접근 가능한 라우트 */
 const commonRoutes = [
@@ -158,7 +168,7 @@ function App() {
     region: '',
   });
   const cookies = new Cookies();
-  const accessToken = cookies.get('ac')
+  const accessToken = cookies.get('ac');
   //로그인한 회원 정보 불러오기
   const {
     data: meData,
@@ -176,40 +186,42 @@ function App() {
         throw error;
       }
     },
-    enabled: !!accessToken
+    enabled: !!accessToken,
   });
 
-  // //회원 정보가 있으면 상태 업데이트
-  // useEffect(() => {
-  //   if (meData) {
-  //     setUserData(meData);
-  //   }
-  // }, [meData]);
+  //회원 정보가 있으면 상태 업데이트
+  useEffect(() => {
+    if (meData) {
+      setUserData(meData);
+    }
+  }, [meData]);
 
-  // if (isMeLoading) return <div>Loading...</div>;
-  // if (
-  //   meError &&
-  //   !['/', '/sign-in', '/sign-up', '/all', '/search', '/oauth2/redirect'].includes(window.location.pathname)
-  // )
-  //   return <div>Error: {meError?.message}</div>;
+  if (isMeLoading) return <div>Loading...</div>;
+  if (
+    meError &&
+    !['/', '/sign-in', '/sign-up', '/all', '/search', '/oauth2/redirect'].includes(window.location.pathname)
+  )
+    return <div>Error: {meError?.message}</div>;
 
   return (
     <>
-      <UserContext.Provider value={{ setUserData, userData: userData }}>
-        <ToastContainer
-          position="top-center"
-          autoClose={700}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-        />
-        <Routes>{[...loggedRoutes, ...commonRoutes]}</Routes>
-      </UserContext.Provider>
+      <NotificationProvider>
+        <UserContext.Provider value={{ setUserData, userData: userData }}>
+          <ToastContainer
+            position="top-center"
+            autoClose={700}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+          />
+          <Routes>{[...loggedRoutes, ...commonRoutes]}</Routes>
+        </UserContext.Provider>
+      </NotificationProvider>
     </>
   );
 }
