@@ -1,7 +1,9 @@
 import { chatListAPI } from "@/api/chatRequests";
-import useMessageStore from "@/stores/useMessageStore";
+import useUserInfoStore from "@/stores/useUserInfoStore";
 import { useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { ErrorBoundary } from 'react-error-boundary';
+import Loading from "../Loading";
 import ChatLIst from "./ChatList";
 
 interface ChatInfoDto {
@@ -24,27 +26,40 @@ interface ChatInfoDto {
 
 
 const ChatLists = () => {
-  const messages = useMessageStore((state) => state.messages);
-
+  const setNickname = useUserInfoStore((state) => state.setNickname);
   const { data: ChatList, isLoading: isChatListLoading, error: ChatListError } = useQuery<ChatInfoDto[], Error>({
     queryKey: ['chatList'],
     queryFn: async () => {
       try {
         const response = await chatListAPI();
-
         console.log("이거는 api에서내려오는 채팅리스트", response.data);
-        return response.data;
+        const chatList = response.data;
+        const firstValidChat = chatList.find(chat => chat.user_info.nickname && chat.user_info.nickname);
+
+        if (firstValidChat) {
+          setNickname(firstValidChat.user_info.nickname);
+        } else {
+          console.warn("유효한 상대방을 찾을 수 없습니다.");
+        }
+        return chatList;
       } catch (error) {
-        throw new Error("채팅리스트 불러오기 에러");
+        if ((error as AxiosError).response && (error as AxiosError).response?.status === 404) {
+          // 404 오류 처리
+          throw new Error("참여중인 채팅방이 없습니다.");
+        } else {
+          // 다른 오류 처리
+          throw new Error("채팅리스트를 불러오는데 실패했습니다.");
+        }
       }
-    }
+    },
   });
 
-  console.log("채팅리스트에 메세진데 이거는 실시간", messages);
 
-  if (isChatListLoading) return <div>Loading...</div>;
-  if (ChatListError) return <div>Error: {ChatListError.message}</div>;
-
+  if (isChatListLoading) return <div><Loading /></div>;
+  if (ChatListError) return <div>{ChatListError.message}</div>;
+  if (!ChatList || ChatList.length === 0) {
+    return <div>채팅이 없습니다</div>;
+  }
   return (
     <>
       {ChatList?.map((data) => (

@@ -95,7 +95,7 @@ const ChatInput = ({ sendMessage }: ChatProps) => {
         <div className="flex flex-row justify-between rounded-full w-full">
           <input
             placeholder="메시지를 입력하세요."
-            className="block w-full rounded-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray placeholder:text-gray focus:ring-2 focus:ring-inset focus:ring-mainBlack sm:text-sm sm:leading-6"
+            className="block w-full rounded-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-customGray placeholder:text-gray focus:ring-2 focus:ring-inset focus:ring-mainBlack sm:text-sm sm:leading-6"
             onChange={(e) => setInputMessage(e.target.value)}
             value={inputMessage}
             onKeyDown={handleKeyPress}
