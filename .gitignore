@@ -49,7 +49,7 @@ Temporary Items
 
 # production
 /build
-
+dist/
 # misc
 *.pem
 

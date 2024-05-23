@@ -9,13 +9,16 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { z as zod } from 'zod';
 
+const { VITE_BASE_REQUEST_URL, VITE_REST_API_KEY, VITE_REDIRECT_URI
 
+} = import.meta.env;
 
+const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${VITE_REST_API_KEY}&redirect_uri=${VITE_REDIRECT_URI}&prompt=login`
 // 소셜미디어 로그인 버튼
 const socialMedia = [
-  { name: 'naver', src: '/images/naver.png' },
-  { name: 'kakao', src: '/images/kakao.png' },
-  { name: 'google', src: '/images/google.svg' },
+  { name: 'naver', src: '/images/naver.png', url: '#' },
+  { name: 'kakao', src: '/images/kakao.png', url: KAKAO_AUTH_URL },
+  { name: 'google', src: '/images/google.svg', url: '#' },
 ];
 
 const SignIn = () => {
@@ -100,10 +103,10 @@ const SignIn = () => {
           <span className=" w-full h-[1px] bg-mainWhite ml-2"></span>
         </div>
         <div className="flex flex-row mt-5">
-          {socialMedia.map(({ name, src }) => (
-            <div key={name} className="w-[39px] h-[39px] mr-3 cursor-pointer overflow-hidden rounded-full">
+          {socialMedia.map(({ name, src, url }) => (
+            <a key={name} href={url} className="w-[39px] h-[39px] mr-3 cursor-pointer overflow-hidden rounded-full">
               <img src={src} alt={name} className="w-full h-full object-cover" />
-            </div>
+            </a>
           ))}
         </div>
       </div>
