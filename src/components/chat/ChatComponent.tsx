@@ -14,6 +14,7 @@ import { Cookies } from 'react-cookie';
 import CommonButton from '../CommonButton';
 import ChatAcceptModal from './ChatAcceptModal';
 import ChatBubble from './ChatBubble';
+import ChatDeleteModal from './ChatDeleteModal';
 import ChatInput from './ChatInput';
 import ChatRentalModal from './ChatRentalModal';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
@@ -115,121 +116,124 @@ const ChatComponent = ({ sendMessage }: ChatProps) => {
 
   return (
     <>
-      {chatRoomId ? (
-        <>
-          {/* 대여신청하기, 수락하기 어떤 버튼 눌렀느냐에 따라서 다른 모달 보여주기 */}
-          {rentalModalOpen ? (
-            <ChatRentalModal setRentalModalOpen={setRentalModalOpen} />
-          ) : (
-            acceptModalOpen && <ChatAcceptModal setAcceptModalOpen={setAcceptModalOpen} />
-          )}
-          <div className="flex flex-col justify-center items-center pl-10 relative w-full md:pl-5 sm:pl-5  ">
-            <div className="flex w-full flex-col justify-between h-screen overflow-y-scroll scrollbar-hide ">
-              <div className="flex flex-col">
-                {/* 사용자 정보 */}
-                <div className={`sm:hidden ${userResCss} relative`}>
-                  <div className="flex items-center mx-auto">
-                    <div className="w-10 aspect-[1/1] mr-2 border-mainBlack rounded-full border ">
-                      <img
-                        src="https://i.pinimg.com/564x/2a/58/e3/2a58e3d012bb65932a7c38d7381f29ee.jpg"
-                        className="w-full h-full object-cover rounded-full"
-                        alt="프로필 이미지"
-                      />
+      <ChatDeleteModal />
+      <>
+        {chatRoomId ? (
+          <>
+            {/* 대여신청하기, 수락하기 어떤 버튼 눌렀느냐에 따라서 다른 모달 보여주기 */}
+            {rentalModalOpen ? (
+              <ChatRentalModal setRentalModalOpen={setRentalModalOpen} />
+            ) : (
+              acceptModalOpen && <ChatAcceptModal setAcceptModalOpen={setAcceptModalOpen} />
+            )}
+            <div className="flex flex-col justify-center items-center pl-10 relative w-full md:pl-5 sm:pl-5  ">
+              <div className="flex w-full flex-col justify-between h-screen overflow-y-scroll scrollbar-hide ">
+                <div className="flex flex-col">
+                  {/* 사용자 정보 */}
+                  <div className={`sm:hidden ${userResCss} relative`}>
+                    <div className="flex items-center mx-auto">
+                      <div className="w-10 aspect-[1/1] mr-2 border-mainBlack rounded-full border ">
+                        <img
+                          src="https://i.pinimg.com/564x/2a/58/e3/2a58e3d012bb65932a7c38d7381f29ee.jpg"
+                          className="w-full h-full object-cover rounded-full"
+                          alt="프로필 이미지"
+                        />
+                      </div>
+                      <div className="text-2xl my-3">{getPartnerNickname()}</div>
                     </div>
-                    <div className="text-2xl my-3">{getPartnerNickname()}</div>
-                  </div>
-                  <div className='absolute right-0'>
-                    <button onClick={toggleDropdown}>
-                      <EllipsisVerticalIcon className='w-4' />
-                    </button>
-                    {showDropdown && (
-                      <div className="dropdown-menu absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
-                        <CommonButton className="block px-4 py-2 text-sm text-gray-700" onClick={deleteChatRoom}>채팅방 나가기</CommonButton>
+                    <div className='absolute right-0'>
+                      <button onClick={toggleDropdown}>
+                        <EllipsisVerticalIcon className='w-4' />
+                      </button>
+                      {showDropdown && (
+                        <div className="dropdown-menu absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
+                          <CommonButton className="block px-4 py-2 text-sm text-gray-700" onClick={deleteChatRoom}>채팅방 나가기</CommonButton>
 
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  {/* 상품정보 */}
-                  {productDetailData.map(item => (
-                    <div className="flex flex-row justify-left items-center h-16 my-3" key={item.id}>
-                      {/* 상품이미지 */}
-                      <div className=" h-20 w-20 border-mainBlack flex justify-center items-center overflow-hidden">
-                        <img src={item.image} alt="상품이미지 " className="object-cover w-20 " />
-                      </div>
-                      {/* 상품상세정보 */}
-                      <div className="flex flex-col justify-center w-1/3 ml-3 h-14 sm:w-full md:w-full">
-                        <p className="text-sm font-semibold">{item.title}</p>
-
-                        <p className=" text-xs font-base text-subGray">
-                          {item.description.length > 40 ? `${item.description.substring(0, 40)}...` : item.description}
-                        </p>
-                        <p className="text-sm">대여비 {item.price}</p>
-                      </div>
+                        </div>
+                      )}
                     </div>
-                  ))}
-                  <div>
-                    <CommonButton
-                      className="bg-mainBlack text-mainWhite w-32 h-9 flex text-sm justify-center items-center mb-2 rounded-md p-1 sm:w-24 cursor-pointer "
-                      onClick={() => setRentalModalOpen(true)}
-                    >
-                      대여 신청하기
-                    </CommonButton>
-                    <CommonButton
-                      className="bg-[#D3D3D3] text-subGray  w-32 h-9 flex text-sm justify-center items-center rounded-md p-1 sm:w-24 cursor-pointer 
+                  </div>
+                  <div className="flex justify-between items-center">
+                    {/* 상품정보 */}
+                    {productDetailData.map(item => (
+                      <div className="flex flex-row justify-left items-center h-16 my-3" key={item.id}>
+                        {/* 상품이미지 */}
+                        <div className=" h-20 w-20 border-mainBlack flex justify-center items-center overflow-hidden">
+                          <img src={item.image} alt="상품이미지 " className="object-cover w-20 " />
+                        </div>
+                        {/* 상품상세정보 */}
+                        <div className="flex flex-col justify-center w-1/3 ml-3 h-14 sm:w-full md:w-full">
+                          <p className="text-sm font-semibold">{item.title}</p>
+
+                          <p className=" text-xs font-base text-subGray">
+                            {item.description.length > 40 ? `${item.description.substring(0, 40)}...` : item.description}
+                          </p>
+                          <p className="text-sm">대여비 {item.price}</p>
+                        </div>
+                      </div>
+                    ))}
+                    <div>
+                      <CommonButton
+                        className="bg-mainBlack text-mainWhite w-32 h-9 flex text-sm justify-center items-center mb-2 rounded-md p-1 sm:w-24 cursor-pointer "
+                        onClick={() => setRentalModalOpen(true)}
+                      >
+                        대여 신청하기
+                      </CommonButton>
+                      <CommonButton
+                        className="bg-[#D3D3D3] text-subGray  w-32 h-9 flex text-sm justify-center items-center rounded-md p-1 sm:w-24 cursor-pointer 
               "
-                      onClick={() => setAcceptModalOpen(true)}
-                    >
-                      수락하기
-                    </CommonButton>
+                        onClick={() => setAcceptModalOpen(true)}
+                      >
+                        수락하기
+                      </CommonButton>
+                    </div>
                   </div>
                 </div>
-              </div>
-              {/* 날짜 수평선 */}
-              <div className="flex items-center justify-center space-x-2  ">
-                <div className="flex-1 border-b  border-hrGray"></div>
-                <div className="text-subGray text-[11px]  px-2">2024.05.09</div>
-                <div className="flex-1 border-b border-hrGray"></div>
-              </div>
-              {/* 채팅창 */}
-              <div className="flex flex-col flex-grow overflow-y-scroll scrollbar-hide pb-3" ref={chatContainerRef}>
-                <div className="flex flex-col justify-between mt-4">
-                  {chatMessages.length > 0 && (
-                    chatMessages.map((data) => (
+                {/* 날짜 수평선 */}
+                <div className="flex items-center justify-center space-x-2  ">
+                  <div className="flex-1 border-b  border-hrGray"></div>
+                  <div className="text-subGray text-[11px]  px-2">2024.05.09</div>
+                  <div className="flex-1 border-b border-hrGray"></div>
+                </div>
+                {/* 채팅창 */}
+                <div className="flex flex-col flex-grow overflow-y-scroll scrollbar-hide pb-3" ref={chatContainerRef}>
+                  <div className="flex flex-col justify-between mt-4">
+                    {chatMessages.length > 0 && (
+                      chatMessages.map((data) => (
+                        <ChatBubble
+                          key={data.id}
+                          content={data.text}
+                          time={data.timestamp}
+                          subject={data.nickname}
+                          img={data.image}
+                          profile_img={`https://i.pinimg.com/564x/9d/d4/52/9dd45271b020a094a12bfeee12b39f65.jpg`}
+                          read={data.status}
+                        />
+                      )))}
+
+                    {messages.map((data, index) => (
                       <ChatBubble
-                        key={data.id}
-                        content={data.text}
+                        key={index}
+                        content={data.message}
                         time={data.timestamp}
                         subject={data.nickname}
                         img={data.image}
                         profile_img={`https://i.pinimg.com/564x/9d/d4/52/9dd45271b020a094a12bfeee12b39f65.jpg`}
                         read={data.status}
                       />
-                    )))}
-
-                  {messages.map((data, index) => (
-                    <ChatBubble
-                      key={index}
-                      content={data.message}
-                      time={data.timestamp}
-                      subject={data.nickname}
-                      img={data.image}
-                      profile_img={`https://i.pinimg.com/564x/9d/d4/52/9dd45271b020a094a12bfeee12b39f65.jpg`}
-                      read={data.status}
-                    />
-                  ))}
+                    ))}
+                  </div>
                 </div>
+                {/* 입력창 */}
+                <ChatInput sendMessage={sendMessage} />
               </div>
-              {/* 입력창 */}
-              <ChatInput sendMessage={sendMessage} />
             </div>
-          </div>
-        </>
-      ) : (
-        <div className="flex flex-col justify-center items-center pl-10 relative w-full  ">현재 접속 중인 채팅방이 없습니다.</div>
-      )}
+          </>
+        ) : (
+          <div className="flex flex-col justify-center items-center pl-10 relative w-full  ">현재 접속 중인 채팅방이 없습니다.</div>
+        )}
 
+      </>
     </>
   );
 };

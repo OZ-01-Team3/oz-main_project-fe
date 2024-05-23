@@ -10,7 +10,7 @@
     "format": "prettier --check --ignore-path .gitignore .",
     "format:fix": "prettier --write --ignore-path .gitignore .",
     "svgr": "npx @svgr/cli -d src/assets/svg --ignore-existing --typescript --no-dimensions public/svg",
-    "dev": "vite --host 0.0.0.0 --port 3000"
+    "dev": "vite"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.19",
@@ -19,6 +19,7 @@
     "@mswjs/http-middleware": "^0.10.1",
     "@tailwindcss/forms": "^0.5.7",
     "@tanstack/react-query": "^5.28.14",
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
     "axios": "^1.6.8",
     "cors": "^2.8.5",
     "eslint-config-airbnb": "^19.0.4",
@@ -34,6 +35,7 @@
     "react-router-dom": "^6.23.1",
     "react-toastify": "^10.0.5",
     "tailwind-scrollbar-hide": "^1.1.7",
+    "vite-plugin-mkcert": "^1.17.5",
     "vite-plugin-svgr": "^4.2.0",
     "zod": "^3.23.8",
     "zustand": "^4.5.2"
@@ -62,5 +64,5 @@
       "public"
     ]
   },
-  "proxy": "http://127.0.0.1:8000"
+  "proxy": "https://api.coatycloset.store/"
 }
