@@ -1,15 +1,14 @@
 import { productRequests } from '@/api/productRequest';
 import CommonButton from '@/components/CommonButton';
+import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { ChangeEventHandler, useEffect, useState } from 'react';
-import { Cookies } from 'react-cookie';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { z as zod } from 'zod';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const sizes = ['S', 'M', 'L', 'XL'];
-const cookies = new Cookies();
 
 export const productStatusOptions = [
   { id: 1, label: '새 상품 (미사용)', description: '사용하지 않은 상품' },
@@ -17,6 +16,7 @@ export const productStatusOptions = [
   { id: 3, label: '사용감 적음', description: '눈에 띄는 흔적이나 얼룩이 약간 있음' },
   { id: 4, label: '사용감 많음', description: '눈에 띄는 흔적이나 얼룩이 많이 있음' },
 ];
+
 interface locationState {
   file: File;
   id: number;
@@ -43,6 +43,7 @@ const productRegistrationSchema = zod.object({
 });
 
 const ProductRegistration = () => {
+  const [price, setPrice] = useState(0);
   const [productNameLength, setProductNameLength] = useState<number>(0);
   const [categories, setCategories] = useState<category[]>([]);
 
@@ -78,7 +79,7 @@ const ProductRegistration = () => {
 
   //상품등록 폼 상태 관리
   const form = useForm({
-    // resolver: zodResolver(productRegistrationSchema),
+    resolver: zodResolver(productRegistrationSchema),
     defaultValues: {
       name: '',
       purchase_price: '',
