@@ -9,16 +9,19 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { z as zod } from 'zod';
 
-const { VITE_BASE_REQUEST_URL, VITE_REST_API_KEY, VITE_REDIRECT_URI
+const { VITE_REST_API_KEY, VITE_REDIRECT_URI, VITE_GOOGLE_AUTH_CLIENT_ID, VITE_GOOGLE_SCOPE
 
 } = import.meta.env;
 
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${VITE_REST_API_KEY}&redirect_uri=${VITE_REDIRECT_URI}&prompt=login`
+
+const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${VITE_GOOGLE_AUTH_CLIENT_ID}&redirect_uri=${VITE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`
+
 // 소셜미디어 로그인 버튼
 const socialMedia = [
   { name: 'naver', src: '/images/naver.png', url: '#' },
   { name: 'kakao', src: '/images/kakao.png', url: KAKAO_AUTH_URL },
-  { name: 'google', src: '/images/google.svg', url: '#' },
+  { name: 'google', src: '/images/google.svg', url: GOOGLE_AUTH_URL },
 ];
 
 const SignIn = () => {
@@ -89,7 +92,7 @@ const SignIn = () => {
             </CommonButton>
           </form>
         </div>
-        <div className="mt-6 font-light">
+        <div className="mt-6">
           아직 회원이 아니신가요?
           <Link to="/sign-up">
             <button type="button" className="font-semibold ml-2">

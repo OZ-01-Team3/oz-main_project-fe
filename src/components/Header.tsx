@@ -70,7 +70,7 @@ const Header = () => {
           {' '}
           {/* PC 사이즈에서만 보이도록 수정 */}
           <div className="w-auto">
-            <ul className="flex justify-between w-52 text-sm font-light text-mainWhite">
+            <ul className="flex justify-between w-52 text-sm ftext-mainWhite">
               {mainMenuItems.map(({ label, onClick, path }) => (
                 <li key={label} className="cursor-pointer" onClick={onClick}>
                   {path ? (
