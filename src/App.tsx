@@ -22,6 +22,7 @@ import authRequests from './api/authRequests';
 import instance from './api/instance';
 
 // import { NotificationProvider } from './NotificationContext';
+import ProductRegistrationButton from './components/ProductRegistrationButton';
 import LoginHandler from './pages/LoginHandler';
 import ProductRegistration from './pages/mypage/productRegistration';
 import ImageUpdate from './pages/products/ImageUpdate';
@@ -223,6 +224,9 @@ function App() {
           theme="colored"
         />
         <Routes>{[...loggedRoutes, ...commonRoutes]}</Routes>
+        {accessToken && (location.pathname === '/' || location.pathname === '/all') && (
+          <ProductRegistrationButton />
+        )}
       </UserContext.Provider>
       {/* </NotificationProvider> */}
     </>
