@@ -3,13 +3,14 @@ import CommonButton from '@/components/CommonButton';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { ChangeEventHandler, useEffect, useState } from 'react';
+import { Cookies } from 'react-cookie';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { z as zod } from 'zod';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const sizes = ['S', 'M', 'L', 'XL'];
-
+const cookies = new Cookies();
 export const productStatusOptions = [
   { id: 1, label: '새 상품 (미사용)', description: '사용하지 않은 상품' },
   { id: 2, label: '사용감 없음', description: '사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음' },
