@@ -23,7 +23,7 @@ import instance from './api/instance';
 
 // import { NotificationProvider } from './NotificationContext';
 import ProductRegistrationButton from './components/ProductRegistrationButton';
-import LoginHandler from './pages/LoginHandler';
+import LoginHandler from './pages/loginHandler';
 import ProductRegistration from './pages/mypage/productRegistration';
 import ImageUpdate from './pages/products/ImageUpdate';
 import ProductUpdate from './pages/products/ProductUpdate';
