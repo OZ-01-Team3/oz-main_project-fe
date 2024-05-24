@@ -10,7 +10,7 @@ const LoginHandler = () => {
 
   const kakaoLogin = async () => {
     try {
-      const response = await axios.post(`${VITE_BASE_REQUEST_URL}/members/kakao/login`, {
+      const response = await axios.post(`${VITE_BASE_REQUEST_URL}/users/login/social/kakao/`, {
         code: code
       }, {
         headers: {
@@ -20,8 +20,8 @@ const LoginHandler = () => {
       );
       // console.log("카카오", response)
       // localStorage.setItem("name",response.data)
-      cookies.set("accessToken", response.data.access, { path: '/', secure: true, })
-      cookies.set("refreshToken", response.data.refresh, { path: '/', secure: true, })
+      cookies.set("ac", response.data.access, { path: '/', secure: true, })
+      cookies.set("rc", response.data.refresh, { path: '/', secure: true, })
       window.location.href = "/"
     } catch (error) {
       console.error("카카오 로그인 실패", error);
