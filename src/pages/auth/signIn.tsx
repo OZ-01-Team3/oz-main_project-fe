@@ -17,6 +17,7 @@ const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=co
 
 const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${VITE_GOOGLE_AUTH_CLIENT_ID}&redirect_uri=${VITE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`
 
+
 // 소셜미디어 로그인 버튼
 const socialMedia = [
   { name: 'naver', src: '/images/naver.png', url: '#' },
