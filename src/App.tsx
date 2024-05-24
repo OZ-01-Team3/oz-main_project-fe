@@ -17,10 +17,11 @@ import ImgRegistration from './pages/products/imgRegistration';
 
 import { useQuery } from '@tanstack/react-query';
 import { Cookies, useCookies } from 'react-cookie';
-import { NotificationProvider } from './NotificationContext';
+
 import authRequests from './api/authRequests';
 import instance from './api/instance';
 
+import { NotificationProvider } from './NotificationContext';
 import ProductRegistration from './pages/mypage/productRegistration';
 import ImageUpdate from './pages/products/ImageUpdate';
 import ProductUpdate from './pages/products/ProductUpdate';
