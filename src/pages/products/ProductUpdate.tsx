@@ -1,4 +1,4 @@
-import { productRequests } from '@/api/productRequest';
+import instance from '@/api/instance';
 import CommonButton from '@/components/CommonButton';
 import axios from 'axios';
 import { ChangeEventHandler, useEffect, useState } from 'react';
@@ -6,47 +6,20 @@ import { Cookies } from 'react-cookie';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { z as zod } from 'zod';
+import { productStatusOptions } from '../mypage/productRegistration';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const sizes = ['S', 'M', 'L', 'XL'];
 const cookies = new Cookies();
-
-export const productStatusOptions = [
-  { id: 1, label: '새 상품 (미사용)', description: '사용하지 않은 상품' },
-  { id: 2, label: '사용감 없음', description: '사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음' },
-  { id: 3, label: '사용감 적음', description: '눈에 띄는 흔적이나 얼룩이 약간 있음' },
-  { id: 4, label: '사용감 많음', description: '눈에 띄는 흔적이나 얼룩이 많이 있음' },
-];
-interface locationState {
-  file: File;
-  id: number;
-  imageUrl: string;
-}
-
+const access = cookies.get('ac');
 interface category {
   id: number;
   name: string;
 }
-
-const productRegistrationSchema = zod.object({
-  name: zod.string().min(1, '상품명을 입력해주세요').max(30, '상품명은 30자 이내로 입력해주세요'),
-  purchasing_price: zod.number().min(1, '1원 이상 입력해주세요'),
-  rental_fee: zod.number().min(1, '1원 이상 입력해주세요'),
-  size: zod.string().min(1, '사이즈를 선택해주세요'),
-  brand: zod.string().min(1, '브랜드를 입력해주세요'),
-  product_category: zod.string().min(1, '카테고리를 선택해주세요'),
-  purchase_date: zod.string().min(1, '구매시기를 선택해주세요'),
-  condition: zod.string().min(1, '상품 상태를 선택해주세요'),
-  description: zod.string().min(1, '상품 설명을 입력해주세요'),
-  amount: zod.string().min(1, '수량을 입력해주세요'),
-  region: zod.string().min(1, '거래지역을 입력해주세요'),
-});
-
-const ProductRegistration = () => {
+const ProductUpdate = () => {
   const [productNameLength, setProductNameLength] = useState<number>(0);
   const [categories, setCategories] = useState<category[]>([]);
 
-  // img-reg 에서 보낸 사진 배열 받아오기
+  // img-reg 에서 보낸 정보 가져오기
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -60,11 +33,21 @@ const ProductRegistration = () => {
     handleGetCategories();
   }, []);
 
-  //**받아온 사진 배열에서 사진파일배열만 보내기 */
-  const registeredImages = (location.state as locationState[]).map(item => {
-    return item.file;
-  });
-  console.log(registeredImages);
+  const prevProductInformation = location.state;
+  console.log('기존정보+사진수정정보', prevProductInformation);
+  console.log('전체사진', prevProductInformation.images);
+  //! 기존이미지
+  // const existedImages = prevProductInformation.images.filter(item => {
+  //   return item.imageUrl;
+  // });
+
+  // //**받아온 사진 배열에서 사진파일배열만 보내기 */
+  // const newRegisteredImages = prevProductInformation.images.filter(item => {
+  //   return item.file;
+  // });
+  //!!! File 형식이 있으면,File 반환, 아니면 imageUrl반환.
+  const images = prevProductInformation.images.map(item => item.file || item.imageUrl);
+  console.log('보내는 Images(기존+새롭게추가)', images);
 
   const handleProductNameMaxLength: ChangeEventHandler<HTMLInputElement> = e => {
     const value = e.target.value;
@@ -75,30 +58,29 @@ const ProductRegistration = () => {
       setProductNameLength(30);
     }
   };
-
   //상품등록 폼 상태 관리
   const form = useForm({
     // resolver: zodResolver(productRegistrationSchema),
     defaultValues: {
-      name: '',
-      purchase_price: '',
-      rental_fee: '',
-      size: '',
-      brand: '',
-      product_category: '',
-      purchase_date: '',
-      condition: '',
-      description: '',
-      // tag: '',
-      amount: '',
-      region: '',
-      image: '',
+      name: prevProductInformation.name,
+      purchase_price: prevProductInformation.purchase_price,
+      rental_fee: prevProductInformation.rental_fee,
+      size: prevProductInformation.size,
+      brand: prevProductInformation.brand,
+      product_category: prevProductInformation.product_category,
+      purchase_date: prevProductInformation.purchase_date,
+      condition: prevProductInformation.condition,
+      description: prevProductInformation.description,
+      // tag: prevProductInformation.,
+      amount: prevProductInformation.amount,
+      region: prevProductInformation.region,
+      image: prevProductInformation.image,
     },
-    mode: 'onSubmit',
+    mode: 'onChange',
   });
   const {
     register,
-    formState: { errors },
+    // formState: { errors },
     handleSubmit,
   } = form;
 
@@ -106,16 +88,15 @@ const ProductRegistration = () => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/`);
       console.log(response, '상품 카테고리 가져오기 성공');
-      console.log(response.data);
-      setCategories(response.data);
+      console.log(response.data.results);
+      setCategories(response.data.results);
     } catch (error) {
       console.log(error);
     }
   };
-
-  const handleClickReg = handleSubmit(async data => {
+  const formData = new FormData();
+  const handleUpdateProduct = handleSubmit(async data => {
     try {
-      const formData = new FormData();
       formData.append('name', data.name);
       formData.append('purchase_price', data.purchase_price);
       formData.append('rental_fee', data.rental_fee);
@@ -127,99 +108,105 @@ const ProductRegistration = () => {
       formData.append('description', data.description);
       formData.append('amount', data.amount);
       formData.append('region', data.region);
-
-      // registeredImages 파일을 formData에 추가
-      registeredImages.forEach(image => {
-        formData.append(`image`, image);
-        console.log(image);
-      });
+      // formData.append('image', data.image);
 
       for (const pair of formData.entries()) {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
-      const access = cookies.get('ac');
-      const response = await axios.post(VITE_BASE_REQUEST_URL + productRequests.products, formData, {
+      // newRegisteredImages.forEach(image => {
+      //   formData.append(`image`, image);
+      //   console.log(image);
+      // });
+      // existedImages.forEach(image => {
+      //   formData.append(`image`, image);
+      //   console.log(image);
+      // });
+      images.forEach(image => {
+        formData.append(`image`, image);
+      });
+      const response = await axios.put(VITE_BASE_REQUEST_URL + `/products/${prevProductInformation.uuid}/`, formData, {
         headers: {
           Authorization: `Bearer ${access}`,
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log('상품 등록 성공', response);
-      toast.success('상품이 성공적으로 등록되었습니다!');
-      navigate('/');
+      console.log('상품수정 보낸 값', response);
+      toast.success('상품정보가 수정되었습니다.');
+      navigate('/all');
     } catch (error) {
       console.log(error);
-      toast.error('상품등록에 실패하였습니다');
+      toast.error('상품정보 수정에 실패했습니다.');
+      for (const pair of formData.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+      }
     }
     console.log(data);
   });
+
+  const handleDeleteProduct = async () => {
+    if (!window.confirm('상품을 삭제하시겠습니까? 다시 되돌릴 수 없습니다.')) {
+      return;
+    }
+    try {
+      const response = await instance.delete(`/products/${prevProductInformation.uuid}/`);
+      console.log(response);
+      toast.success('상품이 성공적으로 삭제되었습니다.');
+      navigate('/img-reg'); // 상품 삭제 후 이미지 등록 페이지로 이동
+    } catch (error) {
+      console.log(error);
+      toast.error('상품 삭제에 실패했습니다.');
+    }
+  };
   return (
-    <div className="lg:w-[700px] w-[900px] md:w-[500px] sm:w-[350px] sm:text-sm m-auto ">
+    <div className="lg:w-[700px] w-[900px] md:w-[500px] sm:w-[350px] sm:text-sm m-auto">
       <FormProvider {...form}>
-        <form className="w-full md:mb-20 sm:mb-20" onSubmit={handleClickReg}>
+        <form className="w-full md:mb-20 sm:mb-20" onSubmit={handleUpdateProduct}>
           <p className="text-left text-3xl mt-28">상품 정보</p>
-
           <hr className="w-full ml-auto mr-auto mt-6 mb-7 text-hrGray" />
-
-          {/* Input fields */}
-          {/* <div> */}
-          {/* 상품명 */}
-          <div className="mb-4 text-center">
-            <div className="flex items-center justify-center w-full">
-              <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">상품명</span>
-              <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
-                <div className="w-full flex justify-between items-center relative">
-                  <input
-                    type="text"
-                    className="pr-2 shadow appearance-none border rounded w-full py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
-                    placeholder="상품명을 입력하세요"
-                    {...register('name')}
-                    onChange={handleProductNameMaxLength}
-                  />
-                  <span className="text-sm ml-3 text-mainBlack absolute z-10 right-2">{productNameLength}/30</span>
-                </div>
-                {errors.name && <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.name.message}</p>}
-              </div>
-            </div>
-            <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
-          </div>
-
-          {/* 구매가 */}
-          <div className="mb-4 text-center">
-            <div className="flex items-center justify-center w-full">
-              <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">구매가</span>
-              <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
-                <div className="w-full flex justify-between items-center relative ">
-                  <input
-                    type="number"
-                    className="pr-6 shadow appearance-none border rounded w-full py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
-                    placeholder="상품을 구매하신 금액을 입력하세요"
-                    {...register('purchase_price')}
-                  />
-                  <span className="text-sm text-mainBlack ml-3 absolute right-2">원</span>
-                </div>
-                {errors.purchase_price && (
-                  <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.purchase_price.message}</p>
-                )}
-              </div>
-            </div>
-            <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
-
-            {/* 대여비 */}
+          <div>
+            {/* 상품명 */}
             <div className="mb-4">
-              <div className="flex items-center justify-center w-full relative">
-                <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5 ">대여비</span>
+              <div className="flex items-center justify-center w-full">
+                <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">상품명</span>
                 <input
-                  type="number"
-                  className="pr-6 shadow appearance-none border rounded w-full md:w-8/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
-                  placeholder="대여비를 입력하세요"
-                  {...register('rental_fee')}
+                  type="text"
+                  className="shadow appearance-none border rounded w-full md:w-8/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
+                  placeholder="상품명을 입력하세요"
+                  {...register('name')}
+                  onChange={handleProductNameMaxLength}
                 />
-                <span className="text-sm text-mainBlack ml-3 absolute right-2">원</span>
+                <span className="text-sm text-white ml-3">{productNameLength}/30</span>
               </div>
               <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
             </div>
-
+            {/* 구매가 */}
+            <div className="mb-4">
+              <div className="flex items-center justify-center w-full">
+                <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">구매가</span>
+                <input
+                  type="text"
+                  className="shadow appearance-none border rounded w-full md:w-8/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
+                  placeholder="상품을 구매하신 금액을 입력하세요"
+                  {...register('purchase_price')}
+                />
+                <span className="text-sm text-white ml-3">원</span>
+              </div>
+              <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
+            </div>
+            {/* 대여비 */}
+            <div className="mb-4">
+              <div className="flex items-center justify-center w-full">
+                <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">대여비</span>
+                <input
+                  type="text"
+                  className="shadow appearance-none border rounded w-full md:w-8/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
+                  placeholder="대여비를 입력하세요"
+                  {...register('rental_fee')}
+                />
+                <span className="text-sm text-white ml-3">원</span>
+              </div>
+              <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
+            </div>
             {/* 사이즈 */}
             <div className="mb-4">
               <div className="flex items-center justify-center w-full">
@@ -259,8 +246,8 @@ const ProductRegistration = () => {
                   {...register('product_category')}
                 >
                   {categories &&
-                    categories.map(category => (
-                      <option key={category.id} value={category.id}>
+                    categories.map((category, index) => (
+                      <option key={index} value={category.id}>
                         {category.name}
                       </option>
                     ))}
@@ -337,16 +324,14 @@ const ProductRegistration = () => {
 
           {/* 수량 */}
           <div className="mb-4">
-            <div className="flex items-center justify-start w-full ">
+            <div className="flex items-center justify-start w-full">
               <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">수량</span>
-              <div className="relative flex items-center ">
-                <input
-                  type="number"
-                  className="shadow appearance-none border rounded w-62 md:w-4/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
-                  {...register('amount')}
-                />
-                <span className="text-sm text-mainBlack ml-3 absolute right-2 ">개</span>
-              </div>
+              <input
+                type="number"
+                className=" shadow appearance-none border rounded w-62 md:w-4/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
+                {...register('amount')}
+              />
+              <span className="text-sm text-white ml-3">개</span>
             </div>
           </div>
           {/* 거래지역 */}
@@ -363,12 +348,16 @@ const ProductRegistration = () => {
           </div>
 
           {/* Submit Button */}
-          <div className="text-right md:mb-48 ">
+          <div className="flex w-full justify-between items-center">
             <CommonButton
-              type="submit"
-              className="align-middle w-44 rounded-lg bg-mainWhite px-auto py-3.5  font-semibold  text-mainBlack  my-10 "
+              type="button"
+              onClick={handleDeleteProduct}
+              className="align-middle w-44 sm:w-32  rounded-lg bg-gray px-auto py-3.5  font-semibold  text-mainBlack  my-10 hover:scale-105"
             >
-              등록하기
+              삭제하기
+            </CommonButton>
+            <CommonButton className="align-middle w-44 sm:w-32 rounded-lg bg-mainWhite px-auto py-3.5  font-semibold  text-mainBlack  my-10 hover:scale-105">
+              저장하기
             </CommonButton>
           </div>
         </form>
@@ -377,4 +366,4 @@ const ProductRegistration = () => {
   );
 };
 
-export default ProductRegistration;
+export default ProductUpdate;

@@ -3,22 +3,21 @@ import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import React, { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-const dragStyle = {
+export const dragStyle = {
   box: 'bg-[#ebe9e935] w-full h-[230px] flex flex-col items-center justify-center rounded-lg  border border-dashed border-[#FF5634] py-10 mt-5 mb-3 ',
   img: 'mx-auto h-60 w-6h-60 text-gray-300 text-mainBlack',
   text: 'mt-5 text-mainBlack ',
 };
-const style = {
+export const style = {
   box: ' w-full  h-[230px] flex flex-col items-center justify-center rounded-lg  hover:cursor-pointer border border-dashed border-mainWhite py-10 mt-5 mb-3',
   img: 'mx-auto h-60 w-6h-60 text-gray-300   ',
   text: 'mt-5',
 };
-interface FileType {
+export interface FileType {
   id: number; // 파일들의 고유값 id
   file: File;
   imageUrl: string; // 파일에 대한 미리보기 이미지 URL
 }
-
 const ImageRegistration = () => {
   const [fileList, setFileList] = useState<FileType[]>([]); // 파일 및 이미지 URL 상태
   const [isDragging, setIsDragging] = useState<boolean>(false); // 드래그 상태

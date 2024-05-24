@@ -1,28 +1,32 @@
+import { useCurrentPageStore, useTotalPageStore } from '@/stores/usePageStore';
+interface PageNationProps {
+  handlePageChange: (newPage: number) => void;
+}
+const PageNation = ({ handlePageChange }: PageNationProps) => {
+  const { currentPage } = useCurrentPageStore();
+  const { totalPages } = useTotalPageStore();
 
-import { useState } from "react";
-const PageNation = () => {
-  // 현제 어느 페이지인지 상태
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  //  현재 페이지랑 페이지넘버랑 같으면 활성화시킴
+  // 현재 페이지와 페이지 넘버가 같으면 활성화시킴
   const isActive = (pageNumber: number) =>
-    currentPage === pageNumber
-      ? "bg-neutral-100 text-mainBlack outline-none bg-neutral-text-mainBlack"
-      : "";
-  // 이젠페이지로 이동
+    currentPage === pageNumber ? 'bg-neutral-100 text-mainBlack outline-none bg-neutral-text-mainBlack' : '';
+
+  // 이전 페이지로 이동
   const handlePrevPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+      handlePageChange(currentPage - 1);
     }
   };
-  // 다음페에지로 이동
+
+  // 다음 페이지로 이동
   const handleNextPage = () => {
-    if (currentPage < 3) {
-      setCurrentPage(currentPage + 1);
+    if (currentPage < totalPages) {
+      handlePageChange(currentPage + 1);
     }
   };
+
   // 페이지 버튼 눌렀을 때 해당 페이지로 이동
   const handlePageClick = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
+    handlePageChange(pageNumber);
   };
 
   return (
@@ -38,26 +42,22 @@ const PageNation = () => {
             <span aria-hidden="true">≪</span>
           </button>
         </li>
-        {[1, 2, 3].map((pageNumber) => (
-          <li
-            key={pageNumber}
-            aria-current={currentPage === pageNumber ? "page" : undefined}
-            onClick={() => handlePageClick(pageNumber)}
-          >
-            <button
-              className={`pageNation ${isActive(pageNumber)}`}
-              onClick={handleNextPage}
-            >
-              {pageNumber}
-            </button>
-          </li>
-        ))}
+        {[...Array(totalPages)].map((_, index) => {
+          const pageNumber = index + 1;
+          return (
+            <li key={pageNumber} aria-current={currentPage === pageNumber ? 'page' : undefined}>
+              <button className={`pageNation ${isActive(pageNumber)}`} onClick={() => handlePageClick(pageNumber)}>
+                {pageNumber}
+              </button>
+            </li>
+          );
+        })}
         <li>
           <button
             className="pageNationIcon"
             aria-label="Next"
-            onClick={() => setCurrentPage(currentPage + 1)}
-            disabled={currentPage === 3}
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
           >
             <span aria-hidden="true">≫</span>
           </button>

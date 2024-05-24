@@ -3,14 +3,14 @@ import { create } from 'zustand';
 // const [selectedProductId, setSelectedProductId] = useState(0);
 // 상품 아이디 저장하는 상태
 interface ProductId {
-  selectedProductId: number;
-  willSelectedProductId: number | null;
-  setSelectedProductId: (id: number) => void;
-  setWillSelectedProductId: (id: number | null) => void;
+  selectedProductId: string | null;
+  willSelectedProductId: string | undefined | null;
+  setSelectedProductId: (id: string) => void;
+  setWillSelectedProductId: (id: string | undefined | null) => void;
 }
 export const useProductIdStore = create<ProductId>(set => ({
-  selectedProductId: 0,
-  willSelectedProductId: 0,
+  selectedProductId: null,
+  willSelectedProductId: null,
   setSelectedProductId: id => set({ selectedProductId: id }),
   setWillSelectedProductId: id => set({ willSelectedProductId: id }),
 }));
@@ -19,12 +19,10 @@ export const useProductIdStore = create<ProductId>(set => ({
 // const [detailModalOpen, setDetailModalOpen] = useState(false);
 interface ModalOpenStore {
   detailModalOpen: boolean;
-  fromPath: string;
-  setDetailModalOpen: (isOpen: boolean, path?: string) => void;
+  setDetailModalOpen: (isOpen: boolean) => void;
 }
 
 export const useModalOpenStore = create<ModalOpenStore>(set => ({
-  detailModalOpen: false,
-  fromPath: '', // 모달이 열릴 때의 경로를 저장할 상태
-  setDetailModalOpen: (isOpen: boolean, path = '') => set({ detailModalOpen: isOpen, fromPath: path }),
+  detailModalOpen: false, // 모달이 열릴 때의 경로를 저장할 상태
+  setDetailModalOpen: (isOpen: boolean) => set({ detailModalOpen: isOpen }),
 }));

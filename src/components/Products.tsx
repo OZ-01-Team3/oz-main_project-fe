@@ -1,21 +1,43 @@
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
-import { HeartIcon } from '@heroicons/react/24/outline';
-import { useEffect, useState } from 'react';
-import { Cookies } from 'react-cookie';
-interface product {
+import { HeartIcon as OutlineHeartIcon } from '@heroicons/react/24/outline';
+import { HeartIcon as FilledHeartIcon } from '@heroicons/react/24/solid';
+
+import { useEffect } from 'react';
+
+interface image {
   id: number;
   image: string;
-  title: string;
+}
+export interface product {
+  uuid: string;
+  brand: string;
+  condition: string;
   description: string;
-  price: number;
+  purchase_date: string;
+  purchase_price: number;
+  name: string;
+  rental_fee: number;
+  size: string;
+  views: 0;
+  product_category: number;
+  amount: number;
+  region: string;
+  images: image[];
+  isFavorite: boolean;
+  lender: lender;
+}
+interface lender {
+  age?: number;
+  email: string;
+  nickname: string;
+}
+export interface ProductProps {
+  products: product[];
+  setProducts: (products: product[]) => void;
 }
 
-
-
-const Products = () => {
+const Products = ({ products, setProducts }: ProductProps) => {
   const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
-  const cookies = new Cookies()
-  const csrfToken = cookies.get('csrftoken');
   useEffect(() => {
     if (detailModalOpen) {
       document.body.style.overflow = 'hidden';
@@ -24,22 +46,16 @@ const Products = () => {
     }
   }, [detailModalOpen]);
   const { setSelectedProductId } = useProductIdStore();
-  const [products, setProducts] = useState<product[]>([]);
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     try {
-  //       const response = await axios.get('/api/v1/products');
-  //       console.log(response.data); // 받은 데이터를 로그로 출력
-  //       console.log("가지고오니?", csrfToken); // 받은 데이터를 로그로 출력
-  //       setProducts(response.data.items); // 받은 데이터의 items 배열을 상품 목록으로 설정
-  //     } catch (error) {
-  //       console.error('상품 불러오기 실패:', error);
-  //     }
-  //   };
-  //   fetchProducts(); // 컴포넌트가 마운트된 후에 상품 데이터를 가져오는 함수 호출
-  // }, []);
 
-  const handleOpenModal = (id: number) => {
+  // 아이디 받아서 일치하면 isFavorite 바꿔주기
+  const toggleFavorite = (id: string) => {
+    // products 받아서 맵 돌리고 선택한 아이디랑 같으면 isFavorite의 값 토글해주기
+    setProducts(currentProducts =>
+      currentProducts.map(product => (product.uuid === id ? { ...product, isFavorite: !product.isFavorite } : product))
+    );
+  };
+
+  const handleOpenModal = (id: string) => {
     setDetailModalOpen(true);
     setSelectedProductId(id);
     history.pushState({}, '', `/product/${id}`);
@@ -47,22 +63,43 @@ const Products = () => {
 
   return (
     <>
-      {/* 8개 상품 컨테이너*/}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-x-8 gap-y-12 w-full pb-10">
-        {/* 각각의 상품 하나하나 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-x-8 gap-y-12 w-full pb-10 ">
         {products.map(product => (
           <div
-            key={product.id}
+            key={product.uuid}
             className="flex flex-col hover:cursor-pointer"
-            onClick={() => handleOpenModal(product.id)}
+            onClick={() => handleOpenModal(product.uuid)}
           >
-            <img src={product.image} className="aspect-[3/3.5] relative mb-2" />
+            {product.images.length > 0 && (
+              <div className="aspect-[3/3.5] bg-red-200 relative mb-2 ">
+                <img src={product.images[0].image} className="w-full h-full object-cover  aspect-[3/3.5]" />
+              </div>
+            )}
+
             <div className="flex justify-between">
-              <p className="font-bold text-base">{product.title}</p>
-              <HeartIcon className="w-6 h-6" />
+              <p className="font-bold text-base w-5/6">{product.name}</p>
+              {product.isFavorite ? (
+                <FilledHeartIcon
+                  className="w-6 h-6 text-red-500 hover:scale-110"
+                  onClick={event => {
+                    event.stopPropagation();
+                    toggleFavorite(product.uuid);
+                  }}
+                />
+              ) : (
+                <OutlineHeartIcon
+                  className="w-6 h-6 hover:scale-110"
+                  onClick={event => {
+                    event.stopPropagation();
+                    toggleFavorite(product.uuid);
+                  }}
+                />
+              )}
             </div>
-            <p className="text-sm">{product.description}</p>
-            <p className="text-sm">{product.price.toLocaleString()}</p>
+            <p className="text-sm font-thin mt-1">
+              {product.description.length > 39 ? `${product.description.substring(0, 39)}...` : product.description}
+            </p>
+            <p className="text-sm mt-1">{product.rental_fee.toLocaleString()}</p>
           </div>
         ))}
       </div>
