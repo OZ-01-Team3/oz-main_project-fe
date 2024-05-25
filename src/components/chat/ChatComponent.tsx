@@ -36,7 +36,7 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
   const { userData } = useContext<UserType>(UserContext)
   const { chatRoomId } = useChatRoomStore()
   const { nickname } = useUserInfoStore()
-  const messages = useMessageStore(state => state.messages.filter(message => message.chatroom === chatRoomId));
+  const messages = useMessageStore(state => state.messages.filter(message => message.chatroom_id === chatRoomId));
 
   const cookies = new Cookies()
   const csrfToken = cookies.get('csrftoken')
@@ -70,6 +70,7 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
         throw new Error("채팅방이 없습니다.");
       }
       const response = await instance.get(`${chatRequests.chat}${chatRoomId}/`);
+      console.log('여기가 api로 진짜 이전메세지들 내려줍디ㅏ.', response.data.messages)
       return response.data.messages;
     },
     enabled: !!chatRoomId
@@ -219,12 +220,12 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
               {/* 채팅창 */}
               <div className="flex flex-col flex-grow overflow-y-scroll scrollbar-hide pb-3" ref={chatContainerRef}>
                 <div className="flex flex-col justify-between mt-4">
-                  {chatMessages.length > 0 && (
+                  {chatMessages?.length > 0 && (
                     chatMessages.map((data) => (
                       <ChatBubble
                         key={data.id}
                         content={data.text}
-                        time={data.timestamp}
+                        time={data.created_at}
                         subject={data.nickname}
                         img={data.image}
                         profile_img={`https://i.pinimg.com/564x/9d/d4/52/9dd45271b020a094a12bfeee12b39f65.jpg`}
@@ -235,8 +236,8 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
                   {messages.map((data, index) => (
                     <ChatBubble
                       key={index}
-                      content={data.message}
-                      time={data.timestamp}
+                      content={data.text}
+                      time={data.created_at}
                       subject={data.nickname}
                       img={data.image}
                       profile_img={`https://i.pinimg.com/564x/9d/d4/52/9dd45271b020a094a12bfeee12b39f65.jpg`}

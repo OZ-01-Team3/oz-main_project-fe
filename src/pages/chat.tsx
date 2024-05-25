@@ -69,8 +69,8 @@ const Chat = () => {
   }, [chatRoomId])
 
   //메시지 전송 함수
-  const sendMessage = (message: string, image: string, sender: string) => {
-    if (!message.trim() && !image) {
+  const sendMessage = (text: string, image: string, sender: string) => {
+    if (!text.trim() && !image) {
       // 텍스트와 이미지가 모두 없는 경우 메시지를 보내지 않음
       return;
     }
@@ -84,8 +84,8 @@ const Chat = () => {
 
 
 
-    webSocketRef.current?.sendMessage({ message, image, sender });
-    console.log("메세지 전송:", message, "사진:", image, "보내는 사람", sender)
+    webSocketRef.current?.sendMessage({ text, image, sender });
+    console.log("메세지 전송:", text, "사진:", image, "보내는 사람", sender)
   }
 
 
