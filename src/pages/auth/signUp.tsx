@@ -218,7 +218,7 @@ const SignUp = () => {
             </CommonButton>
           </form>
         </div>
-        <div className="mt-6 font-light">
+        <div className="mt-6 ">
           회원이신가요?
           <button type="button" className="font-semibold ml-2">
             Sign in

@@ -21,7 +21,9 @@ import { Cookies, useCookies } from 'react-cookie';
 import authRequests from './api/authRequests';
 import instance from './api/instance';
 
-import { NotificationProvider } from './NotificationContext';
+// import { NotificationProvider } from './NotificationContext';
+import ProductRegistrationButton from './components/ProductRegistrationButton';
+import LoginHandler from './pages/loginHandler';
 import ProductRegistration from './pages/mypage/productRegistration';
 import ImageUpdate from './pages/products/ImageUpdate';
 import ProductUpdate from './pages/products/ProductUpdate';
@@ -57,7 +59,7 @@ interface UserContextType {
 
 /** 유저 정보를 전역관리하기 위한 컨텍스트 */
 export const UserContext = createContext<UserContextType>({
-  setUserData: () => {},
+  setUserData: () => { },
   userData: {
     pk: -1,
     age: 0,
@@ -138,6 +140,7 @@ const commonRoutes = [
     <Route path="/search" element={<Search />} />
     <Route path="/all" element={<TotalProducts />} />
     <Route path="/product/:productId" element={<ProductDetailModal />} />
+    <Route path='/oauth2/redirect' element={<LoginHandler />} />
   </Route>,
 ];
 
@@ -206,23 +209,26 @@ function App() {
 
   return (
     <>
-      <NotificationProvider>
-        <UserContext.Provider value={{ setUserData, userData: userData }}>
-          <ToastContainer
-            position="top-center"
-            autoClose={700}
-            hideProgressBar
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="colored"
-          />
-          <Routes>{[...loggedRoutes, ...commonRoutes]}</Routes>
-        </UserContext.Provider>
-      </NotificationProvider>
+      {/* <NotificationProvider> */}
+      <UserContext.Provider value={{ setUserData, userData: userData }}>
+        <ToastContainer
+          position="top-center"
+          autoClose={700}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+        <Routes>{[...loggedRoutes, ...commonRoutes]}</Routes>
+        {accessToken && (location.pathname === '/' || location.pathname === '/all') && (
+          <ProductRegistrationButton />
+        )}
+      </UserContext.Provider>
+      {/* </NotificationProvider> */}
     </>
   );
 }

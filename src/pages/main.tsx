@@ -53,7 +53,7 @@ const Main = () => {
     }
   }, []);
   return (
-    <div>
+    <div >
       {detailModalOpen && <ProductDetailModal />}
       <StyleModal />
       <Banner />

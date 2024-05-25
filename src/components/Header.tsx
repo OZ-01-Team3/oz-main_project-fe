@@ -41,7 +41,6 @@ const Header = () => {
   const mainMenuItems: MenuItem[] = [
     { label: '알림', onClick: handleToggleNotification },
     { label: '마이페이지', path: '/mypage/member-info' },
-    { label: '상품등록', path: '/img-reg' },
     isLoggedIn ? { label: '로그아웃', onClick: handleLogout } : { label: '로그인', path: '/sign-in' },
   ];
 
@@ -70,7 +69,7 @@ const Header = () => {
           {' '}
           {/* PC 사이즈에서만 보이도록 수정 */}
           <div className="w-auto">
-            <ul className="flex justify-between w-52 text-sm font-light text-mainWhite">
+            <ul className="flex justify-between w-52 text-sm ftext-mainWhite">
               {mainMenuItems.map(({ label, onClick, path }) => (
                 <li key={label} className="cursor-pointer" onClick={onClick}>
                   {path ? (
