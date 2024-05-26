@@ -2,6 +2,7 @@
 import { loginAPI } from '@/api/authRequests';
 import AuthInput from '@/components/AuthInput';
 import CommonButton from '@/components/CommonButton';
+import useAuthStore from '@/stores/useAuthStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import { Cookies } from 'react-cookie';
@@ -9,7 +10,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { z as zod } from 'zod';
 
-const { VITE_REST_API_KEY, VITE_REDIRECT_URI, VITE_GOOGLE_AUTH_CLIENT_ID, VITE_GOOGLE_SCOPE
+const { VITE_REST_API_KEY, VITE_REDIRECT_URI, VITE_GOOGLE_AUTH_CLIENT_ID, VITE_NAVER_CLIENT_ID, VITE_NAVER_STATE
 
 } = import.meta.env;
 
@@ -17,10 +18,12 @@ const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=co
 
 const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${VITE_GOOGLE_AUTH_CLIENT_ID}&redirect_uri=${VITE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`
 
+const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${VITE_NAVER_CLIENT_ID}&state=${VITE_NAVER_STATE}&redirect_uri=${VITE_REDIRECT_URI}`;
+
 
 // 소셜미디어 로그인 버튼
 const socialMedia = [
-  { name: 'naver', src: '/images/naver.png', url: '#' },
+  { name: 'naver', src: '/images/naver.png', url: NAVER_AUTH_URL },
   { name: 'kakao', src: '/images/kakao.png', url: KAKAO_AUTH_URL },
   { name: 'google', src: '/images/google.svg', url: GOOGLE_AUTH_URL },
 ];
@@ -60,7 +63,7 @@ const SignIn = () => {
       );
       cookies.set('ac', response.data.access);
       cookies.set('rf', response.data.refresh);
-
+      useAuthStore.getState().setIsLoggedIn(true)
       console.log(response, '로그인 성공');
       navigate('/', { replace: true })
     } catch (error) {
