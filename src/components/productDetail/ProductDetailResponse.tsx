@@ -1,13 +1,19 @@
+import { UserContext } from '@/App';
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { product } from '../Products';
 import ProductDetailResDescription from './ProductDetailResDescription';
 export interface ProductDetailResponseProps {
   productDetails: product;
 }
 const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) => {
+  const { userData } = useContext(UserContext);
+  const logInUser = userData.email; //로그인한 유저
+  const productRegUser = productDetails.lender.email; //상품 등록한 유저
+
   const { productId } = useParams(); // url에서 productId받아오기
   const navigate = useNavigate();
 
@@ -69,20 +75,39 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
         <div className="flex flex-col justify-start items-center bg-white relative w-full h-full   overflow-y-scroll rounded-none pb-5 ">
           <ProductDetailResDescription productDetails={productDetails} />
         </div>
-        <button className="bg-mainBlack w-full text-mainWhite p-3  ">1:1 채팅</button>
-
-        <button
-          className="bg-mainBlack w-full text-mainWhite p-3  "
-          onClick={() => {
-            setDetailModalOpen(false);
-            //바로 navigate 하면 모달이 안닫혀서 overflow:hidden 속성이 남아있어서 setTimeout 썻읍니다.
-            setTimeout(() => {
-              navigate(`/img-update/${productDetails.uuid}`, { state: productDetails.uuid });
-            }, 100);
-          }}
-        >
-          수정하기
-        </button>
+        {logInUser === productRegUser ? (
+          <button
+            className="bg-mainBlack w-full text-mainWhite p-3  "
+            onClick={() => {
+              if (logInUser === '') {
+                toast.info('로그인이 필요한 기능입니다');
+                navigate('/sign-in');
+                return;
+              }
+              //바로 navigate 하면 모달이 안닫혀서 overflow:hidden 속성이 남아있어서 setTimeout 썻읍니다.
+              setDetailModalOpen(false);
+              setTimeout(() => {
+                navigate(`/img-update/${productDetails.uuid}`, { state: productDetails.uuid });
+              }, 100);
+            }}
+          >
+            수정하기
+          </button>
+        ) : (
+          <button
+            className="bg-mainBlack w-full text-mainWhite p-3  "
+            onClick={() => {
+              setDetailModalOpen(false);
+              if (logInUser === '') {
+                toast.info('로그인이 필요한 기능입니다');
+                navigate('/sign-in');
+                return;
+              }
+            }}
+          >
+            1:1 채팅
+          </button>
+        )}
       </div>
     </>
   );
