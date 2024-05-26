@@ -102,10 +102,16 @@ const ProductDetailModal = () => {
   // 모달 닫는 함수
   const handleCloseModal = () => {
     setDetailModalOpen(false);
+    if (prevPath === '/') {
+      navigate('/', { replace: true });
+    }
     if (prevPath === '/all') {
       navigate('/all', { replace: true });
+    }
+    if (prevPath === '/search') {
+      navigate('/search', { replace: true });
     } else {
-      navigate('/', { replace: true });
+      navigate('/all', { replace: true });
     }
   };
 

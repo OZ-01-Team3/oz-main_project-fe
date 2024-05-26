@@ -1,4 +1,3 @@
-import instance from '@/api/instance';
 import CommonButton from '@/components/CommonButton';
 import axios from 'axios';
 import { ChangeEventHandler, useEffect, useState } from 'react';
@@ -36,15 +35,7 @@ const ProductUpdate = () => {
   const prevProductInformation = location.state;
   console.log('기존정보+사진수정정보', prevProductInformation);
   console.log('전체사진', prevProductInformation.images);
-  //! 기존이미지
-  // const existedImages = prevProductInformation.images.filter(item => {
-  //   return item.imageUrl;
-  // });
 
-  // //**받아온 사진 배열에서 사진파일배열만 보내기 */
-  // const newRegisteredImages = prevProductInformation.images.filter(item => {
-  //   return item.file;
-  // });
   //!!! File 형식이 있으면,File 반환, 아니면 imageUrl반환.
   const images = prevProductInformation.images.map(item => item.file || item.imageUrl);
   console.log('보내는 Images(기존+새롭게추가)', images);
@@ -148,7 +139,12 @@ const ProductUpdate = () => {
       return;
     }
     try {
-      const response = await instance.delete(`/products/${prevProductInformation.uuid}/`);
+      const response = await axios.delete(VITE_BASE_REQUEST_URL + `/products/${prevProductInformation.uuid}/`, {
+        headers: {
+          Authorization: `Bearer ${access}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       console.log(response);
       toast.success('상품이 성공적으로 삭제되었습니다.');
       navigate('/img-reg'); // 상품 삭제 후 이미지 등록 페이지로 이동
@@ -158,7 +154,7 @@ const ProductUpdate = () => {
     }
   };
   return (
-    <div className="lg:w-[700px] w-[900px] md:w-[500px] sm:w-[350px] sm:text-sm m-auto">
+    <div className="lg:w-[700px] w-[900px] md:w-[500px] sm:w-[350px] sm:text-sm m-auto ">
       <FormProvider {...form}>
         <form className="w-full md:mb-20 sm:mb-20" onSubmit={handleUpdateProduct}>
           <p className="text-left text-3xl mt-28">상품 정보</p>

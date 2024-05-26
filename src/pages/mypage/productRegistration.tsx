@@ -31,20 +31,19 @@ interface category {
 
 const productRegistrationSchema = zod.object({
   name: zod.string().min(1, '상품명을 입력해주세요').max(30, '상품명은 30자 이내로 입력해주세요'),
-  purchasing_price: zod.number().min(1, '1원 이상 입력해주세요'),
-  rental_fee: zod.number().min(1, '1원 이상 입력해주세요'),
+  purchase_price: zod.coerce.number().min(1, '1원 이상 입력해주세요'),
+  rental_fee: zod.coerce.number().min(1, '1원 이상 입력해주세요'),
   size: zod.string().min(1, '사이즈를 선택해주세요'),
   brand: zod.string().min(1, '브랜드를 입력해주세요'),
   product_category: zod.string().min(1, '카테고리를 선택해주세요'),
   purchase_date: zod.string().min(1, '구매시기를 선택해주세요'),
   condition: zod.string().min(1, '상품 상태를 선택해주세요'),
   description: zod.string().min(1, '상품 설명을 입력해주세요'),
-  amount: zod.string().min(1, '수량을 입력해주세요'),
+  amount: zod.coerce.number().min(1, '수량을 입력해주세요'),
   region: zod.string().min(1, '거래지역을 입력해주세요'),
 });
 
 const ProductRegistration = () => {
-  const [price, setPrice] = useState(0);
   const [productNameLength, setProductNameLength] = useState<number>(0);
   const [categories, setCategories] = useState<category[]>([]);
 

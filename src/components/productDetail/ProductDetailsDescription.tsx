@@ -1,5 +1,6 @@
-import { UserContext, UserType } from '@/App';
+import { UserContext } from '@/App';
 import { productStatusOptions } from '@/pages/mypage/productRegistration';
+import { useModalOpenStore } from '@/stores/useModalStore';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { product } from '../Products';
@@ -9,8 +10,9 @@ interface ProductDetailsDescriptionProps {
 }
 // 모달 오른쪽 부분 상세설명
 const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescriptionProps) => {
-  const { userData } = useContext<UserType>(UserContext);
+  const { userData } = useContext(UserContext);
   const navigate = useNavigate();
+  const { setDetailModalOpen } = useModalOpenStore();
 
   const logInUser = userData.email; //로그인한 유저
   const productRegUser = productDetails.lender.email; //상품 등록한 유저
@@ -67,7 +69,13 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
       {logInUser === productRegUser ? (
         <button
           className="bg-mainBlack w-full text-mainWhite p-3 mt-3"
-          onClick={() => navigate(`/img-update/${productDetails.uuid}`, { state: productDetails.uuid })}
+          onClick={() => {
+            setDetailModalOpen(false);
+            //바로 navigate 하면 모달이 안닫혀서 overflow:hidden 속성이 남아있어서 setTimeout 썻읍니다.
+            setTimeout(() => {
+              navigate(`/img-update/${productDetails.uuid}`, { state: productDetails.uuid });
+            }, 100);
+          }}
         >
           수정하기
         </button>

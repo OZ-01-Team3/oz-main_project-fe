@@ -19,14 +19,21 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
   // * 아이템을 선택해서 모달이 띄워지는게 아니라, 새로고침시 띄워질 경우,
   //  현재 경로에 따라서 all 이면 all 로 돌아오고 메인이면 메인으로 돌아가도록
   // ! 새로고침하면 fromPath 상태 다 날아감.. => localStorage 에 저장?
+
   useEffect(() => {
     if (!selectedProductId) {
       setWillSelectedProductId(productId);
       setDetailModalOpen(true);
+      if (prevPath === '/') {
+        navigate('/', { replace: true });
+      }
       if (prevPath === '/all') {
         navigate('/all', { replace: true });
+      }
+      if (prevPath === '/search') {
+        navigate('/search', { replace: true });
       } else {
-        navigate('/', { replace: true });
+        navigate('/all', { replace: true });
       }
     }
   }, [productId, selectedProductId, setDetailModalOpen, setWillSelectedProductId]);
@@ -34,10 +41,16 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
   // 모달 닫는 함수
   const handleCloseModal = () => {
     setDetailModalOpen(false);
+    if (prevPath === '/') {
+      navigate('/', { replace: true });
+    }
     if (prevPath === '/all') {
       navigate('/all', { replace: true });
+    }
+    if (prevPath === '/search') {
+      navigate('/search', { replace: true });
     } else {
-      navigate('/', { replace: true });
+      navigate('/all', { replace: true });
     }
   };
 
@@ -60,7 +73,13 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
 
         <button
           className="bg-mainBlack w-full text-mainWhite p-3  "
-          onClick={() => navigate(`/img-update/${productDetails.uuid}`, { state: productDetails.uuid })}
+          onClick={() => {
+            setDetailModalOpen(false);
+            //바로 navigate 하면 모달이 안닫혀서 overflow:hidden 속성이 남아있어서 setTimeout 썻읍니다.
+            setTimeout(() => {
+              navigate(`/img-update/${productDetails.uuid}`, { state: productDetails.uuid });
+            }, 100);
+          }}
         >
           수정하기
         </button>
