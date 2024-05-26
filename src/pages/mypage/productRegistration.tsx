@@ -1,3 +1,4 @@
+import instance from '@/api/instance';
 import { productRequests } from '@/api/productRequest';
 import CommonButton from '@/components/CommonButton';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -115,7 +116,7 @@ const ProductRegistration = () => {
     }
   };
 
-  const handleClickReg = handleSubmit(async data => {
+  const handleClickReg = form.handleSubmit(async data => {
     try {
       const formData = new FormData();
       formData.append('name', data.name);
@@ -140,12 +141,7 @@ const ProductRegistration = () => {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
       const access = cookies.get('ac');
-      const response = await axios.post(VITE_BASE_REQUEST_URL + productRequests.products, formData, {
-        headers: {
-          Authorization: `Bearer ${access}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await instance.post(VITE_BASE_REQUEST_URL + productRequests.products, formData);
       console.log('상품 등록 성공', response);
       toast.success('상품이 성공적으로 등록되었습니다!');
       navigate('/');
