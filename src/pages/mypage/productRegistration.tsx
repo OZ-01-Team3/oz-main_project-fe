@@ -35,7 +35,7 @@ const productRegistrationSchema = zod.object({
   rental_fee: zod.coerce.number().min(1, '1원 이상 입력해주세요'),
   size: zod.string().min(1, '사이즈를 선택해주세요'),
   brand: zod.string().min(1, '브랜드를 입력해주세요'),
-  product_category: zod.string().min(1, '카테고리를 선택해주세요'),
+  product_category: zod.coerce.number().min(1, '카테고리를 선택해주세요'),
   purchase_date: zod.string().min(1, '구매시기를 선택해주세요'),
   condition: zod.string().min(1, '상품 상태를 선택해주세요'),
   description: zod.string().min(1, '상품 설명을 입력해주세요'),
@@ -76,6 +76,7 @@ const ProductRegistration = () => {
       setProductNameLength(30);
     }
   };
+  // 숫자입력시 자동으로 toLocaleString 적용
 
   //상품등록 폼 상태 관리
   const form = useForm({
@@ -159,11 +160,7 @@ const ProductRegistration = () => {
       <FormProvider {...form}>
         <form className="w-full md:mb-20 sm:mb-20" onSubmit={handleClickReg}>
           <p className="text-left text-3xl mt-28">상품 정보</p>
-
           <hr className="w-full ml-auto mr-auto mt-6 mb-7 text-hrGray" />
-
-          {/* Input fields */}
-          {/* <div> */}
           {/* 상품명 */}
           <div className="mb-4 text-center">
             <div className="flex items-center justify-center w-full">
@@ -184,7 +181,6 @@ const ProductRegistration = () => {
             </div>
             <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
           </div>
-
           {/* 구매가 */}
           <div className="mb-4 text-center">
             <div className="flex items-center justify-center w-full">
@@ -205,28 +201,35 @@ const ProductRegistration = () => {
               </div>
             </div>
             <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
-
-            {/* 대여비 */}
-            <div className="mb-4">
-              <div className="flex items-center justify-center w-full relative">
-                <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5 ">대여비</span>
-                <input
-                  type="number"
-                  className="pr-6 shadow appearance-none border rounded w-full md:w-8/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
-                  placeholder="대여비를 입력하세요"
-                  {...register('rental_fee')}
-                />
-                <span className="text-sm text-mainBlack ml-3 absolute right-2">원</span>
+          </div>
+          {/* 대여비 */}
+          <div className="mb-4 text-center">
+            <div className="flex items-center justify-center w-full ">
+              <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5 ">대여비</span>
+              <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
+                <div className="w-full flex justify-between items-center relative ">
+                  <input
+                    type="number"
+                    className="pr-6 shadow appearance-none border rounded w-full py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
+                    placeholder="대여비를 입력하세요"
+                    {...register('rental_fee')}
+                  />
+                  <span className="text-sm text-mainBlack ml-3 absolute right-2">원</span>
+                </div>
+                {errors.rental_fee && (
+                  <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.rental_fee.message}</p>
+                )}
               </div>
-              <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
             </div>
-
-            {/* 사이즈 */}
-            <div className="mb-4">
-              <div className="flex items-center justify-center w-full">
-                <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">사이즈</span>
+            <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
+          </div>
+          {/* 사이즈 */}
+          <div className="mb-4">
+            <div className="flex items-center justify-center w-full">
+              <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">사이즈</span>
+              <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
                 <select
-                  className="shadow appearance-none border rounded w-full md:w-8/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline mt-1 focus:border-mainWhite focus:bg-mainWhite"
+                  className="shadow appearance-none border rounded w-full  py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline focus:border-mainWhite focus:bg-mainWhite"
                   {...register('size')}
                 >
                   {sizes.map((size, index) => (
@@ -235,28 +238,34 @@ const ProductRegistration = () => {
                     </option>
                   ))}
                 </select>
+                {errors.size && <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.size.message}</p>}
               </div>
-              <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
             </div>
-            {/* 브랜드 */}
-            <div className="mb-4">
-              <div className="flex items-center justify-center w-full">
-                <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">브랜드</span>
+            <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
+          </div>
+          {/* 브랜드 */}
+          <div className="mb-4">
+            <div className="flex items-center justify-center w-full">
+              <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">브랜드</span>
+              <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
                 <input
                   type="text"
-                  className="shadow appearance-none border rounded w-full md:w-8/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
                   placeholder="브랜드"
                   {...register('brand')}
                 />
+                {errors.brand && <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.brand.message}</p>}
               </div>
-              <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
             </div>
-            {/* 카테고리 */}
-            <div className="mb-4">
-              <div className="flex items-center justify-center w-full">
-                <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">카테고리</span>
+            <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
+          </div>
+          {/* 카테고리 */}
+          <div className="mb-4">
+            <div className="flex items-center justify-center w-full">
+              <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">카테고리</span>
+              <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
                 <select
-                  className="shadow appearance-none border rounded w-full md:w-8/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline mt-1 focus:border-mainWhite focus:bg-mainWhite"
+                  className="shadow appearance-none border rounded w-full  py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline focus:border-mainWhite focus:bg-mainWhite"
                   {...register('product_category')}
                 >
                   {categories &&
@@ -266,68 +275,94 @@ const ProductRegistration = () => {
                       </option>
                     ))}
                 </select>
+                {errors.product_category && (
+                  <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.product_category.message}</p>
+                )}
               </div>
-              <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
             </div>
-            {/* 구매시기 */}
-            <div className="mb-4">
-              <div className="flex items-center justify-center w-full">
-                <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">구매시기</span>
+            <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
+          </div>
+          {/* 구매시기 */}
+          <div className="mb-4">
+            <div className="flex items-center justify-center w-full">
+              <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">구매시기</span>
+              <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
                 <input
                   type="date"
-                  className="shadow appearance-none border rounded w-full md:w-8/12 py-2 px-4 text-mainBlack leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded w-full  py-2 px-4 text-mainBlack leading-tight focus:outline-none focus:shadow-outline"
                   {...register('purchase_date')}
                 />
+                {errors.purchase_date && (
+                  <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.purchase_date.message}</p>
+                )}
               </div>
-              <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
             </div>
-            {/* 상품 상태 */}
-            <div className="flex items-center justify-center w-full">
-              <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">상품 상태</span>
-              <div className="flex w-3/4 items-start flex-col">
+            <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
+          </div>
+          {/* 상품 상태 */}
+          <div className="flex items-center justify-center w-full">
+            <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">상품 상태</span>
+            <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
+              <div className="flex w-full flex-col ">
                 {productStatusOptions.map(option => (
-                  <div className="flex items-center" key={option.id}>
-                    <input
-                      type="radio"
-                      {...register('condition')}
-                      id={String(option.id)}
-                      name="productStatus"
-                      className="focus:border-mainWhite focus:bg-mainWhite mr-5 "
-                      value={option.id}
-                      defaultChecked={true}
-                    />
-                    <label htmlFor={`pro${option.id}`}>{option.label}</label>
-                    <span className="text-sm text-subGray ml-7 text-right">{option.description}</span>
+                  <div className="flex justify-between w-full " key={option.id}>
+                    <label className="w-1/3 md:text-sm md:w-1/2 sm:w-1/2">
+                      <input
+                        type="radio"
+                        {...register('condition')}
+                        id={String(option.id)}
+                        name="condition"
+                        className="focus:border-mainWhite focus:bg-mainWhite mr-5 "
+                        value={option.id}
+                      />
+                      {option.label}
+                    </label>
+                    <span className="text-sm text-subGray  text-left w-2/3   md:w-1/2 sm:w-1/2">
+                      {option.description}
+                    </span>
                   </div>
                 ))}
+                {errors.condition && (
+                  <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.condition.message}</p>
+                )}
               </div>
             </div>
+          </div>
 
-            <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
-            {/* 설명 */}
-            <div className="mb-4">
-              <div className="flex items-center justify-center w-full">
-                <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">설명</span>
+          <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
+          {/* 설명 */}
+          <div className="mb-4">
+            <div className="flex items-center justify-center w-full">
+              <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">설명</span>
+              <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
                 <input
-                  className="shadow appearance-none border rounded w-full md:w-8/12 py-3 px-3 h-[150px]  text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
+                  className="shadow appearance-none border rounded w-full  py-3 px-3 h-[150px]  text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
                   placeholder="상품 설명을 최대한 자세히 적어주세요."
                   {...register('description')}
                 />
+                {errors.description && (
+                  <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.description.message}</p>
+                )}
               </div>
-              <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
             </div>
-            {/* 태그 */}
-            <div className="mb-4">
-              <div className="flex items-center justify-center w-full">
-                <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">
-                  태그 <span className="text-subGray">(선택)</span>
-                </span>
+            <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
+          </div>
+          {/* 태그 */}
+          <div className="mb-4">
+            <div className="flex items-center justify-center w-full">
+              <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">
+                태그 <span className="text-subGray">(선택)</span>
+              </span>
+              <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
                 <input
                   type="text"
-                  className="shadow appearance-none border rounded w-full md:w-8/12 py-3 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
+                  className="shadow appearance-none border rounded w-full  px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
                   placeholder="ex) 긱시크 (최대 5개) "
                   // {...register('tag')}
                 />
+                {/* {errors.description && (
+                  <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.description.message}</p>
+                )} */}
               </div>
             </div>
           </div>
@@ -338,28 +373,36 @@ const ProductRegistration = () => {
 
           {/* 수량 */}
           <div className="mb-4">
-            <div className="flex items-center justify-start w-full ">
+            <div className="flex items-center justify-center w-full">
               <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">수량</span>
-              <div className="relative flex items-center ">
+              <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
                 <input
                   type="number"
-                  className="shadow appearance-none border rounded w-62 md:w-4/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
+                  className="shadow appearance-none border rounded w-full px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
+                  placeholder="ex) 5 "
                   {...register('amount')}
                 />
-                <span className="text-sm text-mainBlack ml-3 absolute right-2 ">개</span>
+                {errors.amount && (
+                  <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.amount.message}</p>
+                )}
               </div>
             </div>
           </div>
           {/* 거래지역 */}
           <div className="mb-4">
-            <div className="flex items-center justify-start w-full">
+            <div className="flex items-center justify-center w-full">
               <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">거래지역</span>
-              <input
-                type="text"
-                className="shadow appearance-none border rounded w-62 md:w-4/12 py-2 px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
-                placeholder="ex) 서울 강남구"
-                {...register('region')}
-              />
+              <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
+                <input
+                  type="text"
+                  className="shadow appearance-none border rounded w-full px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
+                  placeholder="ex) 서울시 강남구 "
+                  {...register('region')}
+                />
+                {errors.region && (
+                  <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.region.message}</p>
+                )}
+              </div>
             </div>
           </div>
 

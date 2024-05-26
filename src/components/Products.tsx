@@ -99,7 +99,7 @@ const Products = ({ products, setProducts }: ProductProps) => {
             <p className="text-sm font-thin mt-1">
               {product.description.length > 39 ? `${product.description.substring(0, 39)}...` : product.description}
             </p>
-            <p className="text-sm mt-1">{product.rental_fee.toLocaleString()}</p>
+            <p className="text-sm mt-1">{product.rental_fee.toLocaleString()}원 </p>
           </div>
         ))}
       </div>

@@ -3,6 +3,7 @@ import { productStatusOptions } from '@/pages/mypage/productRegistration';
 import { useModalOpenStore } from '@/stores/useModalStore';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { product } from '../Products';
 import ProductDetailTitle from './ProductDetailTitle';
 interface ProductDetailsDescriptionProps {
@@ -13,7 +14,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
   const { userData } = useContext(UserContext);
   const navigate = useNavigate();
   const { setDetailModalOpen } = useModalOpenStore();
-
+  console.log(userData);
   const logInUser = userData.email; //로그인한 유저
   const productRegUser = productDetails.lender.email; //상품 등록한 유저
 
@@ -22,9 +23,9 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
     productStatusOptions => productStatusOptions.id === Number(productDetails.condition)
   );
   return (
-    <div className="w-1/2  pb-20 sm:w-full">
+    <div className="w-1/2 h-full sm:w-full flex flex-col justify-between">
       <div
-        className="w-full aspect-[3/3.5] h-full overflow-y-scroll sm:overflow-visible scrollbar-hide text-mainBlack"
+        className="w-full aspect-[3/3.5]h-full overflow-y-scroll sm:overflow-visible scrollbar-hide text-mainBlack"
         key={productDetails.uuid}
       >
         <h1 className="text-3xl font-bold mb-6 ">{productDetails.name}</h1>
@@ -42,7 +43,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
           }
         />
         <div>
-          <p className="text-base font-semibold mt-8 mb-1">상세설명</p>
+          <p className="text-sm font-semibold mt-8 mb-1">상세설명</p>
           <p className="text-sm">{productDetails.description}</p>
         </div>
         <div>
@@ -66,10 +67,16 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
         </div>
       </div>
       {/* 현재 로그인 한 사용자와 상품을 등록한 사용자가 동일하면, 수정하기, 다르면 1:1 채팅버튼 */}
-      {logInUser === productRegUser ? (
+
+      {logInUser !== '' && logInUser === productRegUser ? (
         <button
-          className="bg-mainBlack w-full text-mainWhite p-3 mt-3"
+          className="bg-mainBlack w-full text-mainWhite p-3 "
           onClick={() => {
+            if (logInUser === '') {
+              toast.info('로그인이 필요한 기능입니다');
+              navigate('/sign-in');
+              return;
+            }
             setDetailModalOpen(false);
             //바로 navigate 하면 모달이 안닫혀서 overflow:hidden 속성이 남아있어서 setTimeout 썻읍니다.
             setTimeout(() => {
@@ -80,7 +87,19 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
           수정하기
         </button>
       ) : (
-        <button className="bg-mainBlack w-full text-mainWhite p-3 mt-3">1:1 채팅</button>
+        <button
+          className="bg-mainBlack w-full text-mainWhite p-3 "
+          onClick={() => {
+            // 유저정보없을시에 로그인하도록
+            if (logInUser === '') {
+              toast.info('로그인이 필요한 기능입니다');
+              navigate('/sign-in');
+              return;
+            }
+          }}
+        >
+          1:1 채팅
+        </button>
       )}
     </div>
   );
