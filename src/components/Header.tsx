@@ -23,10 +23,19 @@ const Header = () => {
   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
   const logout = useAuthStore(state => state.logout);
   const navigate = useNavigate();
-  //쿠키에서 액세스 토큰 확인
+
+  // 쿠키에서 액세스 토큰 확인
   useEffect(() => {
-    const accessToken = cookies.get('ac');
-    setIsLoggedIn(!!accessToken);
+    const checkToken = () => {
+      const accessToken = cookies.get('ac');
+      setIsLoggedIn(!!accessToken);
+    };
+
+    checkToken(); // 컴포넌트 마운트 시 한 번 실행
+
+    // const interval = setInterval(checkToken, 1000); // 주기적으로 토큰 확인
+
+    // return () => clearInterval(interval); // 컴포넌트 언마운트 시 인터벌 정리
   }, [setIsLoggedIn]);
 
   //pc 알림

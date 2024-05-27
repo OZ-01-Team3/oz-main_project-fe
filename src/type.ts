@@ -3,7 +3,7 @@ interface Message {
   id: string;
   text: string;
   message: string;
-  timestamp: string;
+  created_at: string;
   nickname: string;
   image?: string;
   status: boolean;

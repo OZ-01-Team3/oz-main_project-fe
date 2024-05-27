@@ -47,9 +47,9 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
       console.log("Latest Message:", latestMessage);
 
       // 최근 메세지가 있으면서 message 속성이 있는 경우
-      if (latestMessage && latestMessage.message) {
-        setDisplayContent(latestMessage.message.length > 30 ? `${latestMessage.message.substring(0, 30)}...` : latestMessage.message);
-        setFormattedTime(formatTime(latestMessage.timestamp));
+      if (latestMessage && latestMessage.text) {
+        setDisplayContent(latestMessage.text.length > 30 ? `${latestMessage.text.substring(0, 30)}...` : latestMessage.text);
+        setFormattedTime(formatTime(latestMessage.created_at));
       } else {
         setDisplayContent(content.length > 30 ? `${content.substring(0, 30)}...` : content);
       }

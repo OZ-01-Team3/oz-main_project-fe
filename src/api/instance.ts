@@ -8,6 +8,7 @@ const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const instance = axios.create({
   baseURL: VITE_BASE_REQUEST_URL,
   withCredentials: true,
+  headers: { 'Content-Type': 'application/json' },
 });
 
 const cookies = new Cookies();
@@ -35,14 +36,25 @@ const tokenRefresh = async () => {
 instance.interceptors.request.use(
   config => {
     const accessToken = cookies.get('ac');
-    config.headers['Content-Type'] = 'application/json';
-    // config.headers["Content-Type"] = "multipart/form-data";
-    config.headers.Authorization = `Bearer ${accessToken}`;
+    // config.headers['Content-Type'] = 'application/json';
 
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+      config.withCredentials = true;
+    }
+
+    // 폼 데이터를 보낼 때만 Content-Type을 "multipart/form-data"로 설정
+    if (config.data instanceof FormData) {
+      config.headers['Content-Type'] = 'multipart/form-data';
+    } else {
+      config.headers['Content-Type'] = 'application/json';
+    }
+
+    console.log('잘 바뀌낭');
     return config;
   },
   error => {
-    console.error(error);
+    console.error('요청 인터셉터 에러:', error);
     return Promise.reject(error);
   }
 );
@@ -50,21 +62,22 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => {
     if (response.status === 404) {
-      // console.log("404 일세");
+      console.log('404 일세');
     }
     return response;
   },
   async error => {
-    // console.log(error);
-
     if (error.response?.status === 401) {
-      await tokenRefresh();
-      const new_accessToken = cookies.get('ac');
+      try {
+        await tokenRefresh();
+        const new_accessToken = cookies.get('ac');
+        error.config.headers['Authorization'] = `Bearer ${new_accessToken}`;
 
-      error.config.headers['Authorization'] = `Bearer ${new_accessToken}`;
-
-      const response = await axios.request(error.config);
-      return response;
+        return axios.request(error.config);
+      } catch (refreshError) {
+        console.error('토큰 갱신 실패:', refreshError);
+        return Promise.reject(refreshError); // 토큰 갱신 실패 시 에러 처리
+      }
     }
 
     return Promise.reject(error);

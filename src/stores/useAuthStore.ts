@@ -1,6 +1,11 @@
 import { create } from 'zustand';
 
-const useAuthStore = create(set => ({
+interface AuthState {
+  isLoggedIn: boolean;
+  setIsLoggedIn: (loggedIn: boolean) => void;
+  logout: () => void;
+}
+const useAuthStore = create<AuthState>(set => ({
   isLoggedIn: false,
   setIsLoggedIn: loggedIn => set({ isLoggedIn: loggedIn }),
   logout: () => set({ isLoggedIn: false }),
