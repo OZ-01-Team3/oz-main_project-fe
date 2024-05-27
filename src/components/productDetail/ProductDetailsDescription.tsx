@@ -4,7 +4,8 @@ import instance from '@/api/instance';
 import { productStatusOptions } from '@/pages/mypage/productRegistration';
 import useChatRoomStore from '@/stores/useChatRoomStore';
 import { useModalOpenStore } from '@/stores/useModalStore';
-import { useProductStore } from '@/stores/useProductDetailStore';
+
+import { useProductDetailStore } from '@/stores/useProductDetailStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import { useContext } from 'react';
@@ -32,7 +33,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
   const productRegUser = productDetails.lender.email; //상품 등록한 유저
   const queryClient = useQueryClient();
   const { chatRoomId } = useChatRoomStore()
-  const { lender } = useProductStore()
+  const { productDetail } = useProductDetailStore()
   // 상품 상태가 '4' 이렇게 숫자로 오는데, 이를 해당하는 id의 상태로 변환해주기
   const filteredStatus = productStatusOptions.find(
     productStatusOptions => productStatusOptions.id === Number(productDetails.condition)
@@ -65,11 +66,13 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
   // 함수 호출 시 데이터 전달
   const createChatRoom = () => {
     const newChatRoomData = {
-      lender: lender?.pk,
+      lender: productDetail?.lender.pk,
       product: productDetails.uuid
     };
     handleCreateChatRoom.mutate(newChatRoomData);
   };
+
+  console.log(productDetail, "-상품정보데이터")
 
   return (
     <div className="w-1/2 h-full sm:w-full flex flex-col justify-between">
