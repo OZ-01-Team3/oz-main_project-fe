@@ -31,7 +31,7 @@ const TotalProducts = () => {
   const { willSelectedProductId, setSelectedProductId, setWillSelectedProductId } = useProductIdStore();
   const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
   const [selectedCategory, setSelectedCategory] = useState('전체');
-  const [selectedOrdered, setSelectedOrdered] = useState('created_at');
+  const [selectedOrdered, setSelectedOrdered] = useState('-created_at');
   const [products, setProducts] = useState<product[]>([]);
   const { setCurrentPage } = useCurrentPageStore();
   const { totalPages, setTotalPages } = useTotalPageStore();
