@@ -38,8 +38,9 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
       }
       if (prevPath === '/search') {
         navigate('/search', { replace: true });
-      } else {
-        navigate('/all', { replace: true });
+      }
+      if (prevPath === '/wish-list') {
+        navigate('/wish-list', { replace: true });
       }
     }
   }, [productId, selectedProductId, setDetailModalOpen, setWillSelectedProductId]);
@@ -55,8 +56,9 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
     }
     if (prevPath === '/search') {
       navigate('/search', { replace: true });
-    } else {
-      navigate('/all', { replace: true });
+    }
+    if (prevPath === '/wish-list') {
+      navigate('/wish-list', { replace: true });
     }
   };
 

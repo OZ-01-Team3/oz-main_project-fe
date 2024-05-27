@@ -1,21 +1,31 @@
 import instance from '@/api/instance';
+import useAuthStore from '@/stores/useAuthStore';
 import useDebounce from '@/utils/UseDebounce';
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { product } from '../Products';
+const { VITE_BASE_REQUEST_URL } = import.meta.env;
+
 export interface SearchProps {
   setProducts: (products: product[]) => void;
   setSearch: (search: boolean) => void;
 }
 const SearchBar = ({ setProducts, setSearch }: SearchProps) => {
+  const { isLoggedIn } = useAuthStore();
   const [query, setQuery] = useState('');
 
   const handleSearch = async () => {
     try {
-      const response = await instance.get(`/products/?search=${query}`);
-      console.log(response);
-      setSearch(true);
-      setProducts(response.data.results);
+      if (isLoggedIn) {
+        const response = await instance.get(`/products/?search=${query}`);
+        setProducts(response.data.results);
+        setSearch(true);
+      } else {
+        const response = await axios.get(VITE_BASE_REQUEST_URL + `/products/?search=${query}`);
+        setProducts(response.data.results);
+        setSearch(true);
+      }
     } catch (error) {
       console.error('검색실패', error);
     }

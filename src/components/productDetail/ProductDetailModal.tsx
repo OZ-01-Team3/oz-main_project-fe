@@ -29,7 +29,6 @@ export const initialProduct: product = {
   amount: 0,
   region: '',
   images: [],
-  isFavorite: false,
   lender: lender,
 };
 
@@ -75,8 +74,9 @@ const ProductDetailModal = () => {
       }
       if (prevPath === '/search') {
         navigate('/search', { replace: true });
-      } else {
-        navigate('/all', { replace: true });
+      }
+      if (prevPath === '/wish-list') {
+        navigate('/wish-list', { replace: true });
       }
     }
   }, [productId, selectedProductId, setDetailModalOpen, setWillSelectedProductId]);
@@ -89,7 +89,6 @@ const ProductDetailModal = () => {
   const fetchProductDetail = async (selectedProductId: string | null) => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/products/${selectedProductId}/`);
-      // console.log(response.data);
       setProductDetails(response.data);
       setCurrentImageIndex(0);
       console.log(response.data);
@@ -110,11 +109,11 @@ const ProductDetailModal = () => {
     }
     if (prevPath === '/search') {
       navigate('/search', { replace: true });
-    } else {
-      navigate('/all', { replace: true });
+    }
+    if (prevPath === '/wish-list') {
+      navigate('/wish-list', { replace: true });
     }
   };
-
   return (
     <>
       {productDetails && (
