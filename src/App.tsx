@@ -25,9 +25,9 @@ import instance from './api/instance';
 import { NotificationProvider } from './NotificationContext';
 import ProductRegistrationButton from './components/ProductRegistrationButton';
 import LoginHandler from './pages/loginHandler';
-import ProductRegistration from './pages/mypage/productRegistration';
 import ImageUpdate from './pages/products/ImageUpdate';
 import ProductUpdate from './pages/products/ProductUpdate';
+import ProductRegistration from './pages/products/productRegistration';
 import TotalProducts from './pages/products/totalProducts';
 import Search from './pages/search';
 import WishList from './pages/wishList';
@@ -114,7 +114,7 @@ const loggedRoutes = [
     <Route
       path="/mypage/*"
       element={
-        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 md:px-6 flex mt-20">
+        <div className="flex mt-20 justify-between w-[1000px] xl:w-[1000px] lg:w-[800px] md:w-[550px] sm:w-[460px] mx-auto  h-auto ">
           <SideBar />
           <Outlet />
         </div>
