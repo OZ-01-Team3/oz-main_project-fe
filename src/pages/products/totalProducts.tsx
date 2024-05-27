@@ -18,7 +18,6 @@ const category = [
   { id: 4, name: '아우터' },
   { id: 5, name: '잡화' },
 ];
-
 const sorts = [
   { id: 1, text: '최신순', value: '-created_at' },
   { id: 2, text: '오래된 순', value: 'created_at' },
@@ -42,7 +41,6 @@ const TotalProducts = () => {
       setCurrentPage(newPage);
     }
   };
-
   // 상품 카테고리 필터링(상의,하의,등등)
   useEffect(() => {
     handleSelectCategory();
@@ -56,7 +54,6 @@ const TotalProducts = () => {
       console.log(error);
     }
   };
-
   // 상품정렬(최신순,인기순 등등)
   useEffect(() => {
     handleSelectedOrdering();
@@ -77,11 +74,7 @@ const TotalProducts = () => {
         const response = await axios.get(VITE_BASE_REQUEST_URL + `${productRequests.products}?page=${page}`);
         console.log(response.data);
         console.log(page);
-        const updatedProducts = response.data.results.map((item: product) => ({
-          ...item,
-          isFavorite: false,
-        }));
-        setProducts(updatedProducts);
+        setProducts(response.data.results);
         const totalProducts = response.data.count;
         setTotalPages(Math.ceil(totalProducts / 24));
         console.log(Math.ceil(totalProducts / 24));

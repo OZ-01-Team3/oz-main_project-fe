@@ -1,4 +1,3 @@
-
 import { loginAPI } from '@/api/authRequests';
 import AuthInput from '@/components/AuthInput';
 import CommonButton from '@/components/CommonButton';
@@ -12,7 +11,7 @@ import { z as zod } from 'zod';
 
 const { VITE_REST_API_KEY, VITE_REDIRECT_URI, VITE_GOOGLE_AUTH_CLIENT_ID, VITE_NAVER_CLIENT_ID, VITE_NAVER_STATE
 
-} = import.meta.env;
+const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${VITE_REST_API_KEY}&redirect_uri=${VITE_REDIRECT_URI}&prompt=login`;
 
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${VITE_REST_API_KEY}&redirect_uri=${VITE_REDIRECT_URI}&prompt=login`
 
@@ -30,11 +29,12 @@ const socialMedia = [
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const { setIsLoggedIn } = useAuthStore();
   // 유효성 검증
   const signInFormSchema = zod.object({
     // 이메일 형식 지정
     email: zod.string().email({ message: '이메일 형식이 아닙니다.' }),
-    password: zod.string().min(1, { message: '비밀번호를 입력해주세요.' })
+    password: zod.string().min(1, { message: '비밀번호를 입력해주세요.' }),
   });
 
   //로그인 폼 상태 관리
@@ -49,23 +49,20 @@ const SignIn = () => {
   const {
     register,
     formState: { errors },
-    setError
+    setError,
   } = form;
 
-  const cookies = new Cookies()
+  const cookies = new Cookies();
 
   //Sign In 버튼 눌렀을 때 api 호출하는 함수
   const handleClickSignIn = form.handleSubmit(async data => {
     try {
-      const response = await loginAPI(
-        data.email,
-        data.password,
-      );
+      const response = await loginAPI(data.email, data.password);
       cookies.set('ac', response.data.access);
       cookies.set('rf', response.data.refresh);
       useAuthStore.getState().setIsLoggedIn(true)
       console.log(response, '로그인 성공');
-      navigate('/', { replace: true })
+      navigate('/', { replace: true });
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 400) {
         console.error('이메일 또는 비밀번호가 잘못되었습니다.', (error as AxiosError).response?.data);
