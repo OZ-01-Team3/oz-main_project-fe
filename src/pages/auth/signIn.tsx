@@ -9,16 +9,14 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { z as zod } from 'zod';
 
-const { VITE_REST_API_KEY, VITE_REDIRECT_URI, VITE_GOOGLE_AUTH_CLIENT_ID, VITE_NAVER_CLIENT_ID, VITE_NAVER_STATE
+const { VITE_REST_API_KEY, VITE_REDIRECT_URI, VITE_GOOGLE_AUTH_CLIENT_ID, VITE_NAVER_CLIENT_ID, VITE_NAVER_STATE } =
+  import.meta.env;
 
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${VITE_REST_API_KEY}&redirect_uri=${VITE_REDIRECT_URI}&prompt=login`;
 
-const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${VITE_REST_API_KEY}&redirect_uri=${VITE_REDIRECT_URI}&prompt=login`
-
-const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${VITE_GOOGLE_AUTH_CLIENT_ID}&redirect_uri=${VITE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`
+const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${VITE_GOOGLE_AUTH_CLIENT_ID}&redirect_uri=${VITE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`;
 
 const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${VITE_NAVER_CLIENT_ID}&state=${VITE_NAVER_STATE}&redirect_uri=${VITE_REDIRECT_URI}`;
-
 
 // 소셜미디어 로그인 버튼
 const socialMedia = [
@@ -29,7 +27,6 @@ const socialMedia = [
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const { setIsLoggedIn } = useAuthStore();
   // 유효성 검증
   const signInFormSchema = zod.object({
     // 이메일 형식 지정
@@ -60,7 +57,7 @@ const SignIn = () => {
       const response = await loginAPI(data.email, data.password);
       cookies.set('ac', response.data.access);
       cookies.set('rf', response.data.refresh);
-      useAuthStore.getState().setIsLoggedIn(true)
+      useAuthStore.getState().setIsLoggedIn(true);
       console.log(response, '로그인 성공');
       navigate('/', { replace: true });
     } catch (error) {
