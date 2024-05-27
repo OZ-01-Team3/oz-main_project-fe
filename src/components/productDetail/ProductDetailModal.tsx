@@ -1,4 +1,5 @@
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
+import { useProductStore } from '@/stores/useProductDetailStore';
 import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
@@ -43,6 +44,7 @@ const ProductDetailModal = () => {
   const navigate = useNavigate();
   const { setDetailModalOpen } = useModalOpenStore();
   const { selectedProductId, setWillSelectedProductId } = useProductIdStore();
+  const { setLender } = useProductStore();
   const [productDetails, setProductDetails] = useState<product>(initialProduct);
   const prevPath = localStorage.getItem('pathname');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -91,6 +93,7 @@ const ProductDetailModal = () => {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/products/${selectedProductId}/`);
       // console.log(response.data);
       setProductDetails(response.data);
+      setLender(response.data.lender);
       setCurrentImageIndex(0);
       console.log(response.data);
     } catch (error) {
