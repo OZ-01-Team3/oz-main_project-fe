@@ -80,6 +80,9 @@ const ProductDetailModal = () => {
       if (prevPath === '/wish-list') {
         navigate('/wish-list', { replace: true });
       }
+      if (prevPath === '/mypage/sales-history') {
+        navigate('/mypage/sales-history', { replace: true });
+      }
     }
   }, [productId, selectedProductId, setDetailModalOpen, setWillSelectedProductId]);
 
@@ -115,6 +118,9 @@ const ProductDetailModal = () => {
     }
     if (prevPath === '/wish-list') {
       navigate('/wish-list', { replace: true });
+    }
+    if (prevPath === '/mypage/sales-history') {
+      navigate('/mypage/sales-history', { replace: true });
     }
   };
   return (

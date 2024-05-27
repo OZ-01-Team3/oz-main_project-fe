@@ -1,6 +1,6 @@
 import orderProducts from '@/orderProductData';
 import { CheckIcon } from '@heroicons/react/16/solid';
-import CommonButton from '../../components/CommonButton';
+import CommonButton from '../CommonButton';
 
 const OrderProducts = () => {
   return (
