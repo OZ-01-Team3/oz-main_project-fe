@@ -1,14 +1,28 @@
 import { UserContext } from '@/App';
+import chatRequests from '@/api/chatRequests';
+import instance from '@/api/instance';
 import { productStatusOptions } from '@/pages/mypage/productRegistration';
+import useChatRoomStore from '@/stores/useChatRoomStore';
 import { useModalOpenStore } from '@/stores/useModalStore';
+
+import { useProductDetailStore } from '@/stores/useProductDetailStore';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { product } from '../Products';
 import ProductDetailTitle from './ProductDetailTitle';
+const { VITE_BASE_REQUEST_URL } = import.meta.env;
 interface ProductDetailsDescriptionProps {
   productDetails: product;
 }
+
+interface NewChatRoomData {
+  lender: number | undefined;
+  product: string;
+}
+
 // 모달 오른쪽 부분 상세설명
 const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescriptionProps) => {
   const { userData } = useContext(UserContext);
@@ -17,11 +31,49 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
   console.log(userData);
   const logInUser = userData.email; //로그인한 유저
   const productRegUser = productDetails.lender.email; //상품 등록한 유저
-
+  const queryClient = useQueryClient();
+  const { chatRoomId } = useChatRoomStore()
+  const { productDetail } = useProductDetailStore()
   // 상품 상태가 '4' 이렇게 숫자로 오는데, 이를 해당하는 id의 상태로 변환해주기
   const filteredStatus = productStatusOptions.find(
     productStatusOptions => productStatusOptions.id === Number(productDetails.condition)
   );
+
+  // 채팅방 생성
+  const handleCreateChatRoom = useMutation<NewChatRoomData, AxiosError, NewChatRoomData>({
+    mutationFn: (newChatRoomData) => {
+      return instance.post(VITE_BASE_REQUEST_URL + chatRequests.chat, newChatRoomData)
+    },
+    onSuccess: () => {
+      console.log("채팅방 생성성공")
+      navigate(`/chat`)
+      queryClient.invalidateQueries({ queryKey: ['chatList'] });
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        console.error("Axios 에러 응답 데이터:", error.response?.data);
+        console.error("Axios 에러 응답 상태:", error.response?.status);
+      } else {
+        console.error("일반 에러:", error);
+      }
+    },
+    onSettled: () => {
+      console.log("결과에 관계없이 무언가 실행됨", chatRoomId);
+      queryClient.invalidateQueries({ queryKey: ['chatList'] });
+    }
+  })
+
+  // 함수 호출 시 데이터 전달
+  const createChatRoom = () => {
+    const newChatRoomData = {
+      lender: productDetail?.lender.pk,
+      product: productDetails.uuid
+    };
+    handleCreateChatRoom.mutate(newChatRoomData);
+  };
+
+  console.log(productDetail, "-상품정보데이터")
+
   return (
     <div className="w-1/2 h-full sm:w-full flex flex-col justify-between">
       <div
@@ -96,6 +148,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
               navigate('/sign-in');
               return;
             }
+            createChatRoom()
           }}
         >
           1:1 채팅

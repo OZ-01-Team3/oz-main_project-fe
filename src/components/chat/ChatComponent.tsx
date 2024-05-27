@@ -1,16 +1,15 @@
 
-import { UserContext, UserType } from '@/App';
 import chatRequests from '@/api/chatRequests';
 import instance from '@/api/instance';
-import productDetailData from '@/productDetailData';
 import useChatRoomStore from '@/stores/useChatRoomStore';
 import useMessageStore from '@/stores/useMessageStore';
+import { useProductDetailStore } from '@/stores/useProductDetailStore';
 import useUserInfoStore from '@/stores/useUserInfoStore';
 import Message from '@/type';
 import { EllipsisVerticalIcon } from '@heroicons/react/16/solid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Cookies } from 'react-cookie';
 import CommonButton from '../CommonButton';
 import ChatAcceptModal from './ChatAcceptModal';
@@ -33,35 +32,17 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
   // const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const { userData } = useContext<UserType>(UserContext)
+  // const { userData } = useContext<UserType>(UserContext)
   const { chatRoomId } = useChatRoomStore()
   const { nickname } = useUserInfoStore()
   const messages = useMessageStore(state => state.messages.filter(message => message.chatroom_id === chatRoomId));
+  const { productDetail } = useProductDetailStore()
 
   const cookies = new Cookies()
   const csrfToken = cookies.get('csrftoken')
 
   const queryClient = useQueryClient();
 
-
-  // useEffect(() => {
-  //   fetchChatMessages()
-  // }, [chatRoomId])
-
-  // const fetchChatMessages = async () => {
-  //   if (chatRoomId !== null) {
-  //     try {
-  //       const response = await instance.get(chatRequests.chat + `${chatRoomId}/`);
-  //       setChatMessages(response.data.messages);
-  //       console.log("채팅 메시지:", response.data.messages);
-  //     } catch (error) {
-  //       console.error('채팅 메시지 불러오기 에러', error);
-  //     }
-  //   } else {
-  //     // chatRoomId가 null일 때의 처리 로직 (옵션)
-  //     console.log("chatRoomId가 null입니다. API 요청을 생략합니다.");
-  //   }
-  // }
 
   const { data: chatMessages, isLoading: isChatMessageLoading, error: ChatMessageError } = useQuery({
     queryKey: ['chatMessage'],
@@ -128,7 +109,8 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
     }
   };
 
-  console.log("상대방이름", nickname)
+  console.log("productDetail 값:", productDetail);
+  console.log("chatRoomId 값:", chatRoomId);
 
   if (isChatMessageLoading) return <div>Loading...</div>;
   if (ChatMessageError) return <div>Error: {ChatMessageError.message}</div>;
@@ -177,23 +159,22 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
                 </div>
                 <div className="flex justify-between items-center">
                   {/* 상품정보 */}
-                  {productDetailData.map(item => (
-                    <div className="flex flex-row justify-left items-center h-16 my-3" key={item.id}>
-                      {/* 상품이미지 */}
-                      <div className=" h-20 w-20 border-mainBlack flex justify-center items-center overflow-hidden">
-                        <img src={item.image} alt="상품이미지 " className="object-cover w-20 " />
-                      </div>
-                      {/* 상품상세정보 */}
-                      <div className="flex flex-col justify-center w-1/3 ml-3 h-14 sm:w-full md:w-full">
-                        <p className="text-sm font-semibold">{item.title}</p>
 
-                        <p className=" text-xs font-base text-subGray">
-                          {item.description.length > 40 ? `${item.description.substring(0, 40)}...` : item.description}
-                        </p>
-                        <p className="text-sm">대여비 {item.price}</p>
-                      </div>
+                  <div className="flex flex-row justify-left items-center h-16 my-3" >
+                    {/* 상품이미지 */}
+                    <div className=" h-20 w-20 border-mainBlack flex justify-center items-center overflow-hidden">
+                      <img src={productDetail?.images[0].image} alt="상품이미지" className="object-cover w-20" />
                     </div>
-                  ))}
+                    {/* 상품상세정보 */}
+                    <div className="flex flex-col justify-center w-1/3 ml-3 h-14 sm:w-full md:w-full">
+                      <p className="text-sm font-semibold">{productDetail?.name}</p>
+
+                      <p className=" text-xs font-base text-subGray">
+                        {productDetail?.description?.length > 40 ? `${productDetail?.description?.substring(0, 40)}...` : productDetail?.description}
+                      </p>
+                      <p className="text-sm">대여비 {productDetail?.purchase_price}</p>
+                    </div>
+                  </div>
                   <div>
                     <CommonButton
                       className="bg-mainBlack text-mainWhite w-32 h-9 flex text-sm justify-center items-center mb-2 rounded-md p-1 sm:w-24 cursor-pointer "
