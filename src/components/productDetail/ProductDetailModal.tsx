@@ -1,6 +1,6 @@
-import instance from '@/api/instance';
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
 import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ModalPortal } from '../ModalPortal';
@@ -88,7 +88,7 @@ const ProductDetailModal = () => {
   // fetchProductDetail id에 맞는 정보 불러오기
   const fetchProductDetail = async (selectedProductId: string | null) => {
     try {
-      const response = await instance.get(VITE_BASE_REQUEST_URL + `/products/${selectedProductId}/`);
+      const response = await axios.get(VITE_BASE_REQUEST_URL + `/products/${selectedProductId}/`);
       // console.log(response.data);
       setProductDetails(response.data);
       setCurrentImageIndex(0);
@@ -102,10 +102,16 @@ const ProductDetailModal = () => {
   // 모달 닫는 함수
   const handleCloseModal = () => {
     setDetailModalOpen(false);
+    if (prevPath === '/') {
+      navigate('/', { replace: true });
+    }
     if (prevPath === '/all') {
       navigate('/all', { replace: true });
+    }
+    if (prevPath === '/search') {
+      navigate('/search', { replace: true });
     } else {
-      navigate('/', { replace: true });
+      navigate('/all', { replace: true });
     }
   };
 
@@ -131,7 +137,7 @@ const ProductDetailModal = () => {
                 onClick={handleCloseModal}
               />
               {/* 사진 영역 */}
-              <div className="w-1/2 pr-10 flex flex-col sm:w-full sm:pr-0 sm:justify-center sm:items-center relative  ">
+              <div className="w-1/2 pr-10 flex flex-col  relative justify-between">
                 <ChevronLeftIcon
                   onClick={handlePrevImage}
                   className="absolute w-7 h-7 -left-6 top-48 text-mainBlack cursor-pointer"
@@ -141,20 +147,20 @@ const ProductDetailModal = () => {
                   className="absolute  w-7 h-7 right-4 top-48 text-mainBlack cursor-pointer"
                 />
 
-                <div className="w-full h-[410px] overscroll-x-none flex ">
+                <div className="w-full h-[410px] lg:h-[360px] overscroll-x-none flex">
                   {productDetails.images.length > 0 && (
                     <img
                       src={productDetails.images[currentImageIndex].image}
-                      className="w-full h-full object-contain "
+                      className="w-full h-full  lg:h-[360px]  object-cover "
                       alt="상품 이미지"
                     />
                   )}
                 </div>
-                <div className="flex flex-row justify-between text-mainBlack mt-2 mb-2 pl-2 pr-2">
-                  <div className="text-lg font-semibold">대여비</div>
-                  <div className="text-base">{productDetails.rental_fee.toLocaleString()}(1일)</div>
+                <div className="flex flex-row justify-between text-mainBlack lg:my-2  pl-2 pr-2">
+                  <div className="text-xl lg:text-lg font-semibold">대여비</div>
+                  <div className="text-lg lg:text-base">{productDetails.rental_fee.toLocaleString()}(1일)</div>
                 </div>
-                <div className="pl-2 pr-2">
+                <div className="px-2 flex justify-start">
                   {/* 스타일 버튼들 */}
                   {style.map(product => (
                     <ModalStyleButton key={product}>{product}</ModalStyleButton>

@@ -1,6 +1,7 @@
 import instance from '@/api/instance';
+import useDebounce from '@/utils/UseDebounce';
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { product } from '../Products';
 export interface SearchProps {
   setProducts: (products: product[]) => void;
@@ -19,6 +20,11 @@ const SearchBar = ({ setProducts, setSearch }: SearchProps) => {
       console.error('검색실패', error);
     }
   };
+  const searchDebounce = useDebounce(handleSearch, 500);
+  useEffect(() => {
+    searchDebounce();
+  }, [query]);
+
   return (
     <>
       <div className="flex justify-between border-b-2 pr-1 border-b-mainWhite items-center w-full  h-12 search text-center relative focus:bg-mainBlack mb-32">

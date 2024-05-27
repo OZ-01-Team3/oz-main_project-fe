@@ -1,20 +1,23 @@
 import useAuthStore from '@/stores/useAuthStore';
+import useNotificationStore from '@/stores/useNotification';
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
 import { BellIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import { Cookies } from 'react-cookie';
 import { Link, useNavigate } from 'react-router-dom';
-import ChatNotification from './ChatNotification';
 import MobileNave from './MobileNav';
+import Notification from './Notification';
 
 interface MenuItem {
   label: string;
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   Icon?: () => JSX.Element;
   path?: string;
+  className?: string;
 }
 const cookies = new Cookies();
 const Header = () => {
+  const notifications = useNotificationStore(state => state.notifications);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false); // pc 상태
   const setIsLoggedIn = useAuthStore(state => state.setIsLoggedIn);
   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
@@ -39,7 +42,11 @@ const Header = () => {
   };
 
   const mainMenuItems: MenuItem[] = [
-    { label: '알림', onClick: handleToggleNotification },
+    {
+      label: '알림',
+      onClick: handleToggleNotification,
+      className: notifications.length > 0 ? 'text-red-200' : '',
+    },
     { label: '마이페이지', path: '/mypage/member-info' },
     isLoggedIn ? { label: '로그아웃', onClick: handleLogout } : { label: '로그인', path: '/sign-in' },
   ];
@@ -52,7 +59,7 @@ const Header = () => {
 
   return (
     <>
-      <nav className="w-full flex justify-between items-center h-24 p-4 bg-mainBlack">
+      <nav className="w-full flex justify-between items-center  h-24 p-4 bg-mainBlack">
         <div className="flex-1"></div>
         <div
           className="font-didot text-5xl  text-mainWhite text-center md:text-left cursor-pointer"
@@ -94,7 +101,7 @@ const Header = () => {
           </div>
         </div>
       </nav>
-      <ChatNotification isOpen={isNotificationOpen} onClose={handleToggleNotification} />
+      <Notification isOpen={isNotificationOpen} onClose={handleToggleNotification} />
 
       <div className="w-full  lg:hidden xl:hidden">
         <MobileNave />

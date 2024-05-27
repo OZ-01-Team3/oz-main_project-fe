@@ -24,7 +24,7 @@ const Main = () => {
       try {
         const response = await axios.get(VITE_BASE_REQUEST_URL + `${productRequests.products}?page=${page}`);
         console.log(response.data);
-        console.log(page);
+        // console.log(page);
         const updatedProducts = response.data.results.map((item: product) => ({
           ...item,
           isFavorite: false,
@@ -32,7 +32,7 @@ const Main = () => {
         setProducts(updatedProducts);
         const totalProducts = response.data.count;
         setTotalPages(Math.ceil(totalProducts / 24));
-        console.log(Math.ceil(totalProducts / 24));
+        // console.log(Math.ceil(totalProducts / 24));
       } catch (error) {
         console.error('상품 불러오기 실패:', error);
       }
@@ -47,7 +47,7 @@ const Main = () => {
     if (willSelectedProductId) {
       setWillSelectedProductId(null);
       setDetailModalOpen(true);
-      console.log('이전경로', window.location.pathname);
+      // console.log('이전경로', window.location.pathname);
       setSelectedProductId(willSelectedProductId);
       history.pushState({}, '', `/product/${willSelectedProductId}`);
     }
