@@ -12,7 +12,7 @@ import { productStatusOptions } from './productRegistration';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const sizes = ['S', 'M', 'L', 'XL'];
 const cookies = new Cookies();
-const access = cookies.get('ac');
+const access = cookies.get('accessToken');
 interface category {
   id: number;
   name: string;

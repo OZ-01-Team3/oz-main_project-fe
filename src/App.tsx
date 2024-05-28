@@ -86,8 +86,8 @@ export const useUserContext = () => {
 
 /** PrivateRoute 컴포넌트 */
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
-  const [cookies] = useCookies(['ac']);
-  const accessToken = cookies.ac;
+  const [cookies] = useCookies(['accessToken']);
+  const accessToken = cookies.accessToken;
   return accessToken ? children : <Navigate to="/sign-in" />;
 };
 
@@ -140,7 +140,9 @@ const commonRoutes = [
     <Route path="/search" element={<Search />} />
     <Route path="/all" element={<TotalProducts />} />
     <Route path="/product/:productId" element={<ProductDetailModal />} />
-    <Route path="/oauth2/redirect" element={<LoginHandler />} />
+    <Route path="/oauth2/naver/redirect" element={<LoginHandler />} />
+    <Route path="/oauth2/kakao/redirect" element={<LoginHandler />} />
+    <Route path="/oauth2/google/redirect" element={<LoginHandler />} />
   </Route>,
 ];
 
@@ -172,8 +174,8 @@ function App() {
     region: '',
   });
 
-  const [cookies] = useCookies(['ac']);
-  const accessToken = cookies.ac;
+  const [cookies] = useCookies(['accessToken']);
+  const accessToken = cookies.accessToken;
 
 
   //로그인한 회원 정보 불러오기
