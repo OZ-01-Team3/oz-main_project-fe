@@ -128,7 +128,7 @@ const SignUp = () => {
         password1: data.password,
         password2: data.confirmPassword,
         nickname: data.nickname,
-        phone: data.password,
+        phone: data.phone,
       });
       console.log(response, '회원가입성공');
       navigate('/sign-in', { replace: true })
