@@ -28,7 +28,7 @@ const Header = () => {
   // 쿠키에서 액세스 토큰 확인
   useEffect(() => {
     const checkToken = () => {
-      const accessToken = cookies.get('ac');
+      const accessToken = cookies.get('accessToken');
       setIsLoggedIn(!!accessToken);
     };
 
