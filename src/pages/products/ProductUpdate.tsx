@@ -32,7 +32,8 @@ const productRegistrationSchema = zod.object({
 const ProductUpdate = () => {
   const [productNameLength, setProductNameLength] = useState<number>(0);
   const [categories, setCategories] = useState<category[]>([]);
-
+  const [styleTag, setStyleTag] = useState<styleTag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<number[]>([]);
   // img-reg 에서 보낸 정보 가져오기
   const location = useLocation();
   const navigate = useNavigate();
@@ -45,6 +46,7 @@ const ProductUpdate = () => {
       return;
     }
     handleGetCategories();
+    handleGetStyle();
   }, []);
   // 상품 상태가 '4' 이렇게 숫자로 오는데, 이를 해당하는 id의 상태로 변환해주기
 
@@ -79,7 +81,7 @@ const ProductUpdate = () => {
       purchase_date: prevProductInformation.purchase_date,
       condition: prevProductInformation.condition,
       description: prevProductInformation.description,
-      // tag: prevProductInformation.,
+      styles: prevProductInformation.styles,
       amount: prevProductInformation.amount,
       region: prevProductInformation.region,
       image: prevProductInformation.image,
@@ -101,7 +103,16 @@ const ProductUpdate = () => {
       console.log(error);
     }
   };
-
+  const handleGetStyle = async () => {
+    try {
+      const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/styles/`);
+      console.log(response, '상품 스타일 가져오기 성공');
+      console.log(response.data);
+      setStyleTag(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const formData = new FormData();
   const handleUpdateProduct = handleSubmit(async data => {
     try {
@@ -116,12 +127,14 @@ const ProductUpdate = () => {
       formData.append('description', data.description);
       formData.append('amount', data.amount);
       formData.append('region', data.region);
-      // formData.append('image', data.image);
 
       for (const pair of formData.entries()) {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
-
+      selectedTags.forEach(tagId => {
+        formData.append('styles', String(tagId));
+        console.log(tagId);
+      });
       images.forEach(image => {
         formData.append(`image`, image);
       });
@@ -143,7 +156,15 @@ const ProductUpdate = () => {
     }
     console.log(data);
   });
-
+  const handleTagClick = (tagId: number) => {
+    setSelectedTags(prev => {
+      if (prev.includes(tagId)) {
+        return prev.filter(id => id !== tagId);
+      } else {
+        return [...prev, tagId];
+      }
+    });
+  };
   const handleDeleteProduct = async () => {
     if (!window.confirm('상품을 삭제하시겠습니까? 다시 되돌릴 수 없습니다.')) {
       return;
@@ -163,6 +184,7 @@ const ProductUpdate = () => {
       toast.error('상품 삭제에 실패했습니다.');
     }
   };
+
   return (
     <div className="lg:w-[700px] w-[900px] md:w-[500px] sm:w-[350px] sm:text-sm m-auto ">
       <FormProvider {...form}>
@@ -367,18 +389,19 @@ const ProductUpdate = () => {
           {/* 태그 */}
           <div className="mb-4">
             <div className="flex items-center justify-center w-full">
-              <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">
-                태그 <span className="text-subGray">(선택)</span>
-              </span>
-              <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
-                <input
-                  type="text"
-                  className="shadow appearance-none border rounded w-full  px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
-                  placeholder="ex) 긱시크 (최대 5개) "
-                  // {...register('tag')}
-                />
-                {errors.description && (
-                  <p className=" text-sm text-red-500 mt-1 w-full text-left">{String(errors.description.message)}</p>
+              <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">태그</span>
+              <div className=" w-full md:w-8/12 flex flex-wrap  justify-start items-center">
+                {styleTag.map(tag => (
+                  <div
+                    key={tag.id}
+                    className={`flex flex-col border text-sm my-1 border-mainBlack bg-mainWhite text-mainBlack rounded-full pt-1 pb-1 pl-3 pr-3 w-20 mr-1 text-center hover:cursor-pointer hover:scale-105 ${selectedTags.includes(tag.id) ? 'bg-yellow-50' : ''}`}
+                    onClick={() => handleTagClick(tag.id)}
+                  >
+                    <span>{tag.name}</span>
+                  </div>
+                ))}
+                {errors.styles && (
+                  <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.styles.message}</p>
                 )}
               </div>
             </div>

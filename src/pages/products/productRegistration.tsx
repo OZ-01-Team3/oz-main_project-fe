@@ -4,14 +4,13 @@ import CommonButton from '@/components/CommonButton';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { ChangeEventHandler, useEffect, useState } from 'react';
-import { Cookies } from 'react-cookie';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { z as zod } from 'zod';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const sizes = ['S', 'M', 'L', 'XL'];
-const cookies = new Cookies();
+
 export const productStatusOptions = [
   { id: 1, label: '새 상품 (미사용)', description: '사용하지 않은 상품' },
   { id: 2, label: '사용감 없음', description: '사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음' },
@@ -29,6 +28,10 @@ interface category {
   id: number;
   name: string;
 }
+interface styleTag {
+  id: number;
+  name: string;
+}
 
 const productRegistrationSchema = zod.object({
   name: zod.string().min(1, '상품명을 입력해주세요').max(30, '상품명은 30자 이내로 입력해주세요'),
@@ -40,6 +43,7 @@ const productRegistrationSchema = zod.object({
   purchase_date: zod.string().min(1, '구매시기를 선택해주세요'),
   condition: zod.string().min(1, '상품 상태를 선택해주세요'),
   description: zod.string().min(1, '상품 설명을 입력해주세요'),
+  // tag: zod.array(zod.number()).min(1, '태그를 하나 이상 선택해주세요'),
   amount: zod.coerce.number().min(1, '수량을 입력해주세요'),
   region: zod.string().min(1, '거래지역을 입력해주세요'),
 });
@@ -47,7 +51,8 @@ const productRegistrationSchema = zod.object({
 const ProductRegistration = () => {
   const [productNameLength, setProductNameLength] = useState<number>(0);
   const [categories, setCategories] = useState<category[]>([]);
-
+  const [styleTag, setStyleTag] = useState<styleTag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<number[]>([]);
   // img-reg 에서 보낸 사진 배열 받아오기
   const location = useLocation();
   const navigate = useNavigate();
@@ -60,6 +65,7 @@ const ProductRegistration = () => {
       return;
     }
     handleGetCategories();
+    handleGetStyle();
   }, []);
 
   //**받아온 사진 배열에서 사진파일배열만 보내기 */
@@ -77,7 +83,6 @@ const ProductRegistration = () => {
       setProductNameLength(30);
     }
   };
-  // 숫자입력시 자동으로 toLocaleString 적용
 
   //상품등록 폼 상태 관리
   const form = useForm({
@@ -92,7 +97,7 @@ const ProductRegistration = () => {
       purchase_date: '',
       condition: '',
       description: '',
-      // tag: '',
+      styles: [],
       amount: '',
       region: '',
       image: '',
@@ -115,7 +120,26 @@ const ProductRegistration = () => {
       console.log(error);
     }
   };
-
+  const handleGetStyle = async () => {
+    try {
+      const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/styles/`);
+      console.log(response, '상품 스타일 가져오기 성공');
+      console.log(response.data);
+      setStyleTag(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleTagClick = (tagId: number) => {
+    setSelectedTags(prev => {
+      if (prev.includes(tagId)) {
+        return prev.filter(id => id !== tagId);
+      } else {
+        return [...prev, tagId];
+      }
+    });
+  };
+  console.log('selectedTags', selectedTags);
   const handleClickReg = form.handleSubmit(async data => {
     try {
       const formData = new FormData();
@@ -136,11 +160,14 @@ const ProductRegistration = () => {
         formData.append(`image`, image);
         console.log(image);
       });
-
+      selectedTags.forEach(tagId => {
+        formData.append('styles', String(tagId));
+        console.log(tagId);
+      });
       for (const pair of formData.entries()) {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
-      const access = cookies.get('ac');
+
       const response = await instance.post(VITE_BASE_REQUEST_URL + productRequests.products, formData);
       console.log('상품 등록 성공', response);
       toast.success('상품이 성공적으로 등록되었습니다!');
@@ -346,27 +373,26 @@ const ProductRegistration = () => {
           {/* 태그 */}
           <div className="mb-4">
             <div className="flex items-center justify-center w-full">
-              <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">
-                태그 <span className="text-subGray">(선택)</span>
-              </span>
-              <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
-                <input
-                  type="text"
-                  className="shadow appearance-none border rounded w-full  px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
-                  placeholder="ex) 긱시크 (최대 5개) "
-                // {...register('tag')}
-                />
-                {/* {errors.description && (
-                  <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.description.message}</p>
-                )} */}
+              <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">태그</span>
+              <div className=" w-full md:w-8/12 flex flex-wrap  justify-start items-center">
+                {styleTag.map(tag => (
+                  <div
+                    key={tag.id}
+                    className={`flex flex-col border text-sm my-1 border-mainBlack bg-mainWhite text-mainBlack rounded-full pt-1 pb-1 pl-3 pr-3 w-20 mr-1 text-center hover:cursor-pointer hover:scale-105 ${selectedTags.includes(tag.id) ? 'bg-yellow-50' : ''}`}
+                    onClick={() => handleTagClick(tag.id)}
+                  >
+                    <span>{tag.name}</span>
+                  </div>
+                ))}
+                {errors.styles && (
+                  <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.styles.message}</p>
+                )}
               </div>
             </div>
           </div>
-
           {/* 추가 정보 */}
           <p className="text-left text-3xl mt-28">추가 정보</p>
           <hr className="w-full ml-auto mr-auto mt-6 mb-7 text-hrGray" />
-
           {/* 수량 */}
           <div className="mb-4">
             <div className="flex items-center justify-center w-full">
@@ -401,7 +427,6 @@ const ProductRegistration = () => {
               </div>
             </div>
           </div>
-
           {/* Submit Button */}
           <div className="text-right md:mb-48 ">
             <CommonButton
