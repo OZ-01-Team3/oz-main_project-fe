@@ -1,4 +1,5 @@
 import CommonButton from '@/components/CommonButton';
+import useStyleTagStore from '@/stores/useStyleTagStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { ChangeEventHandler, useEffect, useState } from 'react';
@@ -32,7 +33,7 @@ const productRegistrationSchema = zod.object({
 const ProductUpdate = () => {
   const [productNameLength, setProductNameLength] = useState<number>(0);
   const [categories, setCategories] = useState<category[]>([]);
-  const [styleTag, setStyleTag] = useState<styleTag[]>([]);
+  const { styleTag, setStyleTag } = useStyleTagStore();
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   // img-reg 에서 보낸 정보 가져오기
   const location = useLocation();
@@ -48,14 +49,13 @@ const ProductUpdate = () => {
     handleGetCategories();
     handleGetStyle();
   }, []);
-  // 상품 상태가 '4' 이렇게 숫자로 오는데, 이를 해당하는 id의 상태로 변환해주기
 
   const prevProductInformation = location.state;
   console.log('기존정보+사진수정정보', prevProductInformation);
   console.log('전체사진', prevProductInformation.images);
 
-  //!!! File 형식이 있으면,File 반환, 아니면 imageUrl반환.
-  const images = prevProductInformation.images.map(item => item.file || item.image);
+  // File 형식이 있으면,File 반환, 아니면 imageUrl반환.
+  const images = prevProductInformation.images.map(item => item.file || item.image || item.imageUrl);
   console.log('보내는 Images(기존+새롭게추가)', images);
 
   const handleProductNameMaxLength: ChangeEventHandler<HTMLInputElement> = e => {
@@ -135,7 +135,7 @@ const ProductUpdate = () => {
         formData.append('styles', String(tagId));
         console.log(tagId);
       });
-      images.forEach(image => {
+      images.forEach((image: File | string) => {
         formData.append(`image`, image);
       });
       const response = await axios.put(VITE_BASE_REQUEST_URL + `/products/${prevProductInformation.uuid}/`, formData, {
@@ -401,7 +401,7 @@ const ProductUpdate = () => {
                   </div>
                 ))}
                 {errors.styles && (
-                  <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.styles.message}</p>
+                  <p className=" text-sm text-red-500 mt-1 w-full text-left">{String(errors.styles.message)}</p>
                 )}
               </div>
             </div>
