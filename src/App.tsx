@@ -16,12 +16,11 @@ import SalesHistory from './pages/mypage/salesHistory';
 import ImgRegistration from './pages/products/imgRegistration';
 
 import { useQuery } from '@tanstack/react-query';
-import { Cookies, useCookies } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 
 import authRequests from './api/authRequests';
 import instance from './api/instance';
 
-// import { NotificationProvider } from './NotificationContext';
 import { NotificationProvider } from './NotificationContext';
 import ProductRegistrationButton from './components/ProductRegistrationButton';
 import LoginHandler from './pages/loginHandler';
@@ -58,9 +57,10 @@ interface UserContextType {
   userData: GetMemberResponseType;
 }
 
+
 /** 유저 정보를 전역관리하기 위한 컨텍스트 */
 export const UserContext = createContext<UserContextType>({
-  setUserData: () => {},
+  setUserData: () => { },
   userData: {
     pk: -1,
     age: 0,
@@ -88,7 +88,6 @@ export const useUserContext = () => {
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const [cookies] = useCookies(['ac']);
   const accessToken = cookies.ac;
-
   return accessToken ? children : <Navigate to="/sign-in" />;
 };
 
@@ -172,8 +171,11 @@ function App() {
     profile: '',
     region: '',
   });
-  const cookies = new Cookies();
-  const accessToken = cookies.get('ac');
+
+  const [cookies] = useCookies(['ac']);
+  const accessToken = cookies.ac;
+
+
   //로그인한 회원 정보 불러오기
   const {
     data: meData,
