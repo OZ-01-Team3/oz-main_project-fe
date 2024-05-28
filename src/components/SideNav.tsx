@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 type SidebarItemProps = {
   text: string;
@@ -21,15 +21,13 @@ const SideBar = () => {
   ];
 
   return (
-    <>
-      <nav className="w-80 sm:w-44 h-auto h-min-[300px] border-r-[1px] border-mainWhite p-5">
-        <ul className="flex justify-end items-end flex-col text-xl sm:text-lg">
-          {sidebarItems.map((item, index) => (
-            <SidebarItem key={index} text={item.text} href={item?.href} />
-          ))}
-        </ul>
-      </nav>
-    </>
+    <nav className="w-44 h-screen h-min-[300px] border-r-[1px] border-mainWhite pr-8 py-5 mr-8 ">
+      <ul className="flex items-end flex-col text-xl sm:text-lg h-ul justify-start h-full">
+        {sidebarItems.map((item, index) => (
+          <SidebarItem key={index} text={item.text} href={item?.href} />
+        ))}
+      </ul>
+    </nav>
   );
 };
 

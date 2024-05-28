@@ -7,7 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { z as zod } from 'zod';
-import { productStatusOptions } from '../mypage/productRegistration';
+import { productStatusOptions } from './productRegistration';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const sizes = ['S', 'M', 'L', 'XL'];
 const cookies = new Cookies();

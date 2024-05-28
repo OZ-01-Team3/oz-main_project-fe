@@ -1,6 +1,6 @@
 'use client';
 
-import OrderProducts from '@/components/OrderProducts';
+import OrderProducts from '@/components/mypage/OrderProducts';
 
 const OrderHistory = () => {
   return (

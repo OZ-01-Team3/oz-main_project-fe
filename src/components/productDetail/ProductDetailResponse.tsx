@@ -60,6 +60,9 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
     if (prevPath === '/wish-list') {
       navigate('/wish-list', { replace: true });
     }
+    if (prevPath === '/mypage/sales-history') {
+      navigate('/mypage/sales-history', { replace: true });
+    }
   };
 
   return (

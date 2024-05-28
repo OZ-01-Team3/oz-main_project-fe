@@ -1,12 +1,15 @@
 import orderProducts from '@/orderProductData';
 import { CheckIcon } from '@heroicons/react/16/solid';
-import CommonButton from './CommonButton';
+import CommonButton from '../CommonButton';
 
 const OrderProducts = () => {
   return (
-    <ul role="list" className="w-screen divide-y divide-subGray border-b border-t border-subGray ml-20 sm:ml-6">
+    <ul
+      role="list"
+      className=" divide-y divide-subGray border-y border-subGray flex items-center justify-start ml-4 flex-col w-full"
+    >
       {orderProducts.map(product => (
-        <li key={product.id} className="flex py-6">
+        <li key={product.id} className="flex py-3  items-center w-full">
           <div className="flex-shrink-0">
             <img
               src={product.image}
