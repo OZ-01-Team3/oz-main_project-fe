@@ -1,3 +1,4 @@
+import { logoutAPI } from '@/api/authRequests';
 import useAuthStore from '@/stores/useAuthStore';
 import useNotificationStore from '@/stores/useNotification';
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
@@ -43,11 +44,17 @@ const Header = () => {
     setIsNotificationOpen(!isNotificationOpen);
   };
 
-  const handleLogout = () => {
-    const allCookies = cookies.getAll(); // 모든 쿠키 가져오기
-    Object.keys(allCookies).forEach(cookieName => cookies.remove(cookieName)); // 모든 쿠키 이름을 순회하며 삭제
-    logout(); // zustand 스토어에서 로그아웃 처리
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await logoutAPI
+      const allCookies = cookies.getAll(); // 모든 쿠키 가져오기
+      Object.keys(allCookies).forEach(cookieName => cookies.remove(cookieName, { path: '/' })); // 모든 쿠키 이름을 순회하며 삭제
+      logout(); // zustand 스토어에서 로그아웃 처리
+      navigate('/');
+
+    } catch (error) {
+      console.error('로그아웃 실패', error)
+    }
   };
 
   const mainMenuItems: MenuItem[] = [
