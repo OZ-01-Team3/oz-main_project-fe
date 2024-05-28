@@ -10,11 +10,12 @@ type InputProps = {
   placeholder?: string;
   min?: string | number;
   ref?: React.RefCallback<HTMLInputElement>;
+  disabled?: boolean;
 };
 
 
 const AuthInput = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ children, value, onChange, type, placeholder, min, name, onBlur }, ref) => {
+  ({ children, value, onChange, type, placeholder, min, name, onBlur, disabled }, ref) => {
     return (
       <div className="relative mt-6">
         <label className="absolute -top-2 left-2 inline-block bg-mainBlack px-1 text-base font-semibold text-mainWite">
@@ -31,6 +32,7 @@ const AuthInput = React.forwardRef<HTMLInputElement, InputProps>(
           name={name}
           onBlur={onBlur}
           ref={ref}
+          disabled={disabled}
         />
       </div>
     );
