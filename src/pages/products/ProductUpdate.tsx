@@ -35,6 +35,8 @@ const ProductUpdate = () => {
   const [categories, setCategories] = useState<category[]>([]);
   const { styleTag, setStyleTag } = useStyleTagStore();
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
+  const [styleTag, setStyleTag] = useState<styleTag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<number[]>([]);
   // img-reg 에서 보낸 정보 가져오기
   const location = useLocation();
   const navigate = useNavigate();
