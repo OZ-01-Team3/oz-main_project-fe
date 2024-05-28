@@ -30,7 +30,7 @@ const TotalProducts = () => {
   const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedOrdered, setSelectedOrdered] = useState('');
-  const [selectedStyle, setSelectedStyle] = useState();
+  const [selectedStyle, setSelectedStyle] = useState('');
   const [products, setProducts] = useState<product[]>([]);
   const { setCurrentPage } = useCurrentPageStore();
   const { totalPages, setTotalPages } = useTotalPageStore();
@@ -39,46 +39,57 @@ const TotalProducts = () => {
   const [categories, setCategories] = useState<categories[]>([]);
   console.log('styleTag', styleTag);
 
-  const handlePageChange = (newPage: number) => {
-    if (newPage > 0 && newPage <= totalPages) {
-      setCurrentPage(newPage);
-    }
-  };
   useEffect(() => {
     handleGetCategories();
-
     handleGetStyles();
   }, []);
+  // 상품 필터링 조건부로 날리기
+  useEffect(() => {
+    handleSelectCategory();
+  }, [selectedCategory, selectedStyle, selectedOrdered]);
+  // 모달 라우팅 용
+  useEffect(() => {
+    localStorage.setItem('pathname', window.location.pathname);
+    if (willSelectedProductId) {
+      setWillSelectedProductId(null);
+      setDetailModalOpen(true);
+      setSelectedProductId(willSelectedProductId);
+      history.pushState({}, '', `/product/${willSelectedProductId}`);
+    }
+  }, []);
+  // 스타일 가져오기
   const handleGetStyles = async () => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/styles`);
       console.log(response, '상품 스타일 가져오기 성공');
-      setStyleTag(response.data);
+      setStyleTag([{ id: 0, name: '전체' }, ...response.data]); //'전체' 추가
     } catch (error) {
       console.log(error);
     }
   };
+  // 카테고리 가져오기
   const handleGetCategories = async () => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/`);
       console.log(response, '상품 카테고리 가져오기 성공');
-      setCategories(response.data);
+      setCategories([{ id: 0, name: '전체' }, ...response.data]); //'전체' 추가
     } catch (error) {
       console.log(error);
     }
   };
-  // 상품 필터링
+  // 처음에 전체상품 불러오기
   useEffect(() => {
-    handleSelectCategory();
-  }, [selectedCategory, selectedStyle, selectedOrdered]);
+    fetchProducts(currentPage);
+  }, [currentPage]);
 
+  // 정렬별로 쿼리문 실행
   const handleSelectCategory = async () => {
     try {
       let query = `${productRequests.products}?`;
-      if (selectedCategory) {
+      if (selectedCategory && selectedCategory !== '0') {
         query += `product_category=${selectedCategory}&`;
       }
-      if (selectedStyle) {
+      if (selectedStyle && selectedStyle !== '0') {
         query += `styles=${selectedStyle}&`;
       }
       if (selectedOrdered) {
@@ -95,34 +106,26 @@ const TotalProducts = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    const fetchProducts = async (page: number) => {
-      try {
-        const response = await axios.get(VITE_BASE_REQUEST_URL + `${productRequests.products}?page=${page}`);
-        console.log(response.data);
-        console.log(page);
-        setProducts(response.data.results);
-        const totalProducts = response.data.count;
-        setTotalPages(Math.ceil(totalProducts / 24));
-        console.log(Math.ceil(totalProducts / 24));
-      } catch (error) {
-        console.error('상품 불러오기 실패:', error);
-      }
-    };
-    fetchProducts(currentPage);
-  }, [currentPage]);
-
-  useEffect(() => {
-    localStorage.setItem('pathname', window.location.pathname);
-    if (willSelectedProductId) {
-      setWillSelectedProductId(null);
-      setDetailModalOpen(true);
-      setSelectedProductId(willSelectedProductId);
-      history.pushState({}, '', `/product/${willSelectedProductId}`);
+  // 전체상품 불러오기
+  const fetchProducts = async (page: number) => {
+    try {
+      const response = await axios.get(VITE_BASE_REQUEST_URL + `${productRequests.products}?page=${page}`);
+      console.log(response.data);
+      console.log(page);
+      setProducts(response.data.results);
+      const totalProducts = response.data.count;
+      setTotalPages(Math.ceil(totalProducts / 24));
+      console.log(Math.ceil(totalProducts / 24));
+    } catch (error) {
+      console.error('상품 불러오기 실패:', error);
     }
-  }, []);
-
+  };
+  // 페이지 네이션
+  const handlePageChange = (newPage: number) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
   return (
     <>
       {detailModalOpen && <ProductDetailModal />}
@@ -144,7 +147,7 @@ const TotalProducts = () => {
         <select
           className="bg-transparent rounded-xl mr-5 "
           value={selectedStyle}
-          onChange={e => setSelectedStyle(Number(e.target.value))}
+          onChange={e => setSelectedStyle(e.target.value)}
         >
           {styleTag.map(item => (
             <option key={item.id} value={item.id}>
