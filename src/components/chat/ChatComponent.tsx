@@ -1,15 +1,17 @@
 
+import { UserContext } from '@/App';
 import chatRequests from '@/api/chatRequests';
 import instance from '@/api/instance';
 import useChatRoomStore from '@/stores/useChatRoomStore';
 import useMessageStore from '@/stores/useMessageStore';
 import { useProductDetailStore } from '@/stores/useProductDetailStore';
-import useUserInfoStore from '@/stores/useUserInfoStore';
+// import useUserInfoStore from '@/stores/useUserInfoStore';
+import useChatRoomListStore from '@/stores/useChatRoomListStore';
 import Message from '@/type';
-import { EllipsisVerticalIcon } from '@heroicons/react/16/solid';
+import { EllipsisVerticalIcon, UserCircleIcon } from '@heroicons/react/16/solid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 import { Cookies } from 'react-cookie';
 import CommonButton from '../CommonButton';
 import ChatAcceptModal from './ChatAcceptModal';
@@ -32,9 +34,10 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
   // const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  // const { userData } = useContext<UserType>(UserContext)
+  const { userData } = useContext(UserContext)
   const { chatRoomId } = useChatRoomStore()
-  const { nickname } = useUserInfoStore()
+  const { chatRoomList } = useChatRoomListStore()
+
   const messages = useMessageStore(state => state.messages.filter(message => message.chatroom_id === chatRoomId));
   const { productDetail } = useProductDetailStore()
 
@@ -45,7 +48,7 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
 
 
   const { data: chatMessages, isLoading: isChatMessageLoading, error: ChatMessageError } = useQuery({
-    queryKey: ['chatMessage'],
+    queryKey: ['chatMessage', chatRoomId],
     queryFn: async () => {
       if (!chatRoomId) {
         throw new Error("채팅방이 없습니다.");
@@ -54,8 +57,10 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
       console.log('여기가 api로 진짜 이전메세지들 내려줍디ㅏ.', response.data.messages)
       return response.data.messages;
     },
-    enabled: !!chatRoomId
+    enabled: !!chatRoomId,
   });
+
+  console.log("채팅룸 정보", chatRoomList)
 
 
   console.log("chatComponents에서 받아오는 실시간 메세지", messages)
@@ -98,7 +103,6 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
     },
     onSettled: () => {
       console.log("결과에 관계없이 무언가 실행됨", chatRoomId);
-      queryClient.invalidateQueries({ queryKey: ['chatList'] });
     }
   })
 
@@ -111,7 +115,6 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
 
   console.log("productDetail 값:", productDetail);
   console.log("chatRoomId 값:", chatRoomId);
-
   if (isChatMessageLoading) return <div>Loading...</div>;
   if (ChatMessageError) return <div>Error: {ChatMessageError.message}</div>;
   if (!chatRoomId || (chatMessages && chatMessages.length === 0)) return <div className="flex flex-col justify-center items-center pl-10 relative w-full  ">접속중인 채팅방이 없습니다.</div>;
@@ -137,13 +140,17 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
                 <div className={`sm:hidden ${userResCss} relative`}>
                   <div className="flex items-center mx-auto">
                     <div className="w-10 aspect-[1/1] mr-2 border-mainBlack rounded-full border ">
-                      <img
-                        src="https://i.pinimg.com/564x/2a/58/e3/2a58e3d012bb65932a7c38d7381f29ee.jpg"
-                        className="w-full h-full object-cover rounded-full"
-                        alt="프로필 이미지"
-                      />
+                      {productDetail.lender && productDetail.lender.profile_img ? (
+                        <img
+                          src={productDetail.lender.profile_img}
+                          className="w-full h-full object-cover rounded-full"
+                          alt="프로필 이미지"
+                        />
+                      ) : (
+                        <UserCircleIcon className="w-full h-full object-cover rounded-full" />
+                      )}
                     </div>
-                    <div className="text-2xl my-3">{nickname}</div>
+                    <div className="text-2xl my-3">{chatRoomList?.user_info.nickname}</div>
                   </div>
                   <div className='absolute right-0'>
                     <button onClick={toggleDropdown}>
