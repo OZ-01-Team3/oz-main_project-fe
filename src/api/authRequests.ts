@@ -17,11 +17,17 @@ interface SignUpType {
 }
 
 interface modificationUserInfoType {
+  email: string;
   password1: string | undefined;
   password2: string | undefined;
   nickname: string | undefined;
   phone: string | undefined;
+  profileImage: string | undefined;
 }
+
+// interface profileImageUploadType extends modificationUserInfoType {
+//   profileImage: string | undefined;
+// }
 
 // interface TokenRefreshResponse {
 //   refresh: string;
@@ -72,7 +78,14 @@ export const verifyEmailAPI = (email: string, code: string) => {
   });
 };
 /**회원 정보 수정 */
-export const modificationUserInfoAPI = (data: modificationUserInfoType): Promise<AxiosResponse<UserActivation, any>> =>
+export const modificationUserInfoAPI = (data: FormData): Promise<AxiosResponse<UserActivation, any>> =>
   instance.patch<UserActivation>(authRequests.userInfo, data);
+
+/** 프로필 이미지 등록 */
+// export const profileImageUploadAPI = (image: string) => {
+//   instance.post<UserActivation>(authRequests.userInfo, {
+//     image,
+//   });
+// };
 
 export default authRequests;
