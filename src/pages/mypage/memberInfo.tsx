@@ -4,21 +4,23 @@ import AuthInput from "@/components/AuthInput";
 import WithdrawalModal from "@/components/mypage/WithdrawalModal";
 import { UserCircleIcon } from "@heroicons/react/16/solid";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext, useEffect, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { Cookies } from "react-cookie";
 import { FormProvider, useForm } from "react-hook-form";
+import Resizer from 'react-image-file-resizer';
 import { z as zod } from 'zod';
-
 const cookies = new Cookies();
 
 const MemberInfo = () => {
   const { userData } = useContext(UserContext)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditable, setIsEditable] = useState(false); // 입력 필드 활성화 상태 
-
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
   /**유효성 검증 */
   const userInfoModifyFormSchema = zod
     .object({
+      email: zod.string(),
       password: zod.string().regex(
         /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,20}$/,
         '문자와 특수문자, 숫자가 혼합된 8~20자리의 비밀번호를 입력해주세요.'
@@ -43,6 +45,7 @@ const MemberInfo = () => {
   const form = useForm({
     resolver: zodResolver(userInfoModifyFormSchema),
     defaultValues: {
+      email: userData.email,
       nickname: userData.nickname,
       password: '',
       confirmPassword: '',
@@ -72,19 +75,65 @@ const MemberInfo = () => {
 
   /**회원정보 수정 */
   const handleModificationUserInfo = form.handleSubmit(async (data) => {
-    try {
-      const response = await modificationUserInfoAPI({
-        password1: data.password || undefined,
-        password2: data.confirmPassword || undefined,
-        nickname: data.nickname,
-        phone: data.phone,
-      });
-      console.log(response, '회원정보 수정 성공')
-    } catch (error) {
-      console.log('회원 정보 수정 실패', error)
-    }
+    const formData = new FormData();
+    formData.append('email', data.email);
+    formData.append('nickname', data.nickname);
+    formData.append('phone', data.phone);
+    if (data.password) formData.append('password1', data.password);
+    if (data.confirmPassword) formData.append('password2', data.confirmPassword);
+    if (profileImage) formData.append('profile_img', profileImage);
 
-  })
+    try {
+      const response = await modificationUserInfoAPI(formData);
+      console.log(response, '회원정보 수정 성공');
+    } catch (error) {
+      console.log('회원 정보 수정 실패', error);
+    }
+  });
+
+
+  const resizeFile = (file: File): Promise<File> =>
+    new Promise((resolve, reject) => {
+      Resizer.imageFileResizer(
+        file,
+        300,
+        300,
+        'JPEG',
+        100,
+        0,
+        (uri) => {
+          if (uri instanceof File) {
+            resolve(uri);
+          } else {
+            reject(new Error("크키가 조정된 파일 형식이 아님"));
+          }
+        },
+        'file',
+      );
+    });
+
+  /** 프로필 이미지 변경 핸들러 */
+  const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files ? event.target.files[0] : null;
+    if (file) {
+      try {
+        const resizedFile = await resizeFile(file);
+        setProfileImage(resizedFile);
+        setPreviewImageUrl(URL.createObjectURL(resizedFile));
+      } catch (error) {
+        console.error("이미지 크기조정 실패", error);
+      }
+    } else {
+      setProfileImage(null);
+      setPreviewImageUrl(null);
+    }
+  };
+
+  useEffect(() => {
+    if (userData.profile_img) {
+      setPreviewImageUrl(userData.profile_img);
+    }
+  }, [userData.profile_img]);
 
 
 
@@ -92,6 +141,7 @@ const MemberInfo = () => {
     if (userData) {
       setValue('nickname', userData.nickname);
       setValue('phone', userData.phone);
+      setValue('email', userData.email);
     }
   }, [userData, setValue]);
 
@@ -111,11 +161,25 @@ const MemberInfo = () => {
       <FormProvider {...form}>
         <div className="w-full ml-20 mt-5 md:ml-8 sm:ml-6">
           <div className="flex flex-col">
-            <UserCircleIcon className="h-52 w-52 sm:w-32 sm:h-32 text-gray-300" aria-hidden="true" />
-            <div className="sm:flex sm:justify-center">
-              <button className="w-52 rounded-lg bg-transparent px-3.5 py-2.5 text-mainWhite shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 mt-6 border-2 border-mainWhite">사진 등록</button>
-              <button className="w-full h-12 hidden sm:block rounded-lg bg-mainWhite px-3.5 py-2.5 mt-6 text-base font-base text-mainBlack shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:ml-4" onClick={toggleEdit}>내정보 수정</button>
-            </div>
+            {previewImageUrl ? (
+              <img src={previewImageUrl} alt="Profile Preview" className="h-52 w-52 sm:w-32 sm:h-32 rounded-full object-cover" />
+            ) : (
+              <UserCircleIcon className="h-52 w-52 sm:w-32 sm:h-32 text-gray-300 " aria-hidden="true" />
+            )}
+            {isEditable && (
+              <div className="sm:flex">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  id="profileImage"
+                  onChange={handleImageChange}
+                />
+                <label htmlFor="profileImage" className="w-52 inline-block rounded-lg bg-transparent px-3.5 py-2.5 mt-6 text-mainWhite shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 border border-mainWhite text-center cursor-pointer sm:w-full">사진 등록</label>
+
+              </div>
+            )}
+
           </div>
 
           <div className="flex flex-col">
@@ -134,7 +198,7 @@ const MemberInfo = () => {
                 </>
               }
               <button
-                className="w-full h-12 rounded-lg bg-mainWhite px-3.5 py-2.5 mt-6 text-base font-base text-mainBlack shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:hidden"
+                className="w-full h-12 rounded-lg bg-mainWhite px-3.5 py-2.5 mt-6 text-base font-base text-mainBlack shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                 onClick={isEditable ? handleModificationUserInfo : toggleEdit}
                 type={isEditable ? "submit" : "button"}
               >
