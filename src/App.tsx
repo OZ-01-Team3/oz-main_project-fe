@@ -46,7 +46,7 @@ export interface UserType {
     height?: string;
     nickname: string;
     phone: string;
-    profile?: string;
+    profileImage?: string;
     region?: string;
   };
 }
@@ -70,7 +70,7 @@ export const UserContext = createContext<UserContextType>({
     height: '',
     nickname: '',
     phone: '',
-    profile: '',
+    profile_img: '',
     region: '',
   },
 });
@@ -156,7 +156,7 @@ interface GetMemberResponseType {
   height: '';
   nickname: '';
   phone: '';
-  profile: '';
+  profile_img: '';
   region: '';
 }
 
@@ -170,7 +170,7 @@ function App() {
     height: '',
     nickname: '',
     phone: '',
-    profile: '',
+    profile_img: '',
     region: '',
   });
 
