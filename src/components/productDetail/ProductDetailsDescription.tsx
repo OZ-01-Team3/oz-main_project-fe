@@ -7,7 +7,7 @@ import { useModalOpenStore } from '@/stores/useModalStore';
 
 import { useProductDetailStore } from '@/stores/useProductDetailStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
+
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -20,7 +20,15 @@ interface ProductDetailsDescriptionProps {
 
 interface NewChatRoomData {
   lender: number | undefined;
-  product: string;
+  product: string | undefined;
+}
+
+interface AxiosError {
+  response?: {
+    data: {
+      msg: string;
+    }
+  }
 }
 
 // 모달 오른쪽 부분 상세설명
@@ -49,12 +57,9 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
       navigate(`/chat`);
       queryClient.invalidateQueries({ queryKey: ['chatList'] });
     },
-    onError: error => {
-      if (axios.isAxiosError(error)) {
-        console.error('Axios 에러 응답 데이터:', error.response?.data);
-        console.error('Axios 에러 응답 상태:', error.response?.status);
-      } else {
-        console.error('일반 에러:', error);
+    onError: (error: AxiosError) => {
+      if (error.response?.data.msg === "이미 개설된 채팅방 내역이 존재합니다.") {
+        navigate(`/chat`);
       }
     },
     onSettled: () => {
@@ -67,7 +72,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
   const createChatRoom = () => {
     const newChatRoomData = {
       lender: productDetail?.lender.pk,
-      product: productDetails.uuid,
+      product: productDetail?.uuid,
     };
     handleCreateChatRoom.mutate(newChatRoomData);
   };
