@@ -2,12 +2,12 @@ import Loading from '@/components/Loading';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { Cookies } from 'react-cookie';
-const { VITE_BASE_REQUEST_URL, VITE_GOOGLE_AUTH_CLIENT_ID, VITE_GOOGLE_SCOPE, VITE_GOOGLE_SECRET } = import.meta.env;
+const { VITE_BASE_REQUEST_URL, VITE_GOOGLE_AUTH_CLIENT_ID, VITE_GOOGLE_SCOPE, VITE_GOOGLE_SECRET, VITE_NAVER_STATE } = import.meta.env;
 
 const LoginHandler = () => {
-  const code = new URL(window.location.href).searchParams.get("code");
+  const url = new URL(window.location.href)
+  const code = url.searchParams.get("code");
   const cookies = new Cookies();
-
 
 
   const kakaoLogin = async () => {
@@ -20,13 +20,30 @@ const LoginHandler = () => {
         }
       }
       );
-      // console.log("카카오", response)
-      // localStorage.setItem("name",response.data)
       cookies.set("accessToken", response.data.access, { path: '/', secure: true, })
       cookies.set("refreshToken", response.data.refresh, { path: '/', secure: true, })
       window.location.href = "/"
     } catch (error) {
       console.error("카카오 로그인 실패", error);
+    }
+  }
+
+  const naverLogin = async () => {
+    try {
+      const response = await axios.post(`${VITE_BASE_REQUEST_URL}/users/login/social/naver/`, {
+        code: code,
+        state: VITE_NAVER_STATE
+      }, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      }
+      );
+      cookies.set("accessToken", response.data.access, { path: '/', secure: true, })
+      cookies.set("refreshToken", response.data.refresh, { path: '/', secure: true, })
+      window.location.href = "/"
+    } catch (error) {
+      console.error("네이버 로그인 실패", error);
     }
   }
 
@@ -44,42 +61,22 @@ const LoginHandler = () => {
         }
       }
       );
-      // console.log("카카오", response)
-      // localStorage.setItem("name",response.data)
+
       cookies.set("accessToken", response.data.access, { path: '/', secure: true, })
       cookies.set("refreshToken", response.data.refresh, { path: '/', secure: true, })
       window.location.href = "/"
     } catch (error) {
-      console.error("카카오 로그인 실패", error);
+      console.error("구글 로그인 실패", error);
     }
   }
-  const naverLogin = async () => {
-    try {
-      const response = await axios.post(`${VITE_BASE_REQUEST_URL}/users/login/social/naver/`, {
-        code: code,
-      }, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        }
-      }
-      );
-      // console.log("카카오", response)
-      // localStorage.setItem("name",response.data)
-      cookies.set("accessToken", response.data.access, { path: '/', secure: true, })
-      cookies.set("refreshToken", response.data.refresh, { path: '/', secure: true, })
-      window.location.href = "/"
-    } catch (error) {
-      console.error("카카오 로그인 실패", error);
-    }
-  }
-
-
-
-
   useEffect(() => {
-    kakaoLogin()
-    googleLogin()
-    naverLogin()
+    if (url.href.includes("kakao")) {
+      kakaoLogin()
+    } else if (url.href.includes("naver")) {
+      naverLogin()
+    } else if (url.href.includes("google")) {
+      googleLogin()
+    }
   }, [])
 
   return (
