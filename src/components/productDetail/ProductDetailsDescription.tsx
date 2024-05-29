@@ -67,7 +67,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
     },
     onSettled: () => {
       console.log('결과에 관계없이 무언가 실행됨', chatRoomId);
-      // queryClient.invalidateQueries({ queryKey: ['chatList'] });
+      // // queryClient.invalidateQueries({ queryKey: ['chatList'] });
     },
   });
 

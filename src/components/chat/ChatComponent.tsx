@@ -61,6 +61,8 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
     enabled: !!chatRoomId,
   });
 
+  console.log('채팅룸 정보', chatRoomList);
+
   const chatMessages = chatData?.messages;
   const chatRoomInfo = chatData;
 
