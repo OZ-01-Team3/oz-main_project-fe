@@ -30,10 +30,9 @@ export const initialProduct: product = {
   amount: 0,
   region: '',
   images: [],
+  styles: [],
   lender: lender,
 };
-
-const style = ['#모던', '#페미닌', '#가디건'];
 
 // 상품클릭 시 나오는 모달
 const ProductDetailModal = () => {
@@ -123,6 +122,7 @@ const ProductDetailModal = () => {
       navigate('/mypage/sales-history', { replace: true });
     }
   };
+
   return (
     <>
       {productDetails && (
@@ -170,9 +170,9 @@ const ProductDetailModal = () => {
                 </div>
                 <div className="px-2 flex justify-start">
                   {/* 스타일 버튼들 */}
-                  {style.map(product => (
-                    <ModalStyleButton key={product}>{product}</ModalStyleButton>
-                  ))}
+                  {productDetails.styles &&
+                    productDetails.styles.length > 0 &&
+                    productDetails.styles.map(style => <ModalStyleButton key={style}>{style}</ModalStyleButton>)}
                 </div>
               </div>
               {/* 상세 설명 영역 */}

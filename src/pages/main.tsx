@@ -14,34 +14,14 @@ import { useNavigate } from 'react-router-dom';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 
 const Main = () => {
-  const { isLoggedIn } = useAuthStore();
   const navigate = useNavigate();
   const [products, setProducts] = useState<product[]>([]);
   const { willSelectedProductId, setSelectedProductId, setWillSelectedProductId } = useProductIdStore();
   const { setDetailModalOpen, detailModalOpen } = useModalOpenStore();
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        if (isLoggedIn) {
-          // 로그인되어있는사용자면,
-          const response = await instance.get(`/products/`);
-          setProducts(response.data.results);
-        } else {
-          // 로그인 되어있지않은 사용자면,,
-          const response = await axios.get(VITE_BASE_REQUEST_URL + `/products/`);
-          setProducts(response.data.results);
-        }
-      } catch (error) {
-        console.error('상품 불러오기 실패:', error);
-      }
-    };
-    fetchProducts();
-  }, []);
-
-  //최신상품 8개만 보여주는
-  const newProducts = products.slice(0, 8);
-
+  const { isLoggedIn } = useAuthStore();
+  const selectedStyle = JSON.parse(localStorage.getItem('style'));
+  const [styleProducts, setStyleProducts] = useState<product[]>([]);
+  // 모달 라우팅 위한 useEffect
   useEffect(() => {
     localStorage.setItem('pathname', window.location.pathname);
     if (willSelectedProductId) {
@@ -51,6 +31,53 @@ const Main = () => {
       history.pushState({}, '', `/product/${willSelectedProductId}`);
     }
   }, []);
+
+  // 마운트 됐을때 전체상품
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+  //  전체상품 불러오는 함수
+  const fetchProducts = async () => {
+    try {
+      // const response = await instance.get(`/products/`);
+      // setProducts(response.data.results);
+      if (isLoggedIn) {
+        // 로그인되어있는사용자면,
+        const response = await instance.get(`/products/`);
+        setProducts(response.data.results);
+      } else {
+        // 로그인 되어있지않은 사용자면,,
+        const response = await axios.get(VITE_BASE_REQUEST_URL + `/products/`);
+        setProducts(response.data.results);
+      }
+    } catch (error) {
+      console.error('상품 불러오기 실패:', error);
+    }
+  };
+  // // 사용자가 선택한 스타일 있는지 보는 함수
+  const filterStyles = (styles: number[]) => {
+    return products.filter(product => styles.some(style => product.styles.includes(style)));
+  };
+  // const filteredProducts = filterStyles(selectedStyle);
+
+  // console.log('filterStyles', filteredProducts);
+  // useEffect(() => {
+  //   setStyleProducts(filteredProducts);
+  // }, []);
+  // 스타일별 필터링된 제품 설정
+  useEffect(() => {
+    if (selectedStyle.length > 0) {
+      const filteredProducts = filterStyles(selectedStyle);
+      setStyleProducts(filteredProducts);
+      console.log('Filtered products set', filteredProducts);
+    }
+  }, [products]);
+  console.log('styleProducts', styleProducts);
+  //최신상품 8개만 보여주는
+  const newProducts = products.slice(0, 8);
+  //스타일별 8개 보여주는
+  // const styleProduct = filteredProducts.slice(0, 8);
+
   return (
     <div>
       {detailModalOpen && <ProductDetailModal />}
@@ -64,7 +91,7 @@ const Main = () => {
             <ArrowRightIcon className="w-4 h-4 ml-3 " />
           </div>
         </div>
-        <Products products={products} setProducts={setProducts} />
+        <Products products={styleProducts} setProducts={setStyleProducts} />
         <hr className=" w-3/4 ml-auto mr-auto mt-10 mb-20 text-mainWhite " />
         <div className="flex w-full items-center justify-between">
           <p className="text-2xl mb-4 font-didot">NEW</p>

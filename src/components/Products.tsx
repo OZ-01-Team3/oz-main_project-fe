@@ -27,6 +27,7 @@ export interface product {
   images: image[];
   lender: lender;
   is_liked?: boolean;
+  styles: number[];
 }
 interface lender {
   age?: number;
