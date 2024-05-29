@@ -1,11 +1,11 @@
 'use client';
 
-import OrderProducts from '@/components/mypage/OrderProducts';
+import OrderRentalHistorys from '@/components/mypage/OrderProducts';
 
 const OrderHistory = () => {
   return (
     <>
-      <OrderProducts />
+      <OrderRentalHistorys />
     </>
   );
 };

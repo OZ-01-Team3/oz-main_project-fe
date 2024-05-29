@@ -20,7 +20,7 @@ export interface product {
   name: string;
   rental_fee: number;
   size: string;
-  views: 0;
+  views: number;
   product_category: number;
   amount: number;
   region: string;
