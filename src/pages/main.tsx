@@ -1,3 +1,4 @@
+import { UserContext } from '@/App';
 import instance from '@/api/instance';
 import Banner from '@/components/Banner';
 import EventBanner from '@/components/EventBanner';
@@ -5,12 +6,11 @@ import Footer from '@/components/Footer';
 import Products, { product } from '@/components/Products';
 import StyleModal from '@/components/StyleModal';
 import ProductDetailModal from '@/components/productDetail/ProductDetailModal';
-import useAuthStore from '@/stores/useAuthStore';
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
 import { useProductDetailStore } from '@/stores/useProductDetailStore';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 
@@ -19,7 +19,8 @@ const Main = () => {
   const [products, setProducts] = useState<product[]>([]);
   const { willSelectedProductId, setSelectedProductId, setWillSelectedProductId } = useProductIdStore();
   const { setDetailModalOpen, detailModalOpen, setStyleModalOpen, styleModalOpen } = useModalOpenStore();
-  const { isLoggedIn } = useAuthStore();
+  const { isLoggedIn } = useContext(UserContext);
+  console.log('isLoggedIn', isLoggedIn);
   const { setProductDetail } = useProductDetailStore(state => state);
   let selectedStyle = {};
 
@@ -65,15 +66,15 @@ const Main = () => {
       if (isLoggedIn) {
         // 로그인되어있는사용자면,
         const response = await instance.get(`/products/`);
-        console.log("메인에서 불러오는 상품 데이터", response.data.results)
+        console.log('메인에서 불러오는 상품 데이터', response.data.results);
         setProducts(response.data.results);
-        setProductDetail(response.data.results)
+        setProductDetail(response.data.results);
       } else {
         // 로그인 되어있지않은 사용자면,,
         const response = await axios.get(VITE_BASE_REQUEST_URL + `/products/`);
         setProducts(response.data.results);
-        setProductDetail(response.data.results)
-        console.log("메인에서 불러오는 상품 데이터", response.data.results)
+        setProductDetail(response.data.results);
+        console.log('메인에서 불러오는 상품 데이터', response.data.results);
       }
     } catch (error) {
       console.error('상품 불러오기 실패:', error);
@@ -116,7 +117,7 @@ const Main = () => {
             <ArrowRightIcon className="w-4 h-4 ml-3 " />
           </div>
         </div>
-        <Products products={styleProducts} setProducts={setStyleProducts} />
+        <Products products={styleProducts} setProducts={setProducts} />
         <hr className=" w-3/4 ml-auto mr-auto mt-10 mb-20 text-mainWhite " />
         <div className="flex w-full items-center justify-between">
           <p className="text-2xl mb-4 font-didot">NEW</p>

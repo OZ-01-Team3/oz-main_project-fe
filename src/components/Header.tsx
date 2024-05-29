@@ -1,9 +1,9 @@
+import { UserContext } from '@/App';
 import { logoutAPI } from '@/api/authRequests';
-import useAuthStore from '@/stores/useAuthStore';
 import useNotificationStore from '@/stores/useNotification';
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
 import { BellIcon } from '@heroicons/react/24/outline';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Cookies } from 'react-cookie';
 import { Link, useNavigate } from 'react-router-dom';
 import MobileNave from './MobileNav';
@@ -20,9 +20,8 @@ const cookies = new Cookies();
 const Header = () => {
   const notifications = useNotificationStore(state => state.notifications);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false); // pc 상태
-  const setIsLoggedIn = useAuthStore(state => state.setIsLoggedIn);
-  const isLoggedIn = useAuthStore(state => state.isLoggedIn);
-  const logout = useAuthStore(state => state.logout);
+
+  const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
   const navigate = useNavigate();
 
   // 쿠키에서 액세스 토큰 확인
@@ -46,14 +45,13 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      await logoutAPI
+      await logoutAPI;
       const allCookies = cookies.getAll(); // 모든 쿠키 가져오기
       Object.keys(allCookies).forEach(cookieName => cookies.remove(cookieName, { path: '/' })); // 모든 쿠키 이름을 순회하며 삭제
-      logout(); // zustand 스토어에서 로그아웃 처리
+      setIsLoggedIn(false);
       navigate('/');
-
     } catch (error) {
-      console.error('로그아웃 실패', error)
+      console.error('로그아웃 실패', error);
     }
   };
 

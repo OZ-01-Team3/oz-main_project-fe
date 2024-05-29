@@ -55,12 +55,13 @@ export interface UserType {
 interface UserContextType {
   setUserData: Dispatch<SetStateAction<GetMemberResponseType>>;
   userData: GetMemberResponseType;
+  isLoggedIn: boolean;
+  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
 }
-
 
 /** 유저 정보를 전역관리하기 위한 컨텍스트 */
 export const UserContext = createContext<UserContextType>({
-  setUserData: () => { },
+  setUserData: () => {},
   userData: {
     pk: -1,
     age: 0,
@@ -73,6 +74,8 @@ export const UserContext = createContext<UserContextType>({
     profile_img: '',
     region: '',
   },
+  isLoggedIn: false,
+  setIsLoggedIn: () => {},
 });
 
 /** 유저 컨텍스트를 사용하기 위한 커스텀 훅!!! */
@@ -161,6 +164,7 @@ interface GetMemberResponseType {
 }
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState<GetMemberResponseType>({
     pk: -1,
     age: 0,
@@ -173,10 +177,15 @@ function App() {
     profile_img: '',
     region: '',
   });
-
   const [cookies] = useCookies(['accessToken']);
   const accessToken = cookies.accessToken;
-
+  useEffect(() => {
+    if (accessToken) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
 
   //로그인한 회원 정보 불러오기
   const {
@@ -215,7 +224,7 @@ function App() {
   return (
     <>
       <NotificationProvider>
-        <UserContext.Provider value={{ setUserData, userData: userData }}>
+        <UserContext.Provider value={{ setUserData, userData: userData, isLoggedIn: isLoggedIn, setIsLoggedIn }}>
           <ToastContainer
             position="top-center"
             autoClose={700}

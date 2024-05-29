@@ -1,9 +1,9 @@
+import { UserContext } from '@/App';
 import instance from '@/api/instance';
-import useAuthStore from '@/stores/useAuthStore';
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
 import { HeartIcon as OutlineHeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as FilledHeartIcon } from '@heroicons/react/24/solid';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 interface image {
@@ -40,8 +40,8 @@ export interface ProductProps {
   setProducts: (products: product[]) => void;
 }
 const Products = ({ products, setProducts }: ProductProps) => {
-  const { isLoggedIn } = useAuthStore();
-  console.log(isLoggedIn);
+  const { isLoggedIn } = useContext(UserContext);
+  console.log('isLoggedIn', isLoggedIn);
   const { detailModalOpen, setDetailModalOpen } = useModalOpenStore();
   useEffect(() => {
     if (detailModalOpen) {
