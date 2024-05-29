@@ -8,6 +8,7 @@ import ProductDetailModal from '@/components/productDetail/ProductDetailModal';
 import useAuthStore from '@/stores/useAuthStore';
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
@@ -38,17 +39,17 @@ const Main = () => {
   //  전체상품 불러오는 함수
   const fetchProducts = async () => {
     try {
-      const response = await instance.get(`/products/`);
-      setProducts(response.data.results);
-      // if (isLoggedIn) {
-      //   // 로그인되어있는사용자면,
-      //   const response = await instance.get(`/products/`);
-      //   setProducts(response.data.results);
-      // } else {
-      //   // 로그인 되어있지않은 사용자면,,
-      //   const response = await axios.get(VITE_BASE_REQUEST_URL + `/products/`);
-      //   setProducts(response.data.results);
-      // }
+      // const response = await instance.get(`/products/`);
+      // setProducts(response.data.results);
+      if (isLoggedIn) {
+        // 로그인되어있는사용자면,
+        const response = await instance.get(`/products/`);
+        setProducts(response.data.results);
+      } else {
+        // 로그인 되어있지않은 사용자면,,
+        const response = await axios.get(VITE_BASE_REQUEST_URL + `/products/`);
+        setProducts(response.data.results);
+      }
     } catch (error) {
       console.error('상품 불러오기 실패:', error);
     }
