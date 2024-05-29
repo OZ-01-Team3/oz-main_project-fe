@@ -390,6 +390,7 @@ const ProductUpdate = () => {
           {/* 태그 */}
           <div className="mb-4">
             <div className="flex items-center justify-center w-full">
+
               <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">태그</span>
               <div className=" w-full md:w-8/12 flex flex-wrap  justify-start items-center">
                 {styleTag.map(tag => (
@@ -403,6 +404,7 @@ const ProductUpdate = () => {
                 ))}
                 {errors.styles && (
                   <p className=" text-sm text-red-500 mt-1 w-full text-left">{String(errors.styles.message)}</p>
+
                 )}
               </div>
             </div>
