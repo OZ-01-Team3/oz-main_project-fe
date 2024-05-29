@@ -61,10 +61,11 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
       if (error.response?.data.msg === "이미 개설된 채팅방 내역이 존재합니다.") {
         navigate(`/chat`);
       }
+      console.error("채팅방 생성에러", error)
     },
     onSettled: () => {
       console.log('결과에 관계없이 무언가 실행됨', chatRoomId);
-      queryClient.invalidateQueries({ queryKey: ['chatList'] });
+      // queryClient.invalidateQueries({ queryKey: ['chatList'] });
     },
   });
 
@@ -72,7 +73,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
   const createChatRoom = () => {
     const newChatRoomData = {
       lender: productDetail?.lender.pk,
-      product: productDetail?.uuid,
+      product: productDetails?.uuid,
     };
     handleCreateChatRoom.mutate(newChatRoomData);
   };

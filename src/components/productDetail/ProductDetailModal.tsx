@@ -101,6 +101,13 @@ const ProductDetailModal = () => {
       console.log(error);
     }
   };
+
+
+
+
+
+
+
   // 바깥이랑 x 눌렀을때 모달 닫히도록
   const outerBoxRef = useRef(null);
   // 모달 닫는 함수

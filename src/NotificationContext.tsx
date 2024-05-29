@@ -1,7 +1,7 @@
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import useNotificationStore from './stores/useNotification';
-
+const { VITE_WEB_SOCKET } = import.meta.env;
 interface NotificationContextType {
   webSocketState: WebSocket | null;
   sendCommand: (command: string, notification_id: number) => void;
@@ -17,7 +17,7 @@ export const NotificationProvider = ({ children }: PropsWithChildren) => {
   const [webSocketState, setWebSocketState] = useState<WebSocket | null>(null);
 
   useEffect(() => {
-    const webSocket = new WebSocket(`ws://127.0.0.1:8000/ws/notification/`);
+    const webSocket = new WebSocket(`${VITE_WEB_SOCKET}/notification/`);
     webSocket.onopen = () => {
       console.log('웹소켓 연결.');
     };

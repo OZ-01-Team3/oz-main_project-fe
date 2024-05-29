@@ -5,11 +5,12 @@ import useChatRoomStore from '@/stores/useChatRoomStore';
 import useMessageStore from '@/stores/useMessageStore';
 import { useEffect, useRef } from 'react';
 
+const { VITE_WEB_SOCKET } = import.meta.env;
 
 class ChatSocket {
   webSocket: WebSocket | null = null;
   constructor(chatRoomId: number | null) {
-    this.webSocket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${chatRoomId}/`)
+    this.webSocket = new WebSocket(`${VITE_WEB_SOCKET}/chat/${chatRoomId}/`)
 
     // 웹소켓 연결
     this.webSocket.onopen = function () {
