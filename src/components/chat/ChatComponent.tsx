@@ -1,4 +1,3 @@
-
 import chatRequests from '@/api/chatRequests';
 import instance from '@/api/instance';
 import useChatRoomStore from '@/stores/useChatRoomStore';
@@ -35,22 +34,24 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  const { chatRoomId } = useChatRoomStore()
-  const { chatRoomList } = useChatRoomListStore()
+  const { chatRoomId } = useChatRoomStore();
+  const { chatRoomList } = useChatRoomListStore();
   const messages = useMessageStore(state => state.messages.filter(message => message.chatroom_id === chatRoomId));
 
-
-  const cookies = new Cookies()
-  const csrfToken = cookies.get('csrftoken')
+  const cookies = new Cookies();
+  const csrfToken = cookies.get('csrftoken');
 
   const queryClient = useQueryClient();
 
-
-  const { data: chatData, isLoading: isChatMessageLoading, error: chatMessageError } = useQuery({
+  const {
+    data: chatData,
+    isLoading: isChatMessageLoading,
+    error: chatMessageError,
+  } = useQuery({
     queryKey: ['chatMessage', chatRoomId],
     queryFn: async () => {
       if (!chatRoomId) {
-        throw new Error("채팅방이 없습니다.");
+        throw new Error('채팅방이 없습니다.');
       }
       const response = await instance.get(`${chatRequests.chat}${chatRoomId}/`);
       // console.log('여기가 api로 진짜 이전메세지들 내려줍디ㅏ.', response.data.messages)
@@ -60,22 +61,24 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
     enabled: !!chatRoomId,
   });
 
-
   const chatMessages = chatData?.messages;
   const chatRoomInfo = chatData;
 
-  const { data: productDetails, isLoading: isProductDetailsLoading, error: productDetailsError } = useQuery({
+  const {
+    data: productDetails,
+    isLoading: isProductDetailsLoading,
+    error: productDetailsError,
+  } = useQuery({
     queryKey: ['productDetail'],
     queryFn: async () => {
       try {
-        const response = await productDetailListAPI()
-        return response.data.results
+        const response = await productDetailListAPI();
+        return response.data.results;
       } catch (error) {
-        throw new Error('상품 디테일 조회 에러')
+        throw new Error('상품 디테일 조회 에러');
       }
-    }
-  })
-
+    },
+  });
 
   // 컴포넌트가 마운트되거나 채팅 메시지가 업데이트될 때 스크롤을 맨 아래로 이동
   useEffect(() => {
@@ -85,45 +88,43 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
     }
   }, [chatMessages, messages]);
 
-
-
   // 드롭다운 메뉴 표시 상태를 토글하는 함수
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
 
-
   const handleDeleteChatRoom = useMutation({
-    mutationFn: (chatRoomId: number) => instance.delete(VITE_BASE_REQUEST_URL + chatRequests.chat + chatRoomId + `/`, {
-      headers: {
-        "X-CSRFToken": csrfToken
-      }
-    }),
+    mutationFn: (chatRoomId: number) =>
+      instance.delete(VITE_BASE_REQUEST_URL + chatRequests.chat + chatRoomId + `/`, {
+        headers: {
+          'X-CSRFToken': csrfToken,
+        },
+      }),
     onSuccess: () => {
-      console.log("삭제성공")
+      console.log('삭제성공');
       queryClient.invalidateQueries({ queryKey: ['chatList'] });
       window.location.reload(); // 페이지 전체를 새로 고침
     },
-    onError: (error) => {
+    onError: error => {
       if (axios.isAxiosError(error)) {
-        console.error("Axios 에러 응답 데이터:", error.response?.data);
-        console.error("Axios 에러 응답 상태:", error.response?.status);
+        console.error('Axios 에러 응답 데이터:', error.response?.data);
+        console.error('Axios 에러 응답 상태:', error.response?.status);
       } else {
-        console.error("일반 에러:", error);
+        console.error('일반 에러:', error);
       }
     },
     onSettled: () => {
-      console.log("결과에 관계없이 무언가 실행됨", chatRoomId);
-    }
-  })
+      console.log('결과에 관계없이 무언가 실행됨', chatRoomId);
+    },
+  });
 
   const deleteChatRoom = () => {
     if (chatRoomId) {
-      webSocketRef.current?.close() //채팅방 종료
+      webSocketRef.current?.close(); //채팅방 종료
       handleDeleteChatRoom.mutate(chatRoomId);
     }
   };
-  console.log("chatRoomInfo:", chatRoomInfo);
+  console.log('chatRoomInfo:', chatRoomInfo);
   // console.log("productDetails:", productDetails);
 
   // chatRoomInfo의 product 값과 productDetails 배열의 uuid 값이 일치하는 객체 찾기
@@ -136,22 +137,23 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
     }
   }, [chatRoomInfo, productDetails]); // chatRoomInfo 또는 productDetails가 변경될 때마다 실행
 
-  console.log("채팅 메세지", chatMessages)
-
+  console.log('채팅 메세지', chatMessages);
 
   if (isChatMessageLoading) return <div>Loading...</div>;
   if (chatMessageError) return <div>Error: {chatMessageError.message}</div>;
-  if (!chatRoomId || (chatMessages && chatMessages.length === 0)) return <div className="flex flex-col justify-center items-center pl-10 relative w-full  ">접속중인 채팅방이 없습니다.</div>;
+  if (!chatRoomId || (chatMessages && chatMessages.length === 0))
+    return (
+      <div className="flex flex-col justify-center items-center pl-10 relative w-full  ">
+        접속중인 채팅방이 없습니다.
+      </div>
+    );
 
-  if (isProductDetailsLoading) return <div>Loading...</div>
-  if (productDetailsError) return <div>{productDetailsError.message}</div>
-
+  if (isProductDetailsLoading) return <div>Loading...</div>;
+  if (productDetailsError) return <div>{productDetailsError.message}</div>;
 
   return (
     <>
-      {deleteModalOpen && (
-        <ChatDeleteModal setOpen={setDeleteModalOpen} deleteChatRoom={deleteChatRoom} />
-      )}
+      {deleteModalOpen && <ChatDeleteModal setOpen={setDeleteModalOpen} deleteChatRoom={deleteChatRoom} />}
       {/* 대여신청하기, 수락하기 어떤 버튼 눌렀느냐에 따라서 다른 모달 보여주기 */}
       {rentalModalOpen ? (
         <ChatRentalModal setRentalModalOpen={setRentalModalOpen} />
@@ -179,21 +181,27 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
                   // 현재 순회 중인 채팅방의 id와 chatRoomId가 일치하는 경우에만 닉네임 출력
                   if (item.id === chatRoomId) {
                     return (
-                      <div className="text-2xl my-3" key={index}>{item.user_info.nickname}</div>
+                      <div className="text-2xl my-3" key={index}>
+                        {item.user_info.nickname}
+                      </div>
                     );
                   }
                   // 일치하지 않는 경우 빈 요소 반환
                   return null;
                 })}
               </div>
-              <div className='absolute right-0'>
+              <div className="absolute right-0">
                 <button onClick={toggleDropdown}>
-                  <EllipsisVerticalIcon className='w-4' />
+                  <EllipsisVerticalIcon className="w-4" />
                 </button>
                 {showDropdown && (
                   <div className="dropdown-menu absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
-                    <CommonButton className="block px-4 py-2 text-sm text-gray-700" onClick={() => setDeleteModalOpen(true)}>채팅방 나가기</CommonButton>
-
+                    <CommonButton
+                      className="block px-4 py-2 text-sm text-gray-700"
+                      onClick={() => setDeleteModalOpen(true)}
+                    >
+                      채팅방 나가기
+                    </CommonButton>
                   </div>
                 )}
               </div>
@@ -201,7 +209,7 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
             <div className="flex justify-between items-center">
               {/* 상품정보 */}
 
-              <div className="flex flex-row justify-left items-center h-16 my-3" >
+              <div className="flex flex-row justify-left items-center h-16 my-3">
                 {/* 상품이미지 */}
                 <div className=" h-20 w-20 border-mainBlack flex justify-center items-center overflow-hidden">
                   <img src={matchingProduct?.images[0].image} alt="상품이미지" className="object-cover w-20" />
@@ -211,7 +219,9 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
                   <p className="text-sm font-semibold">{matchingProduct?.name}</p>
 
                   <p className=" text-xs font-base text-subGray">
-                    {matchingProduct?.description?.length > 40 ? `${matchingProduct?.description?.substring(0, 40)}...` : matchingProduct?.description}
+                    {matchingProduct?.description?.length > 40
+                      ? `${matchingProduct?.description?.substring(0, 40)}...`
+                      : matchingProduct?.description}
                   </p>
                   <p className="text-sm">대여비 {matchingProduct?.purchase_price.toLocaleString()}</p>
                 </div>
@@ -242,8 +252,8 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
           {/* 채팅창 */}
           <div className="flex flex-col flex-grow overflow-y-scroll scrollbar-hide pb-3" ref={chatContainerRef}>
             <div className="flex flex-col justify-between mt-4">
-              {chatMessages?.length > 0 && (
-                chatMessages.map((data) => (
+              {chatMessages?.length > 0 &&
+                chatMessages.map(data => (
                   <ChatBubble
                     key={data.id}
                     content={data.text}
@@ -253,7 +263,7 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
                     profile_img={`https://i.pinimg.com/564x/9d/d4/52/9dd45271b020a094a12bfeee12b39f65.jpg`}
                     read={data.status}
                   />
-                )))}
+                ))}
 
               {messages.map((data, index) => (
                 <ChatBubble

@@ -27,8 +27,8 @@ interface AxiosError {
   response?: {
     data: {
       msg: string;
-    }
-  }
+    };
+  };
 }
 
 // 모달 오른쪽 부분 상세설명
@@ -59,10 +59,11 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
       queryClient.invalidateQueries({ queryKey: ['chatList'] });
     },
     onError: (error: AxiosError) => {
-      if (error.response?.data.msg === "이미 개설된 채팅방 내역이 존재합니다.") {
+      if (error.response?.data.msg === '이미 개설된 채팅방 내역이 존재합니다.') {
         navigate(`/chat`);
       }
-      console.error("채팅방 생성에러", error)
+      console.error('채팅방 생성에러', error);
+      console.error('채팅방 생성에러', error);
     },
     onSettled: () => {
       console.log('결과에 관계없이 무언가 실행됨', chatRoomId);
