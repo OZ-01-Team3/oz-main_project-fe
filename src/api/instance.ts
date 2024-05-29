@@ -32,11 +32,22 @@ const tokenRefresh = async () => {
   }
 };
 
+function getCookieValue(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  if (match) {
+    return match[2];
+  }
+  return null;
+}
+
 // 요청이 전달되기 전에 작업 수행 혹은 요청 오류가 있는 함수를 받음
 instance.interceptors.request.use(
   config => {
-    const accessToken = cookies.get('ac');
+    const accessToken = cookies.get('accessToken');
     // config.headers['Content-Type'] = 'application/json';
+
+    const csrfToken = getCookieValue('csrftoken');
+    config.headers['X-CSRFToken'] = csrfToken;
 
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -70,7 +81,7 @@ instance.interceptors.response.use(
     if (error.response?.status === 401) {
       try {
         await tokenRefresh();
-        const new_accessToken = cookies.get('ac');
+        const new_accessToken = cookies.get('accessToken');
         error.config.headers['Authorization'] = `Bearer ${new_accessToken}`;
 
         return axios.request(error.config);

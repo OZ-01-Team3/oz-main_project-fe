@@ -1,33 +1,19 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Dispatch, Fragment, SetStateAction, useRef, useState } from 'react';
+import { Fragment } from 'react';
 
-interface ChatDeleteModalProps {
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  deleteChatRoom: () => void;
+interface WithdrawalModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
 }
 
-const ChatDeleteModal = ({ setOpen, deleteChatRoom }: ChatDeleteModalProps) => {
-  const [open, setOpenState] = useState(true);
 
-  const cancelButtonRef = useRef(null)
-
-  const handleClose = () => {
-    setOpenState(false);
-    setOpen(false);
-  };
-
-  const handleDelete = () => {
-    deleteChatRoom();
-    handleClose();
-  };
-
+const WithdrawalModal = ({ isOpen, onClose, onConfirm }: WithdrawalModalProps) => {
 
   return (
-    // 모달 뒷 배경
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog className="relative z-10" initialFocus={cancelButtonRef} onClose={handleClose}>
+    <Transition show={isOpen} as={Fragment}>
+      <Dialog className="relative z-10" onClose={onClose}>
         <Transition.Child
-          as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0"
           enterTo="opacity-100"
@@ -35,7 +21,7 @@ const ChatDeleteModal = ({ setOpen, deleteChatRoom }: ChatDeleteModalProps) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-modalBg  transition-opacity" />
+          <div className="fixed inset-0 bg-modalBg transition-opacity" />
         </Transition.Child>
 
         <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -53,25 +39,29 @@ const ChatDeleteModal = ({ setOpen, deleteChatRoom }: ChatDeleteModalProps) => {
                 <div>
                   <div className="mt-3 text-center sm:mt-5">
                     <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-mainBlack">
-                      채팅방 나가기
+                      회원탈퇴
                     </Dialog.Title>
+                    <div className="mt-2">
+                      <p className="text-sm text-customGray">
+                        정말 탈퇴 하시겠어요?
+                      </p>
+                    </div>
                   </div>
                 </div>
-                <div className="mt-5 sm:mt-6 grid grid-flow-row-dense grid-cols-2 gap-x-3 ">
+                <div className="mt-5 sm:mt-6 grid grid-flow-row-dense grid-cols-2 gap-x-3">
                   <button
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-shadow-sm ring-1 ring-inset ring-gray-300 text-mainBlack hover:bg-gray-50"
-                    onClick={handleClose}
-                    ref={cancelButtonRef}
+                    onClick={onClose}
                   >
                     취소
                   </button>
                   <button
                     type="button"
-                    className=" mt-3 inline-flex w-full justify-center rounded-md bg-mainBlack px-3 py-2 text-sm font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mainBlack "
-                    onClick={handleDelete}
+                    className="mt-3 inline-flex w-full justify-center rounded-md bg-mainBlack px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mainBlack"
+                    onClick={onConfirm}
                   >
-                    나가기
+                    탈퇴하기
                   </button>
                 </div>
               </Dialog.Panel>
@@ -79,8 +69,7 @@ const ChatDeleteModal = ({ setOpen, deleteChatRoom }: ChatDeleteModalProps) => {
           </div>
         </div>
       </Dialog>
-    </Transition.Root>
-  );
-};
-
-export default ChatDeleteModal;
+    </Transition>
+  )
+}
+export default WithdrawalModal;

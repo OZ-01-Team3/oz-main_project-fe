@@ -11,7 +11,7 @@ import { productStatusOptions } from './productRegistration';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const sizes = ['S', 'M', 'L', 'XL'];
 const cookies = new Cookies();
-const access = cookies.get('ac');
+const access = cookies.get('accessToken');
 interface category {
   id: number;
   name: string;
@@ -375,7 +375,7 @@ const ProductUpdate = () => {
                   type="text"
                   className="shadow appearance-none border rounded w-full  px-3 text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
                   placeholder="ex) 긱시크 (최대 5개) "
-                  // {...register('tag')}
+                // {...register('tag')}
                 />
                 {errors.description && (
                   <p className=" text-sm text-red-500 mt-1 w-full text-left">{String(errors.description.message)}</p>

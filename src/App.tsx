@@ -16,12 +16,11 @@ import SalesHistory from './pages/mypage/salesHistory';
 import ImgRegistration from './pages/products/imgRegistration';
 
 import { useQuery } from '@tanstack/react-query';
-import { Cookies, useCookies } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 
 import authRequests from './api/authRequests';
 import instance from './api/instance';
 
-// import { NotificationProvider } from './NotificationContext';
 import { NotificationProvider } from './NotificationContext';
 import ProductRegistrationButton from './components/ProductRegistrationButton';
 import LoginHandler from './pages/loginHandler';
@@ -47,7 +46,7 @@ export interface UserType {
     height?: string;
     nickname: string;
     phone: string;
-    profile?: string;
+    profileImage?: string;
     region?: string;
   };
 }
@@ -58,9 +57,10 @@ interface UserContextType {
   userData: GetMemberResponseType;
 }
 
+
 /** 유저 정보를 전역관리하기 위한 컨텍스트 */
 export const UserContext = createContext<UserContextType>({
-  setUserData: () => {},
+  setUserData: () => { },
   userData: {
     pk: -1,
     age: 0,
@@ -70,7 +70,7 @@ export const UserContext = createContext<UserContextType>({
     height: '',
     nickname: '',
     phone: '',
-    profile: '',
+    profile_img: '',
     region: '',
   },
 });
@@ -86,9 +86,8 @@ export const useUserContext = () => {
 
 /** PrivateRoute 컴포넌트 */
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
-  const [cookies] = useCookies(['ac']);
-  const accessToken = cookies.ac;
-
+  const [cookies] = useCookies(['accessToken']);
+  const accessToken = cookies.accessToken;
   return accessToken ? children : <Navigate to="/sign-in" />;
 };
 
@@ -141,7 +140,9 @@ const commonRoutes = [
     <Route path="/search" element={<Search />} />
     <Route path="/all" element={<TotalProducts />} />
     <Route path="/product/:productId" element={<ProductDetailModal />} />
-    <Route path="/oauth2/redirect" element={<LoginHandler />} />
+    <Route path="/oauth2/naver/redirect" element={<LoginHandler />} />
+    <Route path="/oauth2/kakao/redirect" element={<LoginHandler />} />
+    <Route path="/oauth2/google/redirect" element={<LoginHandler />} />
   </Route>,
 ];
 
@@ -155,7 +156,7 @@ interface GetMemberResponseType {
   height: '';
   nickname: '';
   phone: '';
-  profile: '';
+  profile_img: '';
   region: '';
 }
 
@@ -169,11 +170,14 @@ function App() {
     height: '',
     nickname: '',
     phone: '',
-    profile: '',
+    profile_img: '',
     region: '',
   });
-  const cookies = new Cookies();
-  const accessToken = cookies.get('ac');
+
+  const [cookies] = useCookies(['accessToken']);
+  const accessToken = cookies.accessToken;
+
+
   //로그인한 회원 정보 불러오기
   const {
     data: meData,

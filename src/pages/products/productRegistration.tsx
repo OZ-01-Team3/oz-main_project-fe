@@ -140,7 +140,7 @@ const ProductRegistration = () => {
       for (const pair of formData.entries()) {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
-      const access = cookies.get('ac');
+      const access = cookies.get('accessToken');
       const response = await instance.post(VITE_BASE_REQUEST_URL + productRequests.products, formData);
       console.log('상품 등록 성공', response);
       toast.success('상품이 성공적으로 등록되었습니다!');
