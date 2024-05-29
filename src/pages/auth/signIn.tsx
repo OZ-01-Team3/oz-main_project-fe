@@ -9,14 +9,14 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { z as zod } from 'zod';
 
-const { VITE_REST_API_KEY, VITE_REDIRECT_URI, VITE_GOOGLE_AUTH_CLIENT_ID, VITE_NAVER_CLIENT_ID, VITE_NAVER_STATE } =
-  import.meta.env;
 
-const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${VITE_REST_API_KEY}&redirect_uri=${VITE_REDIRECT_URI}&prompt=login`;
+const { VITE_REST_API_KEY, VITE_KAKAO_REDIRECT_URI, VITE_GOOGLE_REDIRECT_URI, VITE_NAVER_REDIRECT_URI, VITE_GOOGLE_AUTH_CLIENT_ID, VITE_NAVER_CLIENT_ID, VITE_NAVER_STATE } = import.meta.env;
 
-const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${VITE_GOOGLE_AUTH_CLIENT_ID}&redirect_uri=${VITE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`;
+const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${VITE_REST_API_KEY}&redirect_uri=${VITE_KAKAO_REDIRECT_URI}&prompt=login`;
 
-const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${VITE_NAVER_CLIENT_ID}&state=${VITE_NAVER_STATE}&redirect_uri=${VITE_REDIRECT_URI}`;
+const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${VITE_GOOGLE_AUTH_CLIENT_ID}&redirect_uri=${VITE_GOOGLE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`;
+
+const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${VITE_NAVER_CLIENT_ID}&state=${VITE_NAVER_STATE}&redirect_uri=${VITE_NAVER_REDIRECT_URI}`;
 
 // 소셜미디어 로그인 버튼
 const socialMedia = [
@@ -55,8 +55,8 @@ const SignIn = () => {
   const handleClickSignIn = form.handleSubmit(async data => {
     try {
       const response = await loginAPI(data.email, data.password);
-      cookies.set('ac', response.data.access);
-      cookies.set('rf', response.data.refresh);
+      cookies.set('accessToken', response.data.access);
+      cookies.set('refreshToken', response.data.refresh);
       useAuthStore.getState().setIsLoggedIn(true);
       console.log(response, '로그인 성공');
       navigate('/', { replace: true });
