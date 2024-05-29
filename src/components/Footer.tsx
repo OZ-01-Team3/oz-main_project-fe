@@ -11,7 +11,7 @@ const Footer = () => {
     <>
       <div className="pt-32 w-2/3 ml-auto mr-auto text-center font-didot flex flex-col items-center justify-center mb-10">
         <p className="text-3xl">Coaty Closet</p>
-        <p className="text-footerOrange text-xs">
+        <p className="text-footerOrange text-sm">
           Rent your style, don't buy it
         </p>
 
@@ -32,10 +32,10 @@ const Footer = () => {
             <EllipsisVerticalIcon className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-xs mb-5">
+        <p className="text-sm mb-5">
           Copyright © Coaty Closet Inc. All right reserved
         </p>
-        <p className="text-footerText w-5/6 ">
+        <p className="text-xs w-5/6 font-base ">
           Coaty Closet는 통신판매중개자이며, 통신판매의 당사자가 아닙니다.
           <br />
           전자상거래 등에서의 소비자보호에 관한 법률 등 관련 법령 및 Coaty
