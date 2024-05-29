@@ -11,6 +11,7 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 
 const Main = () => {
@@ -19,7 +20,16 @@ const Main = () => {
   const { willSelectedProductId, setSelectedProductId, setWillSelectedProductId } = useProductIdStore();
   const { setDetailModalOpen, detailModalOpen } = useModalOpenStore();
   const { isLoggedIn } = useAuthStore();
-  const selectedStyle = JSON.parse(localStorage.getItem('style'));
+  let selectedStyle;
+  try {
+    selectedStyle = JSON.parse(localStorage.getItem('style'));
+    if (selectedStyle === null) {
+      console.log('로컬에 style 없음');
+      selectedStyle = {};
+    }
+  } catch (error) {
+    console.log(error);
+  }
   const [styleProducts, setStyleProducts] = useState<product[]>([]);
   // 모달 라우팅 위한 useEffect
   useEffect(() => {
@@ -70,6 +80,8 @@ const Main = () => {
       const filteredProducts = filterStyles(selectedStyle);
       setStyleProducts(filteredProducts);
       console.log('Filtered products set', filteredProducts);
+    } else {
+      toast.info('스타일을 선택해주세요');
     }
   }, [products]);
   console.log('styleProducts', styleProducts);
