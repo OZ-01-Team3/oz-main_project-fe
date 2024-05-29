@@ -1,5 +1,4 @@
 import CommonButton from '@/components/CommonButton';
-import useStyleTagStore from '@/stores/useStyleTagStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { ChangeEventHandler, useEffect, useState } from 'react';
@@ -33,10 +32,10 @@ const productRegistrationSchema = zod.object({
 const ProductUpdate = () => {
   const [productNameLength, setProductNameLength] = useState<number>(0);
   const [categories, setCategories] = useState<category[]>([]);
-  const { styleTag, setStyleTag } = useStyleTagStore();
+
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
-  const [styleTag, setStyleTag] = useState<styleTag[]>([]);
-  const [selectedTags, setSelectedTags] = useState<number[]>([]);
+  const [styleTag, setStyleTag] = useState<category[]>([]);
+
   // img-reg 에서 보낸 정보 가져오기
   const location = useLocation();
   const navigate = useNavigate();
