@@ -10,7 +10,7 @@ interface ChatNotificationProps {
   onClose: () => void;
 }
 //* created_at을 시간으로 바꾸는 함수
-function getTime(created_at: string) {
+export function getTime(created_at: string) {
   const now = new Date();
   const date = new Date(created_at);
   const difference = now.getTime() - date.getTime();
