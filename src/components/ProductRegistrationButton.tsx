@@ -1,9 +1,12 @@
-import { PlusIcon } from "@heroicons/react/16/solid"
-import { useNavigate } from "react-router-dom"
+import { PlusIcon } from '@heroicons/react/16/solid';
+import { useNavigate } from 'react-router-dom';
 const ProductRegistrationButton = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
-    <div className="fixed right-10 bottom-10 group cursor-pointer md:bottom-20 sm:bottom-20 sm:right-6" onClick={() => navigate('/img-reg')}>
+    <div
+      className="fixed right-10 bottom-10 sm:right-4  group cursor-pointer md:bottom-20 sm:bottom-20 "
+      onClick={() => navigate('/img-reg')}
+    >
       <div className="relative flex justify-center items-center">
         <div className="w-10 h-10 rounded-full bg-white flex justify-center items-center transition-transform duration-500 hover:rotate-180">
           {/* Rotate the icon on hover */}
@@ -14,7 +17,7 @@ const ProductRegistrationButton = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductRegistrationButton
+export default ProductRegistrationButton;

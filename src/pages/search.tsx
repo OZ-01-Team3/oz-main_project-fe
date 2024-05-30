@@ -27,13 +27,12 @@ const Search = () => {
       {detailModalOpen && <ProductDetailModal />}
       <div className="flex flex-col items-center w-2/3 justify-center m-auto mt-10">
         <SearchBar setProducts={setProducts} setSearch={setSearch} />
-        {/* 상품을 검색하지않았을 때 */}
-        {/* {!search && <p>상품을 검색해주세요</p>} */}
-        {/*  상품을 검색했지만, 검색결과가 없을 떄 */}
-        {/* {products.length < 1 && <p>검색결과가 없습니다 </p>} */}
-        {/* 상품을 검색했고, 검색결과가 있을 때 */}
 
-        <Products products={products} setProducts={setProducts} />
+        {products.length === 0 ? (
+          <p>검색결과가 없습니다 </p>
+        ) : (
+          <Products products={products} setProducts={setProducts} />
+        )}
       </div>
     </>
   );

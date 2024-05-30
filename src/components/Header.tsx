@@ -6,7 +6,6 @@ import { BellIcon } from '@heroicons/react/24/outline';
 import React, { useContext, useEffect, useState } from 'react';
 import { Cookies } from 'react-cookie';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import MobileNave from './MobileNav';
 import Notification from './Notification';
 
@@ -53,9 +52,6 @@ const Header = () => {
     } catch (error) {
       console.error('로그아웃 실패', error);
     }
-  };
-  const handle404 = () => {
-    toast.info('준비중입니달라');
   };
   const mainMenuItems: MenuItem[] = [
     {

@@ -99,7 +99,7 @@ const Main = () => {
       {detailModalOpen && <ProductDetailModal />}
       {styleModalOpen && <StyleModal />}
       <Banner />
-      <div className="pt-32 w-2/3 ml-auto mr-auto  ">
+      <div className="pt-24 w-2/3 ml-auto mr-auto  ">
         <div className="flex w-full items-center justify-between">
           <p className="text-2xl mb-4 w-4/6">내가 선택한 스타일에 맞는 추천스타일</p>
           <div className="flex justify-center items-center cursor-pointer " onClick={() => navigate('/all')}>
