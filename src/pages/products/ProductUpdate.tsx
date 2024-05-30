@@ -377,7 +377,7 @@ const ProductUpdate = () => {
             <div className="flex items-center justify-center w-full">
               <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">설명</span>
               <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
-                <input
+                <textarea
                   className="shadow appearance-none border rounded w-full  py-3 px-3 h-[150px]  text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
                   placeholder="상품 설명을 최대한 자세히 적어주세요."
                   {...register('description')}
