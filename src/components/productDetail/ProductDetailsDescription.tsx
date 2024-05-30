@@ -39,6 +39,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
   console.log(userData);
   const logInUser = userData.email; //로그인한 유저
   const productRegUser = productDetails.lender.email; //상품 등록한 유저
+  const productPk = productDetails.lender.pk; //상품 등록한 유저
   const queryClient = useQueryClient();
   const { chatRoomId } = useChatRoomStore();
   const { productDetail } = useProductDetailStore();
@@ -61,18 +62,19 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
       if (error.response?.data.msg === "이미 개설된 채팅방 내역이 존재합니다.") {
         navigate(`/chat`);
       }
+      console.error("채팅방 생성에러", error)
     },
     onSettled: () => {
       console.log('결과에 관계없이 무언가 실행됨', chatRoomId);
-      queryClient.invalidateQueries({ queryKey: ['chatList'] });
+      // queryClient.invalidateQueries({ queryKey: ['chatList'] });
     },
   });
 
   // 함수 호출 시 데이터 전달
   const createChatRoom = () => {
     const newChatRoomData = {
-      lender: productDetail?.lender.pk,
-      product: productDetail?.uuid,
+      lender: productPk,
+      product: productDetails?.uuid,
     };
     handleCreateChatRoom.mutate(newChatRoomData);
   };

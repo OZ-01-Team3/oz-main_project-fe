@@ -1,5 +1,5 @@
 import { chatListAPI } from "@/api/chatRequests";
-import useUserInfoStore from "@/stores/useUserInfoStore";
+import useChatRoomListStore from "@/stores/useChatRoomListStore";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { ErrorBoundary } from 'react-error-boundary';
@@ -12,6 +12,7 @@ interface ChatInfoDto {
     nickname: string;
   };
   product: string;
+  product_image: string;
   last_message: {
     chatroom: number;
     id: string;
@@ -26,21 +27,24 @@ interface ChatInfoDto {
 
 
 const ChatLists = () => {
-  const setNickname = useUserInfoStore((state) => state.setNickname);
+  const setChatRoomList = useChatRoomListStore((state) => state.setChatRoomList);
+  // const queryClient = useQueryClient();
   const { data: ChatList, isLoading: isChatListLoading, error: ChatListError } = useQuery<ChatInfoDto[], Error>({
     queryKey: ['chatList'],
     queryFn: async () => {
       try {
         const response = await chatListAPI();
-        console.log("이거는 api에서내려오는 채팅리스트", response.data);
+        // console.log("이거는 api에서내려오는 채팅리스트", response.data);
         const chatList = response.data;
-        const firstValidChat = chatList.find(chat => chat.user_info.nickname && chat.user_info.nickname);
+        // const firstValidChat = chatList.find(chat => chat.user_info.nickname && chat.user_info.nickname);
 
-        if (firstValidChat) {
-          setNickname(firstValidChat.user_info.nickname);
-        } else {
-          console.warn("유효한 상대방을 찾을 수 없습니다.");
-        }
+        // if (firstValidChat) {
+        //   setNickname(firstValidChat.user_info.nickname);
+        // } else {
+        //   console.warn("유효한 상대방을 찾을 수 없습니다.");
+        // }
+        setChatRoomList(response.data)
+        // queryClient.invalidateQueries({ queryKey: ['chatList'] });
         return chatList;
       } catch (error) {
         if ((error as AxiosError).response && (error as AxiosError).response?.status === 404) {
@@ -54,6 +58,7 @@ const ChatLists = () => {
     },
   });
 
+  console.log("채팅 리스트 ", ChatList)
 
   if (isChatListLoading) return <div><Loading /></div>;
   if (ChatListError) return <div>{ChatListError.message}</div>;
@@ -70,7 +75,7 @@ const ChatLists = () => {
           user={data.user_info.nickname}
           content={data?.last_message?.text || "보낸 메세지가 없습니다."}
           time={data?.last_message?.created_at || new Date().toISOString()}
-          product="https://image.msscdn.net/images/goods_img/20240102/3771106/3771106_17041841891976_320.jpg"
+          product={data.product_image}
           profile="https://i.pinimg.com/564x/2a/58/e3/2a58e3d012bb65932a7c38d7381f29ee.jpg"
           notification={data.unread_chat_count}
         />

@@ -1,5 +1,4 @@
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
-import { useProductDetailStore } from '@/stores/useProductDetailStore';
 import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
@@ -42,7 +41,7 @@ const ProductDetailModal = () => {
   const navigate = useNavigate();
   const { setDetailModalOpen } = useModalOpenStore();
   const { selectedProductId, setWillSelectedProductId } = useProductIdStore();
-  const { setProductDetail } = useProductDetailStore(state => state);
+
   const [productDetails, setProductDetails] = useState<product>(initialProduct);
   const prevPath = localStorage.getItem('pathname');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -94,13 +93,19 @@ const ProductDetailModal = () => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/products/${selectedProductId}/`);
       setProductDetails(response.data);
-      setProductDetail(response.data);
       setCurrentImageIndex(0);
       console.log(response.data);
     } catch (error) {
       console.log(error);
     }
   };
+
+
+
+
+
+
+
   // 바깥이랑 x 눌렀을때 모달 닫히도록
   const outerBoxRef = useRef(null);
   // 모달 닫는 함수

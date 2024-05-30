@@ -37,14 +37,12 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
   /** messages 배열이 업데이트 될때마다 실행되는 useEffect */
   useEffect(() => {
     // chatId와 일치하는 메시지만 필터링
-    const relevantMessages = messages.filter((message) => message.chatroom === chatId);
-    console.log("Relevant Messages:", relevantMessages);
+    const relevantMessages = messages.filter((message) => message.chatroom_id === chatId);
 
     // 가장 최근의 채팅만 표시하기 위해 messages 배열이 비어있지 않은 경우에만 실행
     if (relevantMessages.length > 0) {
       // 가장 최근의 채팅을 가져옴
       const latestMessage = relevantMessages[relevantMessages.length - 1];
-      console.log("Latest Message:", latestMessage);
 
       // 최근 메세지가 있으면서 message 속성이 있는 경우
       if (latestMessage && latestMessage.text) {
@@ -63,7 +61,9 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
     <>
       <div className="flex flex-row items-center justify-center  px-2 cursor-pointer  flex-none  md:px-0 sm:pt-2" onClick={handleClickChatRoom}>
         <div className="w-14 h-14 aspect-[1/1] border-mainBlack rounded-full border md:w-12 md:h-12 mr-2">
+
           <img src={profile} className="w-full h-full  object-cover rounded-full" alt="프로필 이미지" />
+
         </div>
         <div className={`sm:hidden md:${UserResponseCss}  `}>
           <div className="flex flex-row items-center">
