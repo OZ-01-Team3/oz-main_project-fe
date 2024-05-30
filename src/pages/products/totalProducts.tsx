@@ -110,7 +110,6 @@ const TotalProducts = () => {
   const fetchProducts = async (page: number) => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `${productRequests.products}?page=${page}`);
-      console.log(response.data);
       console.log(page);
       setProducts(response.data.results);
       const totalProducts = response.data.count;

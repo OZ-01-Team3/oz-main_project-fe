@@ -48,7 +48,7 @@ instance.interceptors.request.use(
 
     const csrfToken = getCookieValue('csrftoken');
     config.headers['X-CSRFToken'] = csrfToken;
-
+    console.log('csrf', csrfToken);
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
       config.withCredentials = true;
@@ -61,7 +61,6 @@ instance.interceptors.request.use(
       config.headers['Content-Type'] = 'application/json';
     }
 
-    console.log('잘 바뀌낭');
     return config;
   },
   error => {
