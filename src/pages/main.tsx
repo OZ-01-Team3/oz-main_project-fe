@@ -7,7 +7,6 @@ import Products from '@/components/Products';
 import StyleModal from '@/components/StyleModal';
 import ProductDetailModal from '@/components/productDetail/ProductDetailModal';
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
-import { useProductDetailStore } from '@/stores/useProductDetailStore';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -21,12 +20,12 @@ const Main = () => {
   const { setDetailModalOpen, detailModalOpen, setStyleModalOpen, styleModalOpen } = useModalOpenStore();
   const { isLoggedIn } = useContext(UserContext);
   useEffect(() => {}, [isLoggedIn]);
-  let selectedStyle = {};
+  let selectedStyle = [];
   try {
     selectedStyle = JSON.parse(String(localStorage.getItem('style')));
     if (selectedStyle === null) {
       console.log('로컬에 style 없음');
-      selectedStyle = {};
+      selectedStyle = [];
     }
   } catch (error) {
     console.log(error);
@@ -46,7 +45,7 @@ const Main = () => {
       const style = localStorage.getItem('style');
       const firstLogin = localStorage.getItem('firstLogin');
       if (isLoggedIn && (!firstLogin || !style)) {
-        setStyleModalOpen(false);
+        setStyleModalOpen(true);
         localStorage.setItem('firstLogin', 'true');
       }
     }
@@ -87,16 +86,9 @@ const Main = () => {
     return products && products.filter(product => styles.some(style => product.styles.includes(style)));
   };
 
-  const filteredProducts = filterStyles(selectedStyle);
   // 스타일별 필터링된 제품 설정
-  useEffect(() => {
-    if (selectedStyle.length > 0) {
-      const filteredProducts = filterStyles(selectedStyle);
-      setStyleProducts(filteredProducts);
-      console.log('Filtered products set', filteredProducts);
-    }
-  }, [products]);
-  console.log('styleProducts', styleProducts);
+  const filteredProducts = filterStyles(selectedStyle);
+
   //최신상품 8개만 보여주는
   const newProducts = products && products.slice(0, 8);
   //스타일별 8개 보여주는
