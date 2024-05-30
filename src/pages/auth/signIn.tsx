@@ -36,7 +36,7 @@ const socialMedia = [
 const SignIn = () => {
   const navigate = useNavigate();
   const { setIsLoggedIn } = useContext(UserContext);
-  console.log('isLoggedIn', isLoggedIn);
+
   // 유효성 검증
   const signInFormSchema = zod.object({
     // 이메일 형식 지정

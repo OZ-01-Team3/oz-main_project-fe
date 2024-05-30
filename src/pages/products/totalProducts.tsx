@@ -1,4 +1,3 @@
-'use client';
 import instance from '@/api/instance';
 import { productRequests } from '@/api/productRequest';
 import EventBanner from '@/components/EventBanner';
@@ -37,16 +36,17 @@ const TotalProducts = () => {
   const { currentPage } = useCurrentPageStore();
   const { styleTag, setStyleTag } = useStyleTagStore();
   const [categories, setCategories] = useState<categories[]>([]);
-  console.log('styleTag', styleTag);
 
   useEffect(() => {
     handleGetCategories();
     handleGetStyles();
   }, []);
+
   // 상품 필터링 조건부로 날리기
   useEffect(() => {
     handleSelectCategory();
   }, [selectedCategory, selectedStyle, selectedOrdered]);
+
   // 모달 라우팅 용
   useEffect(() => {
     localStorage.setItem('pathname', window.location.pathname);
@@ -57,10 +57,11 @@ const TotalProducts = () => {
       history.pushState({}, '', `/product/${willSelectedProductId}`);
     }
   }, []);
+
   // 스타일 가져오기
   const handleGetStyles = async () => {
     try {
-      const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/styles`);
+      const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/styles/`);
       console.log(response, '상품 스타일 가져오기 성공');
       setStyleTag([{ id: 0, name: '전체' }, ...response.data]); //'전체' 추가
     } catch (error) {
@@ -106,6 +107,7 @@ const TotalProducts = () => {
       console.log(error);
     }
   };
+
   // 전체상품 불러오기
   const fetchProducts = async (page: number) => {
     try {
