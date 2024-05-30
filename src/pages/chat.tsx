@@ -1,6 +1,6 @@
 
 import ChatComponent from '@/components/chat/ChatComponent';
-import ChatLists from '@/components/chat/ChatLists';
+import ChatListsWithErrorBoundary from '@/components/chat/ChatLists';
 import useChatRoomStore from '@/stores/useChatRoomStore';
 import useMessageStore from '@/stores/useMessageStore';
 import { useEffect, useRef } from 'react';
@@ -100,7 +100,7 @@ const Chat = () => {
         <div className="flex  w-full h-[calc(100%-70px)] md:flex-row 2xl:flex-row ">
           {/* 채팅목록 */}
           <div className="w-2/5 pl-3 pr-5 border-r-[1px] border-customGray overflow-y-scroll scrollbar-hide sm:w-28 sm:px-2  ">
-            <ChatLists />
+            <ChatListsWithErrorBoundary webSocketRef={webSocketRef} />
           </div>
           {/* 채팅방 */}
           <ChatComponent sendMessage={sendMessage} webSocketRef={webSocketRef} />

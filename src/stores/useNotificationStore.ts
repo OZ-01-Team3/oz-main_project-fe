@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
 interface Notification {
   global_notification?: GlobalNotificationItem[];

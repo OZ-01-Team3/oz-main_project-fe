@@ -80,7 +80,7 @@ const ChatInput = ({ sendMessage }: ChatProps) => {
 
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col sm:mb-10 md:mb-10'>
       {previewImage && (
         <div className="mb-2 flex flex-col p-2 relative z-50">
           <div className='flex justify-end'>

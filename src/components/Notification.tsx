@@ -1,5 +1,5 @@
 import { useNotificationContext } from '@/NotificationContext';
-import useNotificationStore, { ChatNotificationItem, NotificationItemType } from '@/stores/useNotification';
+import useNotificationStore, { ChatNotificationItem, NotificationItemType } from '@/stores/useNotificationStore';
 import { ChatBubbleOvalLeftEllipsisIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';

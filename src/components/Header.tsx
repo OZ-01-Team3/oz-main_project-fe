@@ -1,6 +1,6 @@
 import { UserContext } from '@/App';
 import { logoutAPI } from '@/api/authRequests';
-import useNotificationStore from '@/stores/useNotification';
+import useNotificationStore from '@/stores/useNotificationStore';
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
 import { BellIcon } from '@heroicons/react/24/outline';
 import React, { useContext, useEffect, useState } from 'react';
