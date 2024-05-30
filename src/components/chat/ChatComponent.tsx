@@ -156,7 +156,8 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
   if (productDetailsError) return <div>{productDetailsError.message}</div>
 
 
-  const sortedChatMessages = [...chatMessages].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+  const sortedChatMessages = chatMessages ? [...chatMessages].sort((a, b) => new Date(a.created_at) - new Date(b.created_at)) : [];
   // const sortedMessages = [...messages].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
   return (
     <>
