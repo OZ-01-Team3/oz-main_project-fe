@@ -1,6 +1,6 @@
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import useNotificationStore from './stores/useNotification';
+import useNotificationStore from './stores/useNotificationStore';
 const { VITE_WEB_SOCKET } = import.meta.env;
 interface NotificationContextType {
   webSocketState: WebSocket | null;

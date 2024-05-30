@@ -1,6 +1,6 @@
 import { chatListAPI } from '@/api/chatRequests';
 import useChatRoomListStore from '@/stores/useChatRoomListStore';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ErrorBoundary } from 'react-error-boundary';
 import Loading from '../Loading';
@@ -27,8 +27,10 @@ interface ChatInfoDto {
 }
 
 const ChatLists = () => {
+
+
   const setChatRoomList = useChatRoomListStore(state => state.setChatRoomList);
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   const {
     data: ChatList,
     isLoading: isChatListLoading,
@@ -38,16 +40,15 @@ const ChatLists = () => {
     queryFn: async () => {
       try {
         const response = await chatListAPI();
-        // console.log("이거는 api에서내려오는 채팅리스트", response.data);
-        const chatList = response.data;
-        // const firstValidChat = chatList.find(chat => chat.user_info.nickname && chat.user_info.nickname);
+        let chatList = response.data;
+        console.log("최근메세지 확인용", response.data)
+        chatList = chatList.sort((a, b) => {
+          const dateA = new Date(a.last_message?.created_at || 0);
+          const dateB = new Date(b.last_message?.created_at || 0);
+          return dateB.getTime() - dateA.getTime();
+        });
 
-        // if (firstValidChat) {
-        //   setNickname(firstValidChat.user_info.nickname);
-        // } else {
-        //   console.warn("유효한 상대방을 찾을 수 없습니다.");
-        // }
-        setChatRoomList(response.data);
+        setChatRoomList(chatList);
         // queryClient.invalidateQueries({ queryKey: ['chatList'] });
         return chatList;
       } catch (error) {
@@ -60,8 +61,14 @@ const ChatLists = () => {
         }
       }
     },
+
   });
-  console.log('채팅 리스트 ', ChatList);
+
+
+  // // console.log('채팅 리스트 ', ChatList);
+  // useEffect(() => {
+  //   queryClient.invalidateQueries({ queryKey: ['chatList'] });
+  // }, [ChatList])
 
   if (isChatListLoading)
     return (

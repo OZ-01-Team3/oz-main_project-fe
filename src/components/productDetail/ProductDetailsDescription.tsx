@@ -83,6 +83,8 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
 
   console.log(productDetail, '-상품정보데이터');
 
+  const paragraphs = productDetails.description.split('\n');
+
   return (
     <div className="w-1/2 h-full sm:w-full flex flex-col justify-between">
       <div
@@ -105,7 +107,11 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
         />
         <div>
           <p className="text-sm font-semibold mt-8 mb-1">상세설명</p>
-          <p className="text-sm">{productDetails.description}</p>
+          {paragraphs.map((paragraph, index) => (
+            <p key={index} className="text-sm mb-2">
+              {paragraph}
+            </p>
+          ))}
         </div>
         <div>
           <p className="text-base font-semibold mt-8 mb-1">옷장 주인</p>
@@ -171,5 +177,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
     </div>
   );
 };
+
+
 
 export default ProductDetailsDescription;

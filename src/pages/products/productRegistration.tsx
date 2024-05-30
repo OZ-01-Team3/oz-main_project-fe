@@ -39,10 +39,11 @@ const productRegistrationSchema = zod.object({
   rental_fee: zod.coerce.number().min(1, '1원 이상 입력해주세요'),
   size: zod.string().min(1, '사이즈를 선택해주세요'),
   brand: zod.string().min(1, '브랜드를 입력해주세요'),
-  product_category: zod.string().min(1, '카테고리를 선택해주세요'),
+  product_category: zod.coerce.number().min(1, '카테고리를 선택해주세요'),
   purchase_date: zod.string().min(1, '구매시기를 선택해주세요'),
   condition: zod.string().min(1, '상품 상태를 선택해주세요'),
   description: zod.string().min(1, '상품 설명을 입력해주세요'),
+  // tag: zod.array(zod.number()).min(1, '태그를 하나 이상 선택해주세요'),
   amount: zod.coerce.number().min(1, '수량을 입력해주세요'),
   region: zod.string().min(1, '거래지역을 입력해주세요'),
 });
@@ -51,7 +52,7 @@ const ProductRegistration = () => {
   const [productNameLength, setProductNameLength] = useState<number>(0);
   const [categories, setCategories] = useState<category[]>([]);
   const [styleTag, setStyleTag] = useState<styleTag[]>([]);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<number[]>([]);
   // img-reg 에서 보낸 사진 배열 받아오기
   const location = useLocation();
   const navigate = useNavigate();
@@ -129,7 +130,7 @@ const ProductRegistration = () => {
       console.log(error);
     }
   };
-  const handleTagClick = (tagId: string) => {
+  const handleTagClick = (tagId: number) => {
     setSelectedTags(prev => {
       if (prev.includes(tagId)) {
         return prev.filter(id => id !== tagId);
@@ -292,7 +293,7 @@ const ProductRegistration = () => {
                 >
                   {categories &&
                     categories.map(category => (
-                      <option key={category.id} value={category.name}>
+                      <option key={category.id} value={category.id}>
                         {category.name}
                       </option>
                     ))}
@@ -357,7 +358,7 @@ const ProductRegistration = () => {
             <div className="flex items-center justify-center w-full">
               <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">설명</span>
               <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
-                <textarea
+                <input
                   className="shadow appearance-none border rounded w-full  py-3 px-3 h-[150px]  text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
                   placeholder="상품 설명을 최대한 자세히 적어주세요."
                   {...register('description')}
@@ -377,8 +378,8 @@ const ProductRegistration = () => {
                 {styleTag.map(tag => (
                   <div
                     key={tag.id}
-                    className={`flex flex-col border text-sm my-1 border-mainBlack bg-mainWhite text-mainBlack rounded-full pt-1 pb-1 pl-3 pr-3 w-20 mr-1 text-center hover:cursor-pointer hover:scale-105 ${selectedTags.includes(tag.name) ? 'bg-sky-100' : ''}`}
-                    onClick={() => handleTagClick(tag.name)}
+                    className={`flex flex-col border text-sm my-1 border-mainBlack bg-mainWhite text-mainBlack rounded-full pt-1 pb-1 pl-3 pr-3 w-20 mr-1 text-center hover:cursor-pointer hover:scale-105 ${selectedTags.includes(tag.id) ? 'bg-yellow-50' : ''}`}
+                    onClick={() => handleTagClick(tag.id)}
                   >
                     <span>{tag.name}</span>
                   </div>

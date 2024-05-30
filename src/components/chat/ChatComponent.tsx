@@ -125,10 +125,10 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
       handleDeleteChatRoom.mutate(chatRoomId);
     }
   };
-  console.log('chatRoomInfo:', chatRoomInfo);
+  // console.log('chatRoomInfo:', chatRoomInfo);
   // console.log("productDetails:", productDetails);
 
-  console.log("필터링된 어쩌구", matchingProduct)
+
   // chatRoomInfo의 product 값과 productDetails 배열의 uuid 값이 일치하는 객체 찾기
   useEffect(() => {
     if (chatRoomInfo && productDetails) {
@@ -174,17 +174,32 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
             {/* 사용자 정보 */}
             <div className={`sm:hidden ${userResCss} relative`}>
               <div className="flex items-center mx-auto">
-                <div className="w-10 aspect-[1/1] mr-2 border-mainBlack rounded-full border ">
-                  {matchingProduct && matchingProduct.lender && matchingProduct.lender.profile_img ? (
-                    <img
-                      src={matchingProduct.lender.profile_img}
-                      className="w-full h-full object-cover rounded-full"
-                      alt="프로필 이미지"
-                    />
-                  ) : (
-                    <UserCircleIcon className="w-full h-full object-cover rounded-full" />
-                  )}
-                </div>
+
+                {chatRoomList.map((item, index) => {
+                  // 현재 순회 중인 채팅방의 id와 chatRoomId가 일치하는 경우에만 프로필 이미지 출력
+                  if (item.id === chatRoomId) {
+                    return (
+                      <div key={index}>
+                        {item.user_info && item.user_info.profile_img ? (
+                          <div className="w-10 h-10 aspect-square mr-2 border-mainBlack rounded-full border overflow-hidden">
+                            <img
+                              src={item.user_info.profile_img}
+                              className="w-full h-full object-cover rounded-full"
+                              alt="프로필 이미지"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-10 h-10 aspect-square mr-2 border-mainBlack rounded-full border overflow-hidden">
+                            <UserCircleIcon className="w-full  object-cover rounded-full" />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+                  // 일치하지 않는 경우 빈 요소 반환
+                  return null;
+                })}
+
                 {chatRoomList.map((item, index) => {
                   // 현재 순회 중인 채팅방의 id와 chatRoomId가 일치하는 경우에만 닉네임 출력
                   if (item.id === chatRoomId) {
