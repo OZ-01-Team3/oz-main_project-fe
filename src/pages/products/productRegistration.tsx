@@ -10,20 +10,17 @@ import { toast } from 'react-toastify';
 import { z as zod } from 'zod';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const sizes = ['S', 'M', 'L', 'XL'];
-
 export const productStatusOptions = [
   { id: 1, label: '새 상품 (미사용)', description: '사용하지 않은 상품' },
   { id: 2, label: '사용감 없음', description: '사용은 했지만 눈에 띄는 흔적이나 얼룩이 없음' },
   { id: 3, label: '사용감 적음', description: '눈에 띄는 흔적이나 얼룩이 약간 있음' },
   { id: 4, label: '사용감 많음', description: '눈에 띄는 흔적이나 얼룩이 많이 있음' },
 ];
-
 interface locationState {
   file: File;
   id: number;
   imageUrl: string;
 }
-
 interface category {
   id: number;
   name: string;
@@ -32,31 +29,27 @@ interface styleTag {
   id: number;
   name: string;
 }
-
 const productRegistrationSchema = zod.object({
   name: zod.string().min(1, '상품명을 입력해주세요').max(30, '상품명은 30자 이내로 입력해주세요'),
   purchase_price: zod.coerce.number().min(1, '1원 이상 입력해주세요'),
   rental_fee: zod.coerce.number().min(1, '1원 이상 입력해주세요'),
   size: zod.string().min(1, '사이즈를 선택해주세요'),
   brand: zod.string().min(1, '브랜드를 입력해주세요'),
-  product_category: zod.coerce.number().min(1, '카테고리를 선택해주세요'),
+  product_category: zod.string().min(1, '카테고리를 선택해주세요'),
   purchase_date: zod.string().min(1, '구매시기를 선택해주세요'),
   condition: zod.string().min(1, '상품 상태를 선택해주세요'),
   description: zod.string().min(1, '상품 설명을 입력해주세요'),
-  // tag: zod.array(zod.number()).min(1, '태그를 하나 이상 선택해주세요'),
   amount: zod.coerce.number().min(1, '수량을 입력해주세요'),
   region: zod.string().min(1, '거래지역을 입력해주세요'),
 });
-
 const ProductRegistration = () => {
   const [productNameLength, setProductNameLength] = useState<number>(0);
   const [categories, setCategories] = useState<category[]>([]);
   const [styleTag, setStyleTag] = useState<styleTag[]>([]);
-  const [selectedTags, setSelectedTags] = useState<number[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   // img-reg 에서 보낸 사진 배열 받아오기
   const location = useLocation();
   const navigate = useNavigate();
-
   // 이미지 등록안한상태로 url로 접송했을 때 틩기도록
   useEffect(() => {
     if (location.state === null) {
@@ -67,13 +60,11 @@ const ProductRegistration = () => {
     handleGetCategories();
     handleGetStyle();
   }, []);
-
   //**받아온 사진 배열에서 사진파일배열만 보내기 */
   const registeredImages = (location.state as locationState[]).map(item => {
     return item.file;
   });
   console.log(registeredImages);
-
   const handleProductNameMaxLength: ChangeEventHandler<HTMLInputElement> = e => {
     const value = e.target.value;
     if (value.length <= 30) {
@@ -83,7 +74,6 @@ const ProductRegistration = () => {
       setProductNameLength(30);
     }
   };
-
   //상품등록 폼 상태 관리
   const form = useForm({
     resolver: zodResolver(productRegistrationSchema),
@@ -109,7 +99,6 @@ const ProductRegistration = () => {
     formState: { errors },
     handleSubmit,
   } = form;
-
   const handleGetCategories = async () => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/`);
@@ -130,7 +119,7 @@ const ProductRegistration = () => {
       console.log(error);
     }
   };
-  const handleTagClick = (tagId: number) => {
+  const handleTagClick = (tagId: string) => {
     setSelectedTags(prev => {
       if (prev.includes(tagId)) {
         return prev.filter(id => id !== tagId);
@@ -154,7 +143,6 @@ const ProductRegistration = () => {
       formData.append('description', data.description);
       formData.append('amount', data.amount);
       formData.append('region', data.region);
-
       // registeredImages 파일을 formData에 추가
       registeredImages.forEach(image => {
         formData.append(`image`, image);
@@ -167,7 +155,6 @@ const ProductRegistration = () => {
       for (const pair of formData.entries()) {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
-
       const response = await instance.post(VITE_BASE_REQUEST_URL + productRequests.products, formData);
       console.log('상품 등록 성공', response);
       toast.success('상품이 성공적으로 등록되었습니다!');
@@ -293,7 +280,7 @@ const ProductRegistration = () => {
                 >
                   {categories &&
                     categories.map(category => (
-                      <option key={category.id} value={category.id}>
+                      <option key={category.id} value={category.name}>
                         {category.name}
                       </option>
                     ))}
@@ -351,14 +338,13 @@ const ProductRegistration = () => {
               </div>
             </div>
           </div>
-
           <hr className="w-full ml-auto mr-auto mt-5 mb-5 border-stone-800" />
           {/* 설명 */}
           <div className="mb-4">
             <div className="flex items-center justify-center w-full">
               <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">설명</span>
               <div className=" w-full md:w-8/12 flex flex-col justify-start items-center">
-                <input
+                <textarea
                   className="shadow appearance-none border rounded w-full  py-3 px-3 h-[150px]  text-mainBlack leading-tight focus:outline-none focus:shadow-outline placeholder-subGray focus:border-mainWhite focus:bg-mainWhite"
                   placeholder="상품 설명을 최대한 자세히 적어주세요."
                   {...register('description')}
@@ -378,8 +364,8 @@ const ProductRegistration = () => {
                 {styleTag.map(tag => (
                   <div
                     key={tag.id}
-                    className={`flex flex-col border text-sm my-1 border-mainBlack bg-mainWhite text-mainBlack rounded-full pt-1 pb-1 pl-3 pr-3 w-20 mr-1 text-center hover:cursor-pointer hover:scale-105 ${selectedTags.includes(tag.id) ? 'bg-yellow-50' : ''}`}
-                    onClick={() => handleTagClick(tag.id)}
+                    className={`flex flex-col border text-sm my-1 border-mainBlack bg-mainWhite text-mainBlack rounded-full pt-1 pb-1 pl-3 pr-3 w-20 mr-1 text-center hover:cursor-pointer hover:scale-105 ${selectedTags.includes(tag.name) ? 'bg-sky-100' : ''}`}
+                    onClick={() => handleTagClick(tag.name)}
                   >
                     <span>{tag.name}</span>
                   </div>
@@ -441,5 +427,4 @@ const ProductRegistration = () => {
     </div>
   );
 };
-
 export default ProductRegistration;
