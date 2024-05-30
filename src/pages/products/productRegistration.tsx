@@ -42,9 +42,11 @@ const productRegistrationSchema = zod.object({
   amount: zod.coerce.number().min(1, '수량을 입력해주세요'),
   region: zod.string().min(1, '거래지역을 입력해주세요'),
 });
+
 const today = new Date();
 export const defaultDate = today.toISOString().substring(0, 10);
 console.log('오늘 날짜', defaultDate);
+
 const ProductRegistration = () => {
   const [productNameLength, setProductNameLength] = useState<number>(0);
   const [categories, setCategories] = useState<category[]>([]);
@@ -431,4 +433,6 @@ const ProductRegistration = () => {
     </div>
   );
 };
+
 export default ProductRegistration;
+
