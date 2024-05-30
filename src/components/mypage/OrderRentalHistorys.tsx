@@ -40,7 +40,6 @@ export const convertDatetime = (created_at: string) => {
   const month = String(datetime.getMonth() + 1).padStart(2, '0');
   const day = String(datetime.getDate()).padStart(2, '0');
   const hour = String(datetime.getHours()).padStart(2, '0');
-
   return `${year}-${month}-${day} ${hour}시`;
 };
 
@@ -49,7 +48,6 @@ const OrderRentalHistorys = () => {
   const { detailModalOpen } = useModalOpenStore();
   const { setDetailModalOpen } = useModalOpenStore();
   const { setSelectedProductId, willSelectedProductId, setWillSelectedProductId } = useProductIdStore();
-
   useEffect(() => {
     localStorage.setItem('pathname', window.location.pathname);
     if (willSelectedProductId) {
@@ -59,7 +57,6 @@ const OrderRentalHistorys = () => {
       history.pushState({}, '', `/product/${willSelectedProductId}`);
     }
   }, []);
-
   const handleOpenModal = (id: string) => {
     setDetailModalOpen(true);
     setSelectedProductId(id);

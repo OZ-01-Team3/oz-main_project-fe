@@ -42,7 +42,6 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
   const csrfToken = cookies.get('csrftoken');
 
   const queryClient = useQueryClient();
-
   const {
     data: chatData,
     isLoading: isChatMessageLoading,
@@ -152,6 +151,9 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
 
   if (isProductDetailsLoading) return <div>Loading...</div>;
   if (productDetailsError) return <div>{productDetailsError.message}</div>;
+  if (isProductDetailsLoading) return <div>Loading...</div>
+  if (productDetailsError) return <div>{productDetailsError.message}</div>
+
 
   return (
     <>
@@ -210,7 +212,6 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
             </div>
             <div className="flex justify-between items-center">
               {/* 상품정보 */}
-
               <div className="flex flex-row justify-left items-center h-16 my-3">
                 {/* 상품이미지 */}
                 <div className=" h-20 w-20 border-mainBlack flex justify-center items-center overflow-hidden">
@@ -266,6 +267,7 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
                     read={data.status}
                   />
                 ))}
+
 
               {messages.map((data, index) => (
                 <ChatBubble

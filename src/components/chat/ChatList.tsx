@@ -39,6 +39,7 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
     // chatId와 일치하는 메시지만 필터링
     const relevantMessages = messages.filter(message => message.chatroom_id === chatId);
 
+
     // 가장 최근의 채팅만 표시하기 위해 messages 배열이 비어있지 않은 경우에만 실행
     if (relevantMessages.length > 0) {
       // 가장 최근의 채팅을 가져옴
@@ -66,7 +67,9 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
         onClick={handleClickChatRoom}
       >
         <div className="w-14 h-14 aspect-[1/1] border-mainBlack rounded-full border md:w-12 md:h-12 mr-2">
+
           <img src={profile} className="w-full h-full  object-cover rounded-full" alt="프로필 이미지" />
+
         </div>
         <div className={`sm:hidden md:${UserResponseCss}  `}>
           <div className="flex flex-row items-center">

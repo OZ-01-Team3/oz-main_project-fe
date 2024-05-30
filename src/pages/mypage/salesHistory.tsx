@@ -1,6 +1,5 @@
 import instance from '@/api/instance';
 import { convertDatetime, rentalHistory } from '@/components/mypage/OrderRentalHistorys';
-
 import ProductDetailModal from '@/components/productDetail/ProductDetailModal';
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
 import { useEffect, useState } from 'react';
@@ -47,9 +46,7 @@ const SalesHistory = () => {
   useEffect(() => {
     fetchSalesProduct();
   }, []);
-
   useEffect(() => {}, [salesHistorys]);
-
   console.log('salesProducts', salesHistorys);
 
   return (

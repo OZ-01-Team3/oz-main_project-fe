@@ -35,7 +35,6 @@ interface lender {
   email: string;
   nickname: string;
   pk: number;
-
   profile_img: string;
 }
 export interface ProductProps {
