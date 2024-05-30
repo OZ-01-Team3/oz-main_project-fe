@@ -23,6 +23,7 @@ const Main = () => {
   let selectedStyle = [];
   try {
     selectedStyle = JSON.parse(String(localStorage.getItem('style')));
+
     if (selectedStyle === null) {
       console.log('로컬에 style 없음');
       selectedStyle = [];
@@ -30,6 +31,7 @@ const Main = () => {
   } catch (error) {
     console.log(error);
   }
+
   // 모달 라우팅 위한 useEffect
   useEffect(() => {
     localStorage.setItem('pathname', window.location.pathname);
@@ -76,12 +78,6 @@ const Main = () => {
     },
   });
 
-  // useEffect(() => {
-  //   if (isLoggedIn !== undefined && selectedStyle !== undefined) {
-  //     refetch();
-  //   }
-  // }, [isLoggedIn, refetch, selectedStyle]);
-
   const filterStyles = (styles: string[]) => {
     return products && products.filter(product => styles.some(style => product.styles.includes(style)));
   };
@@ -101,13 +97,30 @@ const Main = () => {
       <Banner />
       <div className="pt-24 w-2/3 ml-auto mr-auto  ">
         <div className="flex w-full items-center justify-between">
-          <p className="text-2xl mb-4 w-4/6">내가 선택한 스타일에 맞는 추천스타일</p>
-          <div className="flex justify-center items-center cursor-pointer " onClick={() => navigate('/all')}>
+          <div className="flex flex-col w-full mb-6">
+            <p className="text-2xl mb-4 w-4/6">내가 선택한 스타일에 맞는 추천스타일</p>
+            <div className="flex ">
+              {selectedStyle &&
+                selectedStyle.length > 0 &&
+                selectedStyle.map(style => (
+                  <div className="border text-sm border-mainWhite text-mainWhite rounded-full pt-1 pb-1 pl-3 pr-3 w-20 mr-1 text-center">
+                    {style}
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          <div className="flex justify-center items-center cursor-pointer w-32  " onClick={() => navigate('/all')}>
             <p>전체상품</p>
             <ArrowRightIcon className="w-4 h-4 ml-3 " />
           </div>
         </div>
-        <Products products={styleProduct} />
+        {styleProduct && styleProduct.length === 0 ? (
+          <Products products={products.slice(0, 8)} />
+        ) : (
+          <Products products={styleProduct} />
+        )}
+
         <hr className=" w-3/4 ml-auto mr-auto mt-10 mb-20 text-mainWhite " />
         <div className="flex w-full items-center justify-between">
           <p className="text-2xl mb-4 font-didot">NEW</p>

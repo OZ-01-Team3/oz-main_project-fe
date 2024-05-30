@@ -3,15 +3,18 @@ import instance from '@/api/instance';
 import useChatRoomStore from '@/stores/useChatRoomStore';
 import useMessageStore from '@/stores/useMessageStore';
 // import useUserInfoStore from '@/stores/useUserInfoStore';
+import { UserContext } from '@/App';
 import { productDetailListAPI } from '@/api/productRequest';
 import useChatRoomListStore from '@/stores/useChatRoomListStore';
+import useRentalStore from '@/stores/useRentalStore';
 import Message from '@/type';
 import { EllipsisVerticalIcon, UserCircleIcon } from '@heroicons/react/16/solid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 import { Cookies } from 'react-cookie';
 import CommonButton from '../CommonButton';
+import { lender } from '../Products';
 import ChatAcceptModal from './ChatAcceptModal';
 import ChatBubble from './ChatBubble';
 import ChatDeleteModal from './ChatDeleteModal';
@@ -24,18 +27,35 @@ interface ChatProps {
   setMessages: Dispatch<SetStateAction<Message[]>>;
   webSocketRef: React.MutableRefObject<ChatSocket | null>;
 }
-
+interface image {
+  id: number;
+  image: string;
+}
+export interface matchingProduct {
+  amount: number;
+  brand: string;
+  condition: string;
+  description: string;
+  lender: lender;
+  name: string;
+  rental_fee: number;
+  uuid: string;
+  images: image[];
+}
 const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
   const [rentalModalOpen, setRentalModalOpen] = useState<boolean>(false);
   const [acceptModalOpen, setAcceptModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [matchingProduct, setMatchingProduct] = useState(null);
+  const [matchingProduct, setMatchingProduct] = useState<matchingProduct>(null);
+  const { setBorrwerId, setProductId } = useRentalStore();
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const { chatRoomId } = useChatRoomStore();
   const { chatRoomList } = useChatRoomListStore();
+  const { userData } = useContext(UserContext);
+
   const messages = useMessageStore(state => state.messages.filter(message => message.chatroom_id === chatRoomId));
 
   const cookies = new Cookies();
@@ -59,7 +79,7 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
     },
     enabled: !!chatRoomId,
   });
-
+  console.log('-----------------', chatData);
   console.log('채팅룸 정보', chatRoomList);
 
   const chatMessages = chatData?.messages;
@@ -128,7 +148,6 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
   // console.log('chatRoomInfo:', chatRoomInfo);
   // console.log("productDetails:", productDetails);
 
-
   // chatRoomInfo의 product 값과 productDetails 배열의 uuid 값이 일치하는 객체 찾기
   useEffect(() => {
     if (chatRoomInfo && productDetails) {
@@ -140,7 +159,7 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
   }, [chatRoomInfo, productDetails]); // chatRoomInfo 또는 productDetails가 변경될 때마다 실행
 
   console.log('chatMessages', chatMessages);
-  console.log("실시간.", messages)
+  console.log('실시간.', messages);
   if (isChatMessageLoading) return <div>Loading...</div>;
   if (chatMessageError) return <div>Error: {chatMessageError.message}</div>;
   if (!chatRoomId || (chatMessages && chatMessages.length === 0))
@@ -152,21 +171,36 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
 
   if (isProductDetailsLoading) return <div>Loading...</div>;
   if (productDetailsError) return <div>{productDetailsError.message}</div>;
-  if (isProductDetailsLoading) return <div>Loading...</div>
-  if (productDetailsError) return <div>{productDetailsError.message}</div>
+  if (isProductDetailsLoading) return <div>Loading...</div>;
+  if (productDetailsError) return <div>{productDetailsError.message}</div>;
 
-
-
-  const sortedChatMessages = chatMessages ? [...chatMessages].sort((a, b) => new Date(a.created_at) - new Date(b.created_at)) : [];
+  const sortedChatMessages = chatMessages
+    ? [...chatMessages].sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+    : [];
   // const sortedMessages = [...messages].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+  const handleOpenModal = (uuid: string, borrwerId: number) => {
+    setRentalModalOpen(true);
+    setProductId(uuid);
+    setBorrwerId(borrwerId);
+  };
+  const handleOpenAcceptModal = () => {
+    setAcceptModalOpen(true);
+    // setProductId(uuid);
+    // setBorrwerId(borrwerId);
+  };
+  console.log('matchingProduct', matchingProduct);
+
+  const logInUser = userData.email;
+  const lender = matchingProduct && matchingProduct.lender.email;
   return (
     <>
       {deleteModalOpen && <ChatDeleteModal setOpen={setDeleteModalOpen} deleteChatRoom={deleteChatRoom} />}
       {/* 대여신청하기, 수락하기 어떤 버튼 눌렀느냐에 따라서 다른 모달 보여주기 */}
       {rentalModalOpen ? (
-        <ChatRentalModal setRentalModalOpen={setRentalModalOpen} />
+        <ChatRentalModal setRentalModalOpen={setRentalModalOpen} productInfo={chatData} />
       ) : (
-        acceptModalOpen && <ChatAcceptModal setAcceptModalOpen={setAcceptModalOpen} />
+        acceptModalOpen && <ChatAcceptModal setAcceptModalOpen={setAcceptModalOpen} productInfo={chatData} />
       )}
       <div className="flex flex-col justify-center items-center pl-10 relative w-full md:pl-5 sm:pl-5  ">
         <div className="flex w-full flex-col justify-between h-screen overflow-y-scroll scrollbar-hide ">
@@ -174,7 +208,6 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
             {/* 사용자 정보 */}
             <div className={`sm:hidden ${userResCss} relative`}>
               <div className="flex items-center mx-auto">
-
                 {chatRoomList.map((item, index) => {
                   // 현재 순회 중인 채팅방의 id와 chatRoomId가 일치하는 경우에만 프로필 이미지 출력
                   if (item.id === chatRoomId) {
@@ -249,19 +282,24 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
                 </div>
               </div>
               <div>
-                <CommonButton
-                  className="bg-mainBlack text-mainWhite w-32 h-9 flex text-sm justify-center items-center mb-2 rounded-md p-1 sm:w-24 cursor-pointer "
-                  onClick={() => setRentalModalOpen(true)}
-                >
-                  대여 신청하기
-                </CommonButton>
-                <CommonButton
-                  className="bg-[#D3D3D3] text-subGray  w-32 h-9 flex text-sm justify-center items-center rounded-md p-1 sm:w-24 cursor-pointer 
+                {logInUser === lender
+                  ? chatData.rental_history && (
+                      <CommonButton
+                        className="bg-mainBlack text-mainWhite  w-32 h-9 flex text-sm justify-center items-center rounded-md p-1 sm:w-24 cursor-pointer 
               "
-                  onClick={() => setAcceptModalOpen(true)}
-                >
-                  수락하기
-                </CommonButton>
+                        onClick={() => handleOpenAcceptModal()}
+                      >
+                        수락하기
+                      </CommonButton>
+                    )
+                  : !chatData.rental_history && (
+                      <CommonButton
+                        className="bg-mainBlack text-mainWhite w-32 h-9 flex text-sm justify-center items-center mb-2 rounded-md p-1 sm:w-24 cursor-pointer "
+                        onClick={() => handleOpenModal(matchingProduct.uuid, userData.pk)} //상품 아이디랑 빌리는 사람 Pk
+                      >
+                        대여 신청하기
+                      </CommonButton>
+                    )}
               </div>
             </div>
           </div>
@@ -287,7 +325,6 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
                   />
                 ))}
 
-
               {messages.map((data, index) => (
                 <ChatBubble
                   key={index}
@@ -311,7 +348,7 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
 
 const userResCss = 'flex justify-center items-center flex-row ';
 
-export const formatDate = (dateString) => {
+export const formatDate = dateString => {
   const date = new Date(dateString);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');

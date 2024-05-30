@@ -47,7 +47,6 @@ const SalesHistory = () => {
     fetchSalesProduct();
   }, []);
   useEffect(() => {}, [salesHistorys]);
-  console.log('salesProducts', salesHistorys);
 
   return (
     <>

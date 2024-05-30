@@ -63,8 +63,6 @@ const ProductDetailModal = () => {
   //  현재 경로에 따라서 all 이면 all 로 돌아오고 메인이면 메인으로 돌아가도록
   //  새로고침하면 fromPath 상태 다 날아감.. => localStorage 에 저장!
   useEffect(() => {
-    console.log('uuid', selectedProductId);
-    console.log('prevPath', prevPath);
     if (!selectedProductId) {
       setWillSelectedProductId(productId);
       console.log(productId);

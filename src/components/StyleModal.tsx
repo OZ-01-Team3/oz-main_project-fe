@@ -58,6 +58,9 @@ const StyleModal = () => {
   }, []);
   // 모달 닫는 함수
   const handleCloseModal = () => {
+    if (!window.confirm('관심 스타일을 선택하시면 스타일에 맞는 상품 추천을 해드립니다!.')) {
+      return;
+    }
     setStyleModalOpen(false);
   };
   //  styleModalOpen 이 true 이면 모달 보여줌
