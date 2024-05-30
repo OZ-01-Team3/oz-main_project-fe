@@ -64,7 +64,7 @@ interface UserContextType {
 
 /** 유저 정보를 전역관리하기 위한 컨텍스트 */
 export const UserContext = createContext<UserContextType>({
-  setUserData: () => { },
+  setUserData: () => {},
   userData: {
     pk: -1,
     age: 0,
@@ -78,7 +78,7 @@ export const UserContext = createContext<UserContextType>({
     region: '',
   },
   isLoggedIn: false,
-  setIsLoggedIn: () => { },
+  setIsLoggedIn: () => {},
 });
 
 /** 유저 컨텍스트를 사용하기 위한 커스텀 훅!!! */
@@ -242,8 +242,9 @@ function App() {
             theme="colored"
           />
           <Routes>{[...loggedRoutes, ...commonRoutes]}</Routes>
-
-          {location.pathname !== '/chat' && <ScrollToTop />}
+          {location.pathname !== '/chat' && location.pathname !== '/sign-in' && location.pathname !== '/sign-up' && (
+            <ScrollToTop />
+          )}
           {accessToken && (location.pathname === '/' || location.pathname === '/all') && <ProductRegistrationButton />}
         </UserContext.Provider>
       </NotificationProvider>

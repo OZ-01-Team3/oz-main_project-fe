@@ -7,7 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { z as zod } from 'zod';
-import { productStatusOptions } from './productRegistration';
+import { defaultDate, productStatusOptions } from './productRegistration';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const sizes = ['S', 'M', 'L', 'XL'];
 const cookies = new Cookies();
@@ -16,6 +16,7 @@ interface category {
   id: number;
   name: string;
 }
+
 const productRegistrationSchema = zod.object({
   name: zod.string().min(1, '상품명을 입력해주세요').max(30, '상품명은 30자 이내로 입력해주세요'),
   purchase_price: zod.coerce.number().min(1, '1원 이상 입력해주세요'),
@@ -332,6 +333,7 @@ const ProductUpdate = () => {
                   type="date"
                   className="shadow appearance-none border rounded w-full  py-2 px-4 text-mainBlack leading-tight focus:outline-none focus:shadow-outline"
                   {...register('purchase_date')}
+                  max={defaultDate}
                 />
                 {errors.purchase_date && (
                   <p className=" text-sm text-red-500 mt-1 w-full text-left">{String(errors.purchase_date.message)}</p>

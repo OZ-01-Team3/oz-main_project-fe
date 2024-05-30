@@ -59,6 +59,7 @@ const Header = () => {
       onClick: handleToggleNotification,
       className: notifications.length > 0 ? 'text-red-200' : '',
     },
+    { label: '채팅', path: '/chat' },
     { label: '마이페이지', path: '/mypage/member-info' },
     isLoggedIn ? { label: '로그아웃', onClick: handleLogout } : { label: '로그인', path: '/sign-in' },
   ];

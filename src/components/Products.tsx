@@ -29,8 +29,9 @@ export interface product {
   lender: lender;
   is_liked: boolean;
   styles: number[];
+  likes: number;
 }
-interface lender {
+export interface lender {
   age?: number;
   email: string;
   nickname: string;
@@ -128,27 +129,28 @@ const Products = ({ products }: ProductProps) => {
                   <img src={product.images[0].image} className="w-full h-full object-cover  aspect-[3/3.5]" />
                 </div>
               )}
-
               <div className="flex justify-between">
                 <p className="font-bold text-base w-5/6">{product.name}</p>
-                {product.is_liked ? (
-                  <FilledHeartIcon
-                    className="w-6 h-6 text-red-500 hover:scale-110"
-                    onClick={e => handleClickWishButton(e, product.uuid)}
-                  />
-                ) : (
-                  <OutlineHeartIcon
-                    className="w-6 h-6 hover:scale-110"
-                    onClick={e => handleClickWishButton(e, product.uuid)}
-                  />
-                )}
+                <div className="flex justify-center items-center h-6">
+                  {product.is_liked ? (
+                    <FilledHeartIcon
+                      className="w-6 h-6 text-red-500 hover:scale-110"
+                      onClick={e => handleClickWishButton(e, product.uuid)}
+                    />
+                  ) : (
+                    <OutlineHeartIcon
+                      className="w-6 h-6 hover:scale-110"
+                      onClick={e => handleClickWishButton(e, product.uuid)}
+                    />
+                  )}
+                </div>
               </div>
               <p className="text-sm font-thin mt-1">
                 {product.description && product.description.length > 39
                   ? `${product.description.substring(0, 39)}...`
                   : product.description}
               </p>
-              <p className="text-sm mt-1">{Number(product.rental_fee).toLocaleString()}원 </p>
+              <p className="text-sm mt-1">{Number(product.rental_fee).toLocaleString()}원 </p>{' '}
             </div>
           ))}
       </div>

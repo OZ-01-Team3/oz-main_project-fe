@@ -42,6 +42,9 @@ const productRegistrationSchema = zod.object({
   amount: zod.coerce.number().min(1, '수량을 입력해주세요'),
   region: zod.string().min(1, '거래지역을 입력해주세요'),
 });
+const today = new Date();
+export const defaultDate = today.toISOString().substring(0, 10);
+console.log('오늘 날짜', defaultDate);
 const ProductRegistration = () => {
   const [productNameLength, setProductNameLength] = useState<number>(0);
   const [categories, setCategories] = useState<category[]>([]);
@@ -301,6 +304,7 @@ const ProductRegistration = () => {
                   type="date"
                   className="shadow appearance-none border rounded w-full  py-2 px-4 text-mainBlack leading-tight focus:outline-none focus:shadow-outline"
                   {...register('purchase_date')}
+                  max={defaultDate}
                 />
                 {errors.purchase_date && (
                   <p className=" text-sm text-red-500 mt-1 w-full text-left">{errors.purchase_date.message}</p>

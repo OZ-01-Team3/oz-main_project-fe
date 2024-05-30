@@ -35,7 +35,6 @@ interface image {
 
 export const convertDatetime = (created_at: string) => {
   const datetime = new Date(created_at);
-  console.log(datetime);
   const year = datetime.getFullYear();
   const month = String(datetime.getMonth() + 1).padStart(2, '0');
   const day = String(datetime.getDate()).padStart(2, '0');
@@ -43,11 +42,19 @@ export const convertDatetime = (created_at: string) => {
   return `${year}-${month}-${day} ${hour}시`;
 };
 
+const calculateDaysUntilReturn = (returnDateStr: string) => {
+  const returnDate = new Date(returnDateStr);
+  const today = new Date();
+  const diffTime = returnDate.getTime() - today.getTime();
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+};
+
 const OrderRentalHistorys = () => {
   const [rentalHistorys, setRentalHistorys] = useState<rentalHistory[]>([]);
   const { detailModalOpen } = useModalOpenStore();
   const { setDetailModalOpen } = useModalOpenStore();
   const { setSelectedProductId, willSelectedProductId, setWillSelectedProductId } = useProductIdStore();
+
   useEffect(() => {
     localStorage.setItem('pathname', window.location.pathname);
     if (willSelectedProductId) {
@@ -57,6 +64,7 @@ const OrderRentalHistorys = () => {
       history.pushState({}, '', `/product/${willSelectedProductId}`);
     }
   }, []);
+
   const handleOpenModal = (id: string) => {
     setDetailModalOpen(true);
     setSelectedProductId(id);
@@ -79,54 +87,53 @@ const OrderRentalHistorys = () => {
     <>
       {detailModalOpen && <ProductDetailModal />}
       {rentalHistorys.length === 0 ? (
-        <div className="w-full flex justify-center ">
+        <div className="w-full flex justify-center">
           <p>주문이력이 없습니다</p>
         </div>
       ) : (
         <ul
           role="list"
-          className=" divide-y divide-subGray border-y border-subGray flex items-center justify-start ml-4 flex-col w-full"
+          className="divide-y divide-subGray border-y border-subGray flex items-center justify-start ml-4 flex-col w-full"
         >
-          {rentalHistorys.map(history => (
-            <li
-              key={history.product_info.uuid}
-              className="flex py-3  items-center w-full"
-              onClick={() => handleOpenModal(history.product_info.uuid)}
-            >
-              <div className="flex-shrink-0">
-                <img
-                  src={history.product_info.images[0].image}
-                  // alt={product.imageAlt}
-                  className="h-32 w-32 rounded-md object-cover object-center sm:h-32 sm:w-32"
-                />
-              </div>
-              <div className="ml-4 flex flex-1 flex-col sm:ml-6">
-                <div>
-                  <div className="flex justify-between">
-                    <h4 className="text-base">
-                      <a className="font-medium text-mainWhite">{history.product_info.name}</a>
-                    </h4>
-                    <p className="ml-4 text-sm font-medium text-mainWhite">D-13</p>
-                  </div>
-                  <div className="mt-1 text-sm text-subGray">
-                    <span className="text-subGray mr-1 font-medium">대여일</span>
-                    {convertDatetime(history.rental_date)}
-                  </div>
-                  <div className="mt-1 text-sm text-subGray">
-                    <span className=" text-subGray mr-1 font-medium">반납일</span>
-                    {convertDatetime(history.return_date)}
-                  </div>
+          {rentalHistorys.map(history => {
+            const daysUntilReturn = calculateDaysUntilReturn(history.return_date);
+            return (
+              <li key={history.product_info.uuid} className="flex py-3 items-center w-full">
+                <div className="flex-shrink-0">
+                  <img
+                    src={history.product_info.images[0].image}
+                    onClick={() => handleOpenModal(history.product_info.uuid)}
+                    className="h-32 w-32 rounded-md object-cover object-center sm:h-32 sm:w-32"
+                  />
                 </div>
+                <div className="ml-4 flex flex-1 flex-col sm:ml-6">
+                  <div>
+                    <div className="flex justify-between">
+                      <h4 className="text-base">
+                        <a className="font-medium text-mainWhite">{history.product_info.name}</a>
+                      </h4>
+                      <p className="ml-4 text-sm font-medium text-mainWhite">{`D-${daysUntilReturn}`}</p>
+                    </div>
+                    <div className="mt-1 text-sm text-subGray">
+                      <span className="text-subGray mr-1 font-medium">대여일</span>
+                      {convertDatetime(history.rental_date)}
+                    </div>
+                    <div className="mt-1 text-sm text-subGray">
+                      <span className=" text-subGray mr-1 font-medium">반납일</span>
+                      {convertDatetime(history.return_date)}
+                    </div>
+                  </div>
 
-                <div className="mt-4 flex flex-1 items-end justify-between">
-                  <CommonButton className="flex items-center space-x-2 text-sm text-mainWhite border p-1.5 rounded-md">
-                    {history.status}
-                    <CheckIcon className="h-5 w-5 flex-shrink-0 text-green-500" aria-hidden="true" />
-                  </CommonButton>
+                  <div className="mt-4 flex flex-1 items-end justify-between">
+                    <CommonButton className="flex items-center space-x-2 text-sm text-mainWhite border p-1.5 rounded-md">
+                      {history.status}
+                      <CheckIcon className="h-5 w-5 flex-shrink-0 text-green-500" aria-hidden="true" />
+                    </CommonButton>
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))}
+              </li>
+            );
+          })}
         </ul>
       )}
     </>

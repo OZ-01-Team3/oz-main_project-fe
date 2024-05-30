@@ -1,6 +1,6 @@
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dispatch, SetStateAction, useRef } from 'react';
-import CommonButton from '../CommonButton';
+import { productInfo } from './ChatAcceptModal';
 
 interface ModalProps {
   closeModal: Dispatch<SetStateAction<boolean>>;
@@ -9,8 +9,23 @@ interface ModalProps {
   onButtonClick: () => void;
   children: React.ReactNode;
   checkMessage: React.ReactElement;
+  isChecked: boolean;
+  handleCheckboxChange: () => void;
+  returnDate?: string;
+  productInfo: productInfo;
 }
-const ChatModal = ({ closeModal, buttonText, modalTitle, onButtonClick, children, checkMessage }: ModalProps) => {
+const ChatModal = ({
+  returnDate,
+  closeModal,
+  buttonText,
+  modalTitle,
+  onButtonClick,
+  children,
+  checkMessage,
+  productInfo,
+  isChecked,
+  handleCheckboxChange,
+}: ModalProps) => {
   const outerBoxRef = useRef(null);
   const handleCloseModal = () => {
     closeModal(false);
@@ -35,11 +50,7 @@ const ChatModal = ({ closeModal, buttonText, modalTitle, onButtonClick, children
         />
         <div className="flex justify-center items-center mb-5">
           <div className="h-11 w-11 mr-3 flex justify-center items-center border-customGray rounded-md border">
-            <img
-              src="https://image.msscdn.net/images/goods_img/20240507/4108579/4108579_17151337802676_320.jpg"
-              alt="상품이미지"
-              className="object-cover h-11 w-11 rounded-md"
-            />
+            <img src={productInfo.product_image} alt="상품이미지" className="object-cover h-11 w-11 rounded-md" />
           </div>
           <p className="text-xl font-semibold ">{modalTitle}</p>
         </div>
@@ -47,13 +58,22 @@ const ChatModal = ({ closeModal, buttonText, modalTitle, onButtonClick, children
         <div className="flex justify-center items-center flex-col">
           <p className="w-80 text-center text-xs font-thin ">{checkMessage}</p>
           <div>
-            <input type="checkbox" className="w-3 h-3 mr-2 border-[#d3d3d3]  " />
+            <input
+              type="checkbox"
+              className="w-3 h-3 mr-2 border-[#d3d3d3]  "
+              required
+              onChange={handleCheckboxChange}
+            />
             <span className="text-xs">확인했습니다</span>
           </div>
         </div>
-        <CommonButton className="bg-mainBlack w-52 h-10 text-mainWhite rounded-lg" onClick={onButtonClick}>
+        <button
+          className="bg-mainBlack w-52 h-10 cursor-pointer text-mainWhite rounded-lg disabled:bg-gray-200 disabled:cursor-default"
+          onClick={onButtonClick}
+          disabled={!isChecked || returnDate === ''}
+        >
           {buttonText}
-        </CommonButton>
+        </button>
       </div>
     </div>
   );
