@@ -85,6 +85,15 @@ const ProductDetailModal = () => {
       if (prevPath === '/mypage/sales-history') {
         navigate('/mypage/sales-history', { replace: true });
       }
+      if (prevPath === '/mypage/my-closet') {
+        navigate('/mypage/my-closet', { replace: true });
+      }
+      if (prevPath === '/mypage/order-history') {
+        navigate('/mypage/order-history', { replace: true });
+      }
+      if (prevPath === '/mypage/sales-history') {
+        navigate('/mypage/sales-history', { replace: true });
+      }
     }
   }, [productId, selectedProductId, setDetailModalOpen, setWillSelectedProductId]);
 
@@ -119,6 +128,15 @@ const ProductDetailModal = () => {
     }
     if (prevPath === '/wish-list') {
       navigate('/wish-list', { replace: true });
+    }
+    if (prevPath === '/mypage/sales-history') {
+      navigate('/mypage/sales-history', { replace: true });
+    }
+    if (prevPath === '/mypage/my-closet') {
+      navigate('/mypage/my-closet', { replace: true });
+    }
+    if (prevPath === '/mypage/order-history') {
+      navigate('/mypage/order-history', { replace: true });
     }
     if (prevPath === '/mypage/sales-history') {
       navigate('/mypage/sales-history', { replace: true });

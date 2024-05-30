@@ -9,11 +9,11 @@ const EventBanner = () => {
           className="bg-customGray w-full h-full object-contain sm:mb-3 md:mb-3"
           onClick={() => toast.info('준비중입니다 !')}
         >
-          <img src="../../public/images/eventBanner.png" className="w-full h-80  md:h-56 sm:h-56 object-cover" />
+          <img src="/images/eventBanner.png" className="w-full h-80  md:h-56 sm:h-56 object-cover" />
         </div>
         <div className="bg-customGray w-full h-ful">
           <img
-            src="../../public/images/eventBanner2.png"
+            src="/images/eventBanner2.png"
             className="w-full h-80  md:h-56 sm:h-56 object-cover"
             onClick={() => toast.info('준비중입니다 !')}
           />

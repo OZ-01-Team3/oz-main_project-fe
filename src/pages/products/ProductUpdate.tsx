@@ -181,7 +181,7 @@ const ProductUpdate = () => {
       });
       console.log(response);
       toast.success('상품이 성공적으로 삭제되었습니다.');
-      navigate('/img-reg'); // 상품 삭제 후 이미지 등록 페이지로 이동
+      navigate('/all');
     } catch (error) {
       console.log(error);
       toast.error('상품 삭제에 실패했습니다.');
@@ -454,7 +454,7 @@ const ProductUpdate = () => {
             <CommonButton
               type="button"
               onClick={handleDeleteProduct}
-              className="align-middle w-44 sm:w-32  rounded-lg bg-gray px-auto py-3.5  font-semibold  text-mainBlack  my-10 hover:scale-105"
+              className="align-middle w-44 sm:w-32  rounded-lg bg-gray px-auto py-3.5  font-semibold   bg-mainWhite text-mainBlack  my-10 hover:scale-105"
             >
               삭제하기
             </CommonButton>
