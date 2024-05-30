@@ -24,6 +24,7 @@ jobs:
           echo "VITE_NAVER_CLIENT_ID=${{ secrets.VITE_NAVER_CLIENT_ID }}" >> .env
           echo "VITE_NAVER_CLIENT_SECRET=${{ secrets.VITE_NAVER_CLIENT_SECRET }}" >> .env
           echo "VITE_NAVER_STATE=${{ secrets.VITE_NAVER_STATE }}" >> .env
+          echo "VITE_WEB_SOCKET=${{ secrets.VITE_WEB_SOCKET }}" >> .env
 
       - name: install dependencies
         run: yarn install
