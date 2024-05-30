@@ -33,6 +33,7 @@ interface lender {
   age?: number;
   email: string;
   nickname: string;
+  pk: number;
 }
 export interface ProductProps {
   products: product[];

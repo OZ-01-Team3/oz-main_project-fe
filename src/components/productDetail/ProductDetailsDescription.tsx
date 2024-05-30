@@ -39,6 +39,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
   console.log(userData);
   const logInUser = userData.email; //로그인한 유저
   const productRegUser = productDetails.lender.email; //상품 등록한 유저
+  const productPk = productDetails.lender.pk; //상품 등록한 유저
   const queryClient = useQueryClient();
   const { chatRoomId } = useChatRoomStore();
   const { productDetail } = useProductDetailStore();
@@ -72,7 +73,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
   // 함수 호출 시 데이터 전달
   const createChatRoom = () => {
     const newChatRoomData = {
-      lender: productDetail?.lender.pk,
+      lender: productPk,
       product: productDetails?.uuid,
     };
     handleCreateChatRoom.mutate(newChatRoomData);

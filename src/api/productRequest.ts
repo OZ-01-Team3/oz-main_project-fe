@@ -21,3 +21,8 @@ export const fetchProducts = async (page: number) => {
     throw error;
   }
 };
+
+//상품 조회
+export const productDetailListAPI = () => {
+  return instance.get(productRequests.products);
+};

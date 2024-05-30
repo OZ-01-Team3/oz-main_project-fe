@@ -38,13 +38,11 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
   useEffect(() => {
     // chatId와 일치하는 메시지만 필터링
     const relevantMessages = messages.filter((message) => message.chatroom_id === chatId);
-    console.log("Relevant Messages:", relevantMessages);
 
     // 가장 최근의 채팅만 표시하기 위해 messages 배열이 비어있지 않은 경우에만 실행
     if (relevantMessages.length > 0) {
       // 가장 최근의 채팅을 가져옴
       const latestMessage = relevantMessages[relevantMessages.length - 1];
-      console.log("Latest Message:", latestMessage);
 
       // 최근 메세지가 있으면서 message 속성이 있는 경우
       if (latestMessage && latestMessage.text) {

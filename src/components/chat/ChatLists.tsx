@@ -1,6 +1,6 @@
 import { chatListAPI } from "@/api/chatRequests";
 import useChatRoomListStore from "@/stores/useChatRoomListStore";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { ErrorBoundary } from 'react-error-boundary';
 import Loading from "../Loading";
@@ -28,13 +28,13 @@ interface ChatInfoDto {
 
 const ChatLists = () => {
   const setChatRoomList = useChatRoomListStore((state) => state.setChatRoomList);
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   const { data: ChatList, isLoading: isChatListLoading, error: ChatListError } = useQuery<ChatInfoDto[], Error>({
     queryKey: ['chatList'],
     queryFn: async () => {
       try {
         const response = await chatListAPI();
-        console.log("이거는 api에서내려오는 채팅리스트", response.data);
+        // console.log("이거는 api에서내려오는 채팅리스트", response.data);
         const chatList = response.data;
         // const firstValidChat = chatList.find(chat => chat.user_info.nickname && chat.user_info.nickname);
 
@@ -44,7 +44,7 @@ const ChatLists = () => {
         //   console.warn("유효한 상대방을 찾을 수 없습니다.");
         // }
         setChatRoomList(response.data)
-        queryClient.invalidateQueries({ queryKey: ['chatList'] });
+        // queryClient.invalidateQueries({ queryKey: ['chatList'] });
         return chatList;
       } catch (error) {
         if ((error as AxiosError).response && (error as AxiosError).response?.status === 404) {
@@ -58,7 +58,6 @@ const ChatLists = () => {
     },
   });
 
-  console.log("채팅 리스트 ", ChatList)
 
   if (isChatListLoading) return <div><Loading /></div>;
   if (ChatListError) return <div>{ChatListError.message}</div>;
