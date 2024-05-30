@@ -114,7 +114,7 @@ const Products = ({ products }: ProductProps) => {
 
   return (
     <>
-      {products && products.length === 0 && <p className="text-center">상품이 존재하지 않습니다</p>}
+      {/* {products && products.length === 0 && <p className="text-center">상품이 존재하지 않습니다</p>} */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-x-8 gap-y-12 w-full pb-10 ">
         {products &&
           products.map(product => (

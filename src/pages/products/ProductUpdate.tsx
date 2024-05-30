@@ -36,7 +36,7 @@ const ProductUpdate = () => {
   const [productNameLength, setProductNameLength] = useState<number>(0);
   const [categories, setCategories] = useState<category[]>([]);
 
-  const [selectedTags, setSelectedTags] = useState<string[]>([location.state.styles]);
+  const [selectedTags, setSelectedTags] = useState<string[]>(location.state.styles);
   const [styleTag, setStyleTag] = useState<category[]>([]);
 
   // 이미지 등록안한상태로 url로 접송했을 때 틩기도록

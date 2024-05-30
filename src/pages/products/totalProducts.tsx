@@ -1,5 +1,6 @@
 import instance from '@/api/instance';
 import { productRequests } from '@/api/productRequest';
+import Banner from '@/components/Banner';
 import EventBanner from '@/components/EventBanner';
 import Footer from '@/components/Footer';
 import PageNation from '@/components/PageNation';
@@ -123,53 +124,58 @@ const TotalProducts = () => {
   };
   // 페이지 네이션
   const handlePageChange = (newPage: number) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     if (newPage > 0 && newPage <= totalPages) {
       setCurrentPage(newPage);
     }
   };
   return (
     <>
+      <Banner />
       {detailModalOpen && <ProductDetailModal />}
       {/* 페이지 레이아웃 */}
-      <div className="pt-32 w-2/3 ml-auto mr-auto ">
+      <h1 className="text-4xl mb-14 mt-14 font-didot text-center">ALL</h1>
+      <div className="w-2/3 ml-auto mr-auto ">
         {/* 상품 카테고리 select박스 */}
-        <select
-          className="bg-transparent rounded-xl mr-5 "
-          value={selectedCategory}
-          onChange={e => setSelectedCategory(e.target.value)}
-        >
-          {categories.map(item => (
-            <option key={item.id} value={item.id}>
-              {item.name}
-            </option>
-          ))}
-        </select>
-        {/* 상품 스타일태그 select박스 */}
-        <select
-          className="bg-transparent rounded-xl mr-5 "
-          value={selectedStyle}
-          onChange={e => setSelectedStyle(e.target.value)}
-        >
-          {styleTag.map(item => (
-            <option key={item.id} value={item.id}>
-              {item.name}
-            </option>
-          ))}
-        </select>
-        {/* 상품 정렬 select박스 */}
-        <select
-          className="bg-transparent rounded-xl"
-          value={selectedOrdered}
-          onChange={e => setSelectedOrdered(e.target.value)}
-        >
-          {sorts.map(item => (
-            <option key={item.id} value={item.value}>
-              {item.text}
-            </option>
-          ))}
-        </select>
-        <h1 className="text-4xl mb-20 mt-12 font-didot text-center">ALL</h1>
-        {products.length < 1 && <p className="text-center">해당 상품이 없습니다 </p>}
+        <div className="mb-16">
+          <select
+            className="bg-transparent rounded-xl mr-5 "
+            value={selectedCategory}
+            onChange={e => setSelectedCategory(e.target.value)}
+          >
+            {categories.map(item => (
+              <option key={item.id} value={item.id}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+          {/* 상품 스타일태그 select박스 */}
+          <select
+            className="bg-transparent rounded-xl mr-5 "
+            value={selectedStyle}
+            onChange={e => setSelectedStyle(e.target.value)}
+          >
+            {styleTag.map(item => (
+              <option key={item.id} value={item.id}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+          {/* 상품 정렬 select박스 */}
+          <select
+            className="bg-transparent rounded-xl"
+            value={selectedOrdered}
+            onChange={e => setSelectedOrdered(e.target.value)}
+          >
+            {sorts.map(item => (
+              <option key={item.id} value={item.value}>
+                {item.text}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* {products.length < 1 && <p className="text-center">해당 상품이 없습니다 </p>} */}
         <Products products={products} setProducts={setProducts} />
         <EventBanner />
         {/* 페이지네이션 */}
