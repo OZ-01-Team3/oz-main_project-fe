@@ -1,6 +1,6 @@
-import useChatRoomStore from "@/stores/useChatRoomStore";
-import useMessageStore from "@/stores/useMessageStore";
-import { useEffect, useState } from "react";
+import useChatRoomStore from '@/stores/useChatRoomStore';
+import useMessageStore from '@/stores/useMessageStore';
+import { useEffect, useState } from 'react';
 
 interface ChatListProps {
   id: number;
@@ -19,12 +19,12 @@ const ProductResCss = 'w-16 h-16 aspect-[1/1] border-customGray rounded-md borde
 const ChatList = ({ chatId, id, user, content, time, profile, product, notification }: ChatListProps) => {
   const [formattedTime, setFormattedTime] = useState(formatTime(time));
   const [displayContent, setDisplayContent] = useState('');
-  const setChatRoomId = useChatRoomStore((state) => state.setChatRoomId);
-  const messages = useMessageStore((state => state.messages));
+  const setChatRoomId = useChatRoomStore(state => state.setChatRoomId);
+  const messages = useMessageStore(state => state.messages);
 
   const handleClickChatRoom = () => {
     setChatRoomId(chatId);
-    console.log("채팅룸 아이디", chatId);
+    console.log('채팅룸 아이디', chatId);
   };
 
   useEffect(() => {
@@ -37,7 +37,8 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
   /** messages 배열이 업데이트 될때마다 실행되는 useEffect */
   useEffect(() => {
     // chatId와 일치하는 메시지만 필터링
-    const relevantMessages = messages.filter((message) => message.chatroom_id === chatId);
+    const relevantMessages = messages.filter(message => message.chatroom_id === chatId);
+
 
     // 가장 최근의 채팅만 표시하기 위해 messages 배열이 비어있지 않은 경우에만 실행
     if (relevantMessages.length > 0) {
@@ -46,7 +47,9 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
 
       // 최근 메세지가 있으면서 message 속성이 있는 경우
       if (latestMessage && latestMessage.text) {
-        setDisplayContent(latestMessage.text.length > 30 ? `${latestMessage.text.substring(0, 30)}...` : latestMessage.text);
+        setDisplayContent(
+          latestMessage.text.length > 30 ? `${latestMessage.text.substring(0, 30)}...` : latestMessage.text
+        );
         setFormattedTime(formatTime(latestMessage.created_at));
       } else {
         setDisplayContent(content.length > 30 ? `${content.substring(0, 30)}...` : content);
@@ -59,7 +62,10 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
 
   return (
     <>
-      <div className="flex flex-row items-center justify-center  px-2 cursor-pointer  flex-none  md:px-0 sm:pt-2" onClick={handleClickChatRoom}>
+      <div
+        className="flex flex-row items-center justify-center  px-2 cursor-pointer  flex-none  md:px-0 sm:pt-2"
+        onClick={handleClickChatRoom}
+      >
         <div className="w-14 h-14 aspect-[1/1] border-mainBlack rounded-full border md:w-12 md:h-12 mr-2">
 
           <img src={profile} className="w-full h-full  object-cover rounded-full" alt="프로필 이미지" />
@@ -75,9 +81,7 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
             )}
           </div>
 
-          <p className="text-sm overflow-hidden h-10 md:h-8 sm:text-xs text-subGray">
-            {displayContent}
-          </p>
+          <p className="text-sm overflow-hidden h-10 md:h-8 sm:text-xs text-subGray">{displayContent}</p>
           <p className="text-[12px] text-subGray">{formattedTime}</p>
         </div>
         <div className={`xl:${ProductResCss} lg:hidden md:hidden sm:hidden`}>

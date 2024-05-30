@@ -1,16 +1,24 @@
+import { UserContext } from '@/App';
 import { loginAPI } from '@/api/authRequests';
 import AuthInput from '@/components/AuthInput';
 import CommonButton from '@/components/CommonButton';
-import useAuthStore from '@/stores/useAuthStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
+import { useContext } from 'react';
 import { Cookies } from 'react-cookie';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { z as zod } from 'zod';
 
-
-const { VITE_REST_API_KEY, VITE_KAKAO_REDIRECT_URI, VITE_GOOGLE_REDIRECT_URI, VITE_NAVER_REDIRECT_URI, VITE_GOOGLE_AUTH_CLIENT_ID, VITE_NAVER_CLIENT_ID, VITE_NAVER_STATE } = import.meta.env;
+const {
+  VITE_REST_API_KEY,
+  VITE_KAKAO_REDIRECT_URI,
+  VITE_GOOGLE_REDIRECT_URI,
+  VITE_NAVER_REDIRECT_URI,
+  VITE_GOOGLE_AUTH_CLIENT_ID,
+  VITE_NAVER_CLIENT_ID,
+  VITE_NAVER_STATE,
+} = import.meta.env;
 
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${VITE_REST_API_KEY}&redirect_uri=${VITE_KAKAO_REDIRECT_URI}&prompt=login`;
 
@@ -27,6 +35,8 @@ const socialMedia = [
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const { setIsLoggedIn } = useContext(UserContext);
+
   // 유효성 검증
   const signInFormSchema = zod.object({
     // 이메일 형식 지정
@@ -57,7 +67,7 @@ const SignIn = () => {
       const response = await loginAPI(data.email, data.password);
       cookies.set('accessToken', response.data.access);
       cookies.set('refreshToken', response.data.refresh);
-      useAuthStore.getState().setIsLoggedIn(true);
+      setIsLoggedIn(true);
       console.log(response, '로그인 성공');
       navigate('/', { replace: true });
     } catch (error) {
@@ -70,7 +80,6 @@ const SignIn = () => {
       }
     }
   });
-
   // console.log("유저 정보 ", user)
   return (
     <FormProvider {...form}>

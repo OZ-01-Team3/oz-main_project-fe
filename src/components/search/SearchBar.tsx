@@ -1,9 +1,9 @@
+import { UserContext } from '@/App';
 import instance from '@/api/instance';
-import useAuthStore from '@/stores/useAuthStore';
 import useDebounce from '@/utils/UseDebounce';
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { product } from '../Products';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 
@@ -12,7 +12,8 @@ export interface SearchProps {
   setSearch: (search: boolean) => void;
 }
 const SearchBar = ({ setProducts, setSearch }: SearchProps) => {
-  const { isLoggedIn } = useAuthStore();
+  const { isLoggedIn } = useContext(UserContext);
+  console.log('isLoggedIn', isLoggedIn);
   const [query, setQuery] = useState('');
 
   const handleSearch = async () => {

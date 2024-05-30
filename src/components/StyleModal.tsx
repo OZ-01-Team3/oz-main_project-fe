@@ -7,7 +7,7 @@ const { VITE_BASE_REQUEST_URL } = import.meta.env;
 
 const StyleModal = () => {
   const { styleTag, setStyleTag } = useStyleTagStore();
-  const [selectedTags, setSelectedTags] = useState<number[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [styleModalOpen, setStyleModalOpen] = useState(false);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const StyleModal = () => {
     }
   };
   // 태그 선택하면 배열에 담아주기
-  const handleTagClick = (tagId: number) => {
+  const handleTagClick = (tagId: string) => {
     setSelectedTags(prev => {
       if (prev.includes(tagId)) {
         return prev.filter(id => id !== tagId);
@@ -46,6 +46,7 @@ const StyleModal = () => {
       return;
     }
     localStorage.setItem('style', JSON.stringify(selectedTags));
+    window.location.reload();
     setStyleModalOpen(false);
   };
   // 바깥이랑 x 눌렀을때 모달 닫히도록
@@ -65,12 +66,12 @@ const StyleModal = () => {
       // 바깥영역
       <div
         className="flex w-ful h-screen fixed inset-0 z-50 bg-modalBg justify-center items-center "
-      // ref={outerBoxRef}
-      // onClick={e => {
-      //   if (e.target === outerBoxRef.current) {
-      //     handleCloseModal();
-      //   }
-      // }}
+        // ref={outerBoxRef}
+        // onClick={e => {
+        //   if (e.target === outerBoxRef.current) {
+        //     handleCloseModal();
+        //   }
+        // }}
       >
         {/* 모달 */}
         <div className="flex flex-col justify-center pl-10 pr-10 bg-mainWhite h-96   text-mainBlack w-modalWidth pt-5 rounded-xl">
@@ -90,8 +91,8 @@ const StyleModal = () => {
             {styleTag.map(style => (
               <button
                 key={style.id}
-                className={`border border-mainBlack text-mainBlack rounded-full pt-2 pb-2 pl-6 pr-6 w-28 text-center hover:cursor-pointer ${selectedTags.includes(style.id) ? 'bg-mainBlack text-mainWhite ' : ''}`}
-                onClick={() => handleTagClick(style.id)}
+                className={`border border-mainBlack text-mainBlack rounded-full pt-2 pb-2 pl-6 pr-6 w-28 text-center hover:cursor-pointer ${selectedTags.includes(style.name) ? 'bg-mainBlack text-mainWhite ' : ''}`}
+                onClick={() => handleTagClick(style.name)}
               >
                 {style.name}
               </button>

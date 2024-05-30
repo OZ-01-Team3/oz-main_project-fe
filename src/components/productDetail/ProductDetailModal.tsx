@@ -10,9 +10,11 @@ import ProductDetailResponse from './ProductDetailResponse';
 import ProductDetailsDescription from './ProductDetailsDescription';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 const lender = {
+  pk: 1,
   age: 24,
   email: 'test@gmail.com',
   nickname: '닉네임',
+  profile_img: '',
 };
 export const initialProduct: product = {
   uuid: 'uuid',
@@ -31,6 +33,7 @@ export const initialProduct: product = {
   images: [],
   styles: [],
   lender: lender,
+  is_liked: false,
 };
 
 // 상품클릭 시 나오는 모달
@@ -43,6 +46,7 @@ const ProductDetailModal = () => {
   const { selectedProductId, setWillSelectedProductId } = useProductIdStore();
 
   const [productDetails, setProductDetails] = useState<product>(initialProduct);
+
   const prevPath = localStorage.getItem('pathname');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -54,7 +58,7 @@ const ProductDetailModal = () => {
     setCurrentImageIndex(prevIndex => (prevIndex - 1 + productDetails.images.length) % productDetails.images.length);
   };
   console.log(currentImageIndex);
-
+  const filterStyleTag = productDetails.styles.slice(0, 3);
   //  아이템을 선택해서 모달이 띄워지는게 아니라, 새로고침시 띄워질 경우,
   //  현재 경로에 따라서 all 이면 all 로 돌아오고 메인이면 메인으로 돌아가도록
   //  새로고침하면 fromPath 상태 다 날아감.. => localStorage 에 저장!
@@ -99,13 +103,6 @@ const ProductDetailModal = () => {
       console.log(error);
     }
   };
-
-
-
-
-
-
-
   // 바깥이랑 x 눌렀을때 모달 닫히도록
   const outerBoxRef = useRef(null);
   // 모달 닫는 함수
@@ -175,9 +172,9 @@ const ProductDetailModal = () => {
                 </div>
                 <div className="px-2 flex justify-start">
                   {/* 스타일 버튼들 */}
-                  {productDetails.styles &&
-                    productDetails.styles.length > 0 &&
-                    productDetails.styles.map(style => <ModalStyleButton key={style}>{style}</ModalStyleButton>)}
+                  {filterStyleTag &&
+                    filterStyleTag.length > 0 &&
+                    filterStyleTag.map(style => <ModalStyleButton key={style}>{style}</ModalStyleButton>)}
                 </div>
               </div>
               {/* 상세 설명 영역 */}

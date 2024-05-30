@@ -22,7 +22,7 @@ const productRegistrationSchema = zod.object({
   rental_fee: zod.coerce.number().min(1, '1원 이상 입력해주세요'),
   size: zod.string().min(1, '사이즈를 선택해주세요'),
   brand: zod.string().min(1, '브랜드를 입력해주세요'),
-  product_category: zod.coerce.number().min(1, '카테고리를 선택해주세요'),
+  product_category: zod.string().min(1, '카테고리를 선택해주세요'),
   purchase_date: zod.string().min(1, '구매시기를 선택해주세요'),
   condition: zod.string().min(1, '상품 상태를 선택해주세요'),
   description: zod.string().min(1, '상품 설명을 입력해주세요'),
@@ -30,15 +30,14 @@ const productRegistrationSchema = zod.object({
   region: zod.string().min(1, '거래지역을 입력해주세요'),
 });
 const ProductUpdate = () => {
-  const [productNameLength, setProductNameLength] = useState<number>(0);
-  const [categories, setCategories] = useState<category[]>([]);
-
-  const [selectedTags, setSelectedTags] = useState<number[]>([]);
-  const [styleTag, setStyleTag] = useState<category[]>([]);
-
   // img-reg 에서 보낸 정보 가져오기
   const location = useLocation();
   const navigate = useNavigate();
+  const [productNameLength, setProductNameLength] = useState<number>(0);
+  const [categories, setCategories] = useState<category[]>([]);
+
+  const [selectedTags, setSelectedTags] = useState<string[]>([location.state.styles]);
+  const [styleTag, setStyleTag] = useState<category[]>([]);
 
   // 이미지 등록안한상태로 url로 접송했을 때 틩기도록
   useEffect(() => {
@@ -50,6 +49,9 @@ const ProductUpdate = () => {
     handleGetCategories();
     handleGetStyle();
   }, []);
+  console.log(selectedTags);
+
+  console.log('스타일초기값', location.state.styles);
 
   const prevProductInformation = location.state;
   console.log('기존정보+사진수정정보', prevProductInformation);
@@ -157,7 +159,7 @@ const ProductUpdate = () => {
     }
     console.log(data);
   });
-  const handleTagClick = (tagId: number) => {
+  const handleTagClick = (tagId: string) => {
     setSelectedTags(prev => {
       if (prev.includes(tagId)) {
         return prev.filter(id => id !== tagId);
@@ -307,7 +309,7 @@ const ProductUpdate = () => {
                 >
                   {categories &&
                     categories.map(category => (
-                      <option key={category.id} value={category.id}>
+                      <option key={category.id} value={category.name}>
                         {category.name}
                       </option>
                     ))}
@@ -390,21 +392,19 @@ const ProductUpdate = () => {
           {/* 태그 */}
           <div className="mb-4">
             <div className="flex items-center justify-center w-full">
-
               <span className="w-1/4 text-left flex-shrink-0 mr-1 pl-5">태그</span>
               <div className=" w-full md:w-8/12 flex flex-wrap  justify-start items-center">
                 {styleTag.map(tag => (
                   <div
                     key={tag.id}
-                    className={`flex flex-col border text-sm my-1 border-mainBlack bg-mainWhite text-mainBlack rounded-full pt-1 pb-1 pl-3 pr-3 w-20 mr-1 text-center hover:cursor-pointer hover:scale-105 ${selectedTags.includes(tag.id) ? 'bg-yellow-50' : ''}`}
-                    onClick={() => handleTagClick(tag.id)}
+                    className={`flex flex-col border text-sm my-1 border-mainBlack bg-mainWhite text-mainBlack rounded-full pt-1 pb-1 pl-3 pr-3 w-20 mr-1 text-center hover:cursor-pointer hover:scale-105 ${selectedTags.includes(tag.name) ? 'bg-sky-100' : ''}`}
+                    onClick={() => handleTagClick(tag.name)}
                   >
                     <span>{tag.name}</span>
                   </div>
                 ))}
                 {errors.styles && (
                   <p className=" text-sm text-red-500 mt-1 w-full text-left">{String(errors.styles.message)}</p>
-
                 )}
               </div>
             </div>
