@@ -1,7 +1,7 @@
 import useStyleTagStore from '@/stores/useStyleTagStore';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 const { VITE_BASE_REQUEST_URL } = import.meta.env;
 
@@ -34,17 +34,22 @@ const StyleModal = () => {
       }
     });
   };
+
   if (selectedTags.length > 5) {
     selectedTags.splice(5);
     toast.info('태그는 최대 다섯 개까지 선택가능합니다!');
   }
   // 확인 눌렀을 때 로컬에 배열 저장
   const handleSubmitStyle = () => {
+    if (selectedTags.length === 0) {
+      toast.info('스타일을 선택해주세요');
+      return;
+    }
     localStorage.setItem('style', JSON.stringify(selectedTags));
     setStyleModalOpen(false);
   };
   // 바깥이랑 x 눌렀을때 모달 닫히도록
-  const outerBoxRef = useRef(null);
+  // const outerBoxRef = useRef(null);
   // console.log(outerBoxRef);
   //  최초로그인 상태에 따라 모달 열고닫고 할건데, 일단 로그인 상태가 없으니 페이지 새로고침할때마다 열리게 해뒀어요
   useEffect(() => {
@@ -60,12 +65,12 @@ const StyleModal = () => {
       // 바깥영역
       <div
         className="flex w-ful h-screen fixed inset-0 z-50 bg-modalBg justify-center items-center "
-        ref={outerBoxRef}
-        onClick={e => {
-          if (e.target === outerBoxRef.current) {
-            handleCloseModal();
-          }
-        }}
+      // ref={outerBoxRef}
+      // onClick={e => {
+      //   if (e.target === outerBoxRef.current) {
+      //     handleCloseModal();
+      //   }
+      // }}
       >
         {/* 모달 */}
         <div className="flex flex-col justify-center pl-10 pr-10 bg-mainWhite h-96   text-mainBlack w-modalWidth pt-5 rounded-xl">
