@@ -20,6 +20,7 @@ import { useCookies } from 'react-cookie';
 import authRequests from './api/authRequests';
 import instance from './api/instance';
 
+import { useLocation } from 'react-router-dom';
 import { NotificationProvider } from './NotificationContext';
 import ProductRegistrationButton from './components/ProductRegistrationButton';
 import OrderRentalHistorys from './components/mypage/OrderRentalHistorys';
@@ -62,7 +63,7 @@ interface UserContextType {
 
 /** 유저 정보를 전역관리하기 위한 컨텍스트 */
 export const UserContext = createContext<UserContextType>({
-  setUserData: () => {},
+  setUserData: () => { },
   userData: {
     pk: -1,
     age: 0,
@@ -76,7 +77,7 @@ export const UserContext = createContext<UserContextType>({
     region: '',
   },
   isLoggedIn: false,
-  setIsLoggedIn: () => {},
+  setIsLoggedIn: () => { },
 });
 
 /** 유저 컨텍스트를 사용하기 위한 커스텀 훅!!! */
@@ -179,6 +180,7 @@ function App() {
     profile_img: '',
     region: '',
   });
+  const location = useLocation()
   const [cookies] = useCookies(['accessToken']);
   const accessToken = cookies.accessToken;
   useEffect(() => {
@@ -223,6 +225,7 @@ function App() {
   )
     return <div>Error: {meError?.message}</div>;
 
+
   return (
     <>
       <NotificationProvider>
@@ -240,7 +243,7 @@ function App() {
             theme="colored"
           />
           <Routes>{[...loggedRoutes, ...commonRoutes]}</Routes>
-          {accessToken && (location.pathname === '/' || location.pathname === '/all') && <ProductRegistrationButton />}
+          {accessToken && (location.pathname === '/' || location.pathname === '/all') && location.pathname !== '/chat' && <ProductRegistrationButton />}
         </UserContext.Provider>
       </NotificationProvider>
     </>

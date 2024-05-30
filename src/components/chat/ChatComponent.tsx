@@ -128,6 +128,7 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
   console.log('chatRoomInfo:', chatRoomInfo);
   // console.log("productDetails:", productDetails);
 
+  console.log("필터링된 어쩌구", matchingProduct)
   // chatRoomInfo의 product 값과 productDetails 배열의 uuid 값이 일치하는 객체 찾기
   useEffect(() => {
     if (chatRoomInfo && productDetails) {
@@ -138,8 +139,8 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
     }
   }, [chatRoomInfo, productDetails]); // chatRoomInfo 또는 productDetails가 변경될 때마다 실행
 
-  console.log('채팅 메세지', chatMessages);
-
+  console.log('chatMessages', chatMessages);
+  console.log("실시간.", messages)
   if (isChatMessageLoading) return <div>Loading...</div>;
   if (chatMessageError) return <div>Error: {chatMessageError.message}</div>;
   if (!chatRoomId || (chatMessages && chatMessages.length === 0))
@@ -155,6 +156,8 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
   if (productDetailsError) return <div>{productDetailsError.message}</div>
 
 
+  const sortedChatMessages = [...chatMessages].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+  // const sortedMessages = [...messages].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
   return (
     <>
       {deleteModalOpen && <ChatDeleteModal setOpen={setDeleteModalOpen} deleteChatRoom={deleteChatRoom} />}
@@ -226,7 +229,7 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
                       ? `${matchingProduct?.description?.substring(0, 40)}...`
                       : matchingProduct?.description}
                   </p>
-                  <p className="text-sm">대여비 {matchingProduct?.purchase_price.toLocaleString()}</p>
+                  <p className="text-sm">대여비 {matchingProduct?.rental_fee.toLocaleString()}</p>
                 </div>
               </div>
               <div>
@@ -249,14 +252,14 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
           {/* 날짜 수평선 */}
           <div className="flex items-center justify-center space-x-2  ">
             <div className="flex-1 border-b  border-hrGray"></div>
-            <div className="text-subGray text-[11px]  px-2">2024.05.09</div>
+            <div className="text-subGray text-[11px]  px-2">{formatDate(matchingProduct?.created_at)}</div>
             <div className="flex-1 border-b border-hrGray"></div>
           </div>
           {/* 채팅창 */}
           <div className="flex flex-col flex-grow overflow-y-scroll scrollbar-hide pb-3" ref={chatContainerRef}>
             <div className="flex flex-col justify-between mt-4">
-              {chatMessages?.length > 0 &&
-                chatMessages.map(data => (
+              {sortedChatMessages?.length > 0 &&
+                sortedChatMessages.map(data => (
                   <ChatBubble
                     key={data.id}
                     content={data.text}
@@ -291,4 +294,13 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
 };
 
 const userResCss = 'flex justify-center items-center flex-row ';
+
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}.${month}.${day}`;
+};
 export default ChatComponent;

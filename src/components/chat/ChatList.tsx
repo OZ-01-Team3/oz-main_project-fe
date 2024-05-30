@@ -1,5 +1,6 @@
 import useChatRoomStore from '@/stores/useChatRoomStore';
 import useMessageStore from '@/stores/useMessageStore';
+import { UserCircleIcon } from '@heroicons/react/16/solid';
 import { useEffect, useState } from 'react';
 
 interface ChatListProps {
@@ -63,14 +64,18 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
   return (
     <>
       <div
-        className="flex flex-row items-center justify-center  px-2 cursor-pointer  flex-none  md:px-0 sm:pt-2"
+        className="flex flex-row items-center justify-center  px-2 cursor-pointer  flex-none  md:px-0 sm:pt-2 hover:bg-gray-50"
         onClick={handleClickChatRoom}
       >
-        <div className="w-14 h-14 aspect-[1/1] border-mainBlack rounded-full border md:w-12 md:h-12 mr-2">
+        {profile ? (
+          <div className="w-14 h-14 aspect-[1/1] border-mainBlack rounded-full border md:w-12 md:h-12 mr-2">
+            <img src={profile} className="w-full h-full  object-cover rounded-full" alt="프로필 이미지" />
 
-          <img src={profile} className="w-full h-full  object-cover rounded-full" alt="프로필 이미지" />
+          </div>
 
-        </div>
+        ) : (
+          <UserCircleIcon className="w-14 h-14 aspect-[1/1]   text-gray-300 " aria-hidden="true" />
+        )}
         <div className={`sm:hidden md:${UserResponseCss}  `}>
           <div className="flex flex-row items-center">
             <p className=" h-5 overflow-hidden  font-semibold mr-1">{user}</p>

@@ -62,8 +62,8 @@ const ProductDetailResDescription = ({ productDetails }: ProductDetailResponsePr
           {/* 옷장주인 박스 */}
           <div className="flex flex-row p-1  justify-between items-center mb-9 border ">
             <div className="flex flex-row ">
-              {productRegistered.profile_img == '' ? (
-                <img src={productRegistered.profile_img} className="w-14 h-14 aspect-[1/1] mr-2" />
+              {productRegistered.profile_img ? (
+                <img src={productRegistered.profile_img} className="w-14 object-cover aspect-[1/1] mr-2 rounded-full" />
               ) : (
                 <UserCircleIcon className="w-14 h-14 mr-3 text-gray-300 " aria-hidden="true" />
               )}
