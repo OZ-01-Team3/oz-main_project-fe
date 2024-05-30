@@ -51,10 +51,6 @@ const LoginHandler = () => {
     try {
       const response = await axios.post(`${VITE_BASE_REQUEST_URL}/users/login/social/google/`, {
         code: code,
-        client_id: VITE_GOOGLE_AUTH_CLIENT_ID,
-        client_secret: VITE_GOOGLE_SECRET,
-        redirect: 'http://localhost:5173/',
-
       }, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
