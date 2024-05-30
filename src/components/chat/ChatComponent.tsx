@@ -60,6 +60,8 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
     enabled: !!chatRoomId,
   });
 
+  console.log("채팅룸 정보", chatRoomList)
+
 
   const chatMessages = chatData?.messages;
   const chatRoomInfo = chatData;
@@ -137,7 +139,6 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
   }, [chatRoomInfo, productDetails]); // chatRoomInfo 또는 productDetails가 변경될 때마다 실행
 
   console.log("채팅 메세지", chatMessages)
-
 
   if (isChatMessageLoading) return <div>Loading...</div>;
   if (chatMessageError) return <div>Error: {chatMessageError.message}</div>;

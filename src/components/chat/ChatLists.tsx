@@ -58,6 +58,7 @@ const ChatLists = () => {
     },
   });
 
+  console.log("채팅 리스트 ", ChatList)
 
   if (isChatListLoading) return <div><Loading /></div>;
   if (ChatListError) return <div>{ChatListError.message}</div>;
