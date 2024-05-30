@@ -24,7 +24,6 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
 
   // * 아이템을 선택해서 모달이 띄워지는게 아니라, 새로고침시 띄워질 경우,
   //  현재 경로에 따라서 all 이면 all 로 돌아오고 메인이면 메인으로 돌아가도록
-  // ! 새로고침하면 fromPath 상태 다 날아감.. => localStorage 에 저장?
 
   useEffect(() => {
     if (!selectedProductId) {

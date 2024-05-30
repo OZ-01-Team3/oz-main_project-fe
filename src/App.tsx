@@ -24,6 +24,7 @@ import { NotificationProvider } from './NotificationContext';
 import ProductRegistrationButton from './components/ProductRegistrationButton';
 import OrderRentalHistorys from './components/mypage/OrderRentalHistorys';
 import LoginHandler from './pages/loginHandler';
+import MyClosetPage from './pages/mypage/myCloset';
 import ImageUpdate from './pages/products/ImageUpdate';
 import ProductUpdate from './pages/products/ProductUpdate';
 import ProductRegistration from './pages/products/productRegistration';
@@ -122,6 +123,7 @@ const loggedRoutes = [
         </div>
       }
     >
+      <Route path="my-closet" element={<MyClosetPage />} />
       <Route path="member-info" element={<MemberInfo />} />
       <Route path="sales-history" element={<SalesHistory />} />
       <Route path="order-history" element={<OrderRentalHistorys />} />

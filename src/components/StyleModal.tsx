@@ -46,6 +46,7 @@ const StyleModal = () => {
       return;
     }
     localStorage.setItem('style', JSON.stringify(selectedTags));
+    window.location.reload();
     setStyleModalOpen(false);
   };
   // 바깥이랑 x 눌렀을때 모달 닫히도록
@@ -65,12 +66,12 @@ const StyleModal = () => {
       // 바깥영역
       <div
         className="flex w-ful h-screen fixed inset-0 z-50 bg-modalBg justify-center items-center "
-      // ref={outerBoxRef}
-      // onClick={e => {
-      //   if (e.target === outerBoxRef.current) {
-      //     handleCloseModal();
-      //   }
-      // }}
+        // ref={outerBoxRef}
+        // onClick={e => {
+        //   if (e.target === outerBoxRef.current) {
+        //     handleCloseModal();
+        //   }
+        // }}
       >
         {/* 모달 */}
         <div className="flex flex-col justify-center pl-10 pr-10 bg-mainWhite h-96   text-mainBlack w-modalWidth pt-5 rounded-xl">

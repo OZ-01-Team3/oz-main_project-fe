@@ -8,6 +8,7 @@ import { useModalOpenStore } from '@/stores/useModalStore';
 import { useProductDetailStore } from '@/stores/useProductDetailStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { UserCircleIcon } from '@heroicons/react/16/solid';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -47,7 +48,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
   const filteredStatus = productStatusOptions.find(
     productStatusOptions => productStatusOptions.id === Number(productDetails.condition)
   );
-
+  const productRegistered = productDetails.lender;
   // 채팅방 생성
   const handleCreateChatRoom = useMutation<NewChatRoomData, AxiosError, NewChatRoomData>({
     mutationFn: newChatRoomData => {
@@ -63,13 +64,13 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
         navigate(`/chat`);
       }
       console.error('채팅방 생성에러', error);
-      console.error('채팅방 생성에러', error);
     },
     onSettled: () => {
       console.log('결과에 관계없이 무언가 실행됨', chatRoomId);
       // // queryClient.invalidateQueries({ queryKey: ['chatList'] });
     },
   });
+  console.log(productRegistered.profile_img);
 
   // 함수 호출 시 데이터 전달
   const createChatRoom = () => {
@@ -111,16 +112,21 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
           {/* 옷장주인 박스 */}
           <div className="flex flex-row w-full justify-between items-center mb-3">
             <div className="flex flex-row ">
-              <img
-                src="https://image.msscdn.net/images/goods_img/20240117/3800972/3800972_17071843073582_500.jpg"
-                className="w-14 h-14 aspect-[1/1] mr-2"
-              />
+              {productRegistered.profile_img == '' ? (
+                <img src={productRegistered.profile_img} className="w-14 h-14 aspect-[1/1] mr-2" />
+              ) : (
+                <UserCircleIcon className="w-14 h-14 mr-3 text-gray-300 " aria-hidden="true" />
+              )}
+
               <div className="flex flex-col justify-around">
-                <p className="text-sm font-bold">하염빵</p>
+                <p className="text-sm font-bold">{productRegistered.nickname}</p>
                 <p className="text-sm">대여중인 옷: 109개</p>
               </div>
             </div>
-            <div className="border rounded-full  border-mainBlack text-sm p-2 w-28 text-center hover:bg-mainBlack hover:text-mainWhite hover:cursor-pointer">
+            <div
+              className="border rounded-full  border-mainBlack text-sm p-2 w-28 text-center hover:bg-mainBlack hover:text-mainWhite hover:cursor-pointer"
+              onClick={() => toast.info('준비중입니당^___^')}
+            >
               옷장 구경하기
             </div>
           </div>

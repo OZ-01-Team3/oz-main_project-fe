@@ -6,6 +6,7 @@ import { BellIcon } from '@heroicons/react/24/outline';
 import React, { useContext, useEffect, useState } from 'react';
 import { Cookies } from 'react-cookie';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import MobileNave from './MobileNav';
 import Notification from './Notification';
 
@@ -20,7 +21,6 @@ const cookies = new Cookies();
 const Header = () => {
   const notifications = useNotificationStore(state => state.notifications);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false); // pc 상태
-
   const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -54,7 +54,9 @@ const Header = () => {
       console.error('로그아웃 실패', error);
     }
   };
-
+  const handle404 = () => {
+    toast.info('준비중입니달라');
+  };
   const mainMenuItems: MenuItem[] = [
     {
       label: '알림',
@@ -67,7 +69,10 @@ const Header = () => {
 
   const subMenuItems: MenuItem[] = [
     { label: 'WishList', path: '/wish-list' },
-    { label: 'MyCloset', path: '/404' },
+    {
+      label: 'MyCloset',
+      path: '/mypage/my-closet',
+    },
     { label: '', path: '/search', Icon: () => <MagnifyingGlassIcon className="w-6" /> },
   ];
 

@@ -14,7 +14,7 @@ const SidebarItem = ({ text, href }: SidebarItemProps) => {
 
 const SideBar = () => {
   const sidebarItems = [
-    { text: '내 옷장' },
+    { text: '내 옷장', href: '/mypage/my-closet' },
     { text: '주문 이력', href: '/mypage/order-history' },
     { text: '대여 상품', href: '/mypage/sales-history' },
     { text: '회원 정보', href: '/mypage/member-info' },
