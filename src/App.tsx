@@ -11,7 +11,6 @@ import SignUp from './pages/auth/signUp';
 import Chat from './pages/chat';
 import Main from './pages/main';
 import MemberInfo from './pages/mypage/memberInfo';
-import OrderHistory from './pages/mypage/orderHistory';
 import SalesHistory from './pages/mypage/salesHistory';
 import ImgRegistration from './pages/products/imgRegistration';
 
@@ -23,6 +22,7 @@ import instance from './api/instance';
 
 import { NotificationProvider } from './NotificationContext';
 import ProductRegistrationButton from './components/ProductRegistrationButton';
+import OrderRentalHistorys from './components/mypage/OrderRentalHistorys';
 import LoginHandler from './pages/loginHandler';
 import ImageUpdate from './pages/products/ImageUpdate';
 import ProductUpdate from './pages/products/ProductUpdate';
@@ -121,7 +121,7 @@ const loggedRoutes = [
     >
       <Route path="member-info" element={<MemberInfo />} />
       <Route path="sales-history" element={<SalesHistory />} />
-      <Route path="order-history" element={<OrderHistory />} />
+      <Route path="order-history" element={<OrderRentalHistorys />} />
     </Route>
 
     <Route path="/img-reg" element={<ImgRegistration />} />

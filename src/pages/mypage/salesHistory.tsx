@@ -1,5 +1,5 @@
 import instance from '@/api/instance';
-import { convertDatetime, rentalHistory } from '@/components/mypage/OrderProducts';
+import { convertDatetime, rentalHistory } from '@/components/mypage/OrderRentalHistorys';
 import ProductDetailModal from '@/components/productDetail/ProductDetailModal';
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
 import { useEffect, useState } from 'react';
@@ -34,12 +34,12 @@ const SalesHistory = () => {
 
   const returnProduct = async (historyId: number, e) => {
     e.stopPropagation();
-    try{
+    try {
       const response = await instance.patch(`/products/rental_history/${historyId}/`,
-        {status: "RETURNED"}
+        { status: "RETURNED" }
       )
       console.log('반납 성공', response.data);
-      setSalesHistorys((prevHistorys) => 
+      setSalesHistorys((prevHistorys) =>
         prevHistorys.map((history) =>
           history.id === historyId ? { ...history, ...response.data } : history
         )
@@ -53,7 +53,7 @@ const SalesHistory = () => {
     fetchSalesProduct();
   }, []);
 
-  useEffect(() => {}, [salesHistorys])
+  useEffect(() => { }, [salesHistorys])
 
   console.log('salesProducts', salesHistorys);
 
@@ -112,9 +112,9 @@ const SalesHistory = () => {
                   </li>
                 </ul>
               </div>
-              <button 
+              <button
                 className="rounded-full w-20 disabled:hidden bg-gray-50 py-1 text-xs font-medium ring-1 ring-inset ring-mainWhite hover:bg-mainWhite text-mainBlack focus:bg-mainWhite focus:text-mainBlack"
-                onClick={(e)=>returnProduct(history.id, e)}
+                onClick={(e) => returnProduct(history.id, e)}
                 disabled={history.status === "반납 완료"}
               >
                 반납 확정
