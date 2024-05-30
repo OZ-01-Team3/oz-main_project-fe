@@ -25,7 +25,7 @@ const ChatDeleteModal = ({ setOpen, deleteChatRoom }: ChatDeleteModalProps) => {
   return (
     // 모달 뒷 배경
     <Transition.Root show={open} as={Fragment}>
-      <Dialog className="relative z-10" initialFocus={cancelButtonRef} onClose={handleClose}>
+      <Dialog className="relative z-50" initialFocus={cancelButtonRef} onClose={handleClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"

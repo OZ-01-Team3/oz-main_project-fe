@@ -1,24 +1,47 @@
 import { UserContext } from '@/App';
+import chatRequests from '@/api/chatRequests';
+import instance from '@/api/instance';
+import useChatRoomStore from '@/stores/useChatRoomStore';
 import { useModalOpenStore, useProductIdStore } from '@/stores/useModalStore';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { product } from '../Products';
 import ProductDetailResDescription from './ProductDetailResDescription';
+const { VITE_BASE_REQUEST_URL } = import.meta.env;
 export interface ProductDetailResponseProps {
   productDetails: product;
 }
+
+interface NewChatRoomData {
+  lender: number | undefined;
+  product: string | undefined;
+}
+
+interface AxiosError {
+  response?: {
+    data: {
+      msg: string;
+    };
+  };
+}
+
 const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) => {
   const { userData } = useContext(UserContext);
   const logInUser = userData.email; //로그인한 유저
   const productRegUser = productDetails.lender.email; //상품 등록한 유저
+  const productPk = productDetails.lender.pk; //상품 등록한 유저
 
   const { productId } = useParams(); // url에서 productId받아오기
   const navigate = useNavigate();
 
+  const { chatRoomId } = useChatRoomStore();
   const { setDetailModalOpen } = useModalOpenStore();
   const { selectedProductId, setWillSelectedProductId } = useProductIdStore();
+
+  const queryClient = useQueryClient();
 
   const prevPath = localStorage.getItem('pathname');
 
@@ -64,6 +87,39 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
     }
   };
 
+
+  // 채팅방 생성
+  const handleCreateChatRoom = useMutation<NewChatRoomData, AxiosError, NewChatRoomData>({
+    mutationFn: newChatRoomData => {
+      return instance.post(VITE_BASE_REQUEST_URL + chatRequests.chat, newChatRoomData);
+    },
+    onSuccess: () => {
+      console.log('채팅방 생성성공');
+      navigate(`/chat`);
+      queryClient.invalidateQueries({ queryKey: ['chatList'] });
+    },
+    onError: (error: AxiosError) => {
+      if (error.response?.data.msg === '이미 개설된 채팅방 내역이 존재합니다.') {
+        navigate(`/chat`);
+      }
+      console.error('채팅방 생성에러', error);
+    },
+    onSettled: () => {
+      console.log('결과에 관계없이 무언가 실행됨', chatRoomId);
+      // // queryClient.invalidateQueries({ queryKey: ['chatList'] });
+    },
+  });
+
+
+  // 함수 호출 시 데이터 전달
+  const createChatRoom = () => {
+    const newChatRoomData = {
+      lender: productPk,
+      product: productDetails?.uuid,
+    };
+    handleCreateChatRoom.mutate(newChatRoomData);
+  };
+
   return (
     <>
       <div className="w-full  flex flex-col overflow-y-scroll justify-center items-center h-screen  lg:hidden xl:hidden">
@@ -107,6 +163,7 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
                 navigate('/sign-in');
                 return;
               }
+              createChatRoom()
             }}
           >
             1:1 채팅

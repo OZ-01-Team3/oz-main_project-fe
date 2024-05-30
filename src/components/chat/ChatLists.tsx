@@ -10,6 +10,7 @@ interface ChatInfoDto {
   id: number;
   user_info: {
     nickname: string;
+    profile_img: string;
   };
   product: string;
   product_image: string;
@@ -83,7 +84,7 @@ const ChatLists = () => {
           content={data?.last_message?.text || '보낸 메세지가 없습니다.'}
           time={data?.last_message?.created_at || new Date().toISOString()}
           product={data.product_image}
-          profile="https://i.pinimg.com/564x/2a/58/e3/2a58e3d012bb65932a7c38d7381f29ee.jpg"
+          profile={data.user_info.profile_img}
           notification={data.unread_chat_count}
         />
       ))}
