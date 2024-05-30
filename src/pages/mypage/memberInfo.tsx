@@ -1,6 +1,7 @@
 import { UserContext } from "@/App";
 import { modificationUserInfoAPI, withdrawalAPI } from "@/api/authRequests";
 import AuthInput from "@/components/AuthInput";
+import ImageLoading from "@/components/ImageLoading";
 import WithdrawalModal from "@/components/mypage/WithdrawalModal";
 import { UserCircleIcon } from "@heroicons/react/16/solid";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +18,7 @@ const MemberInfo = () => {
   const [isEditable, setIsEditable] = useState(false); // 입력 필드 활성화 상태 
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   /**유효성 검증 */
   const userInfoModifyFormSchema = zod
     .object({
@@ -56,7 +58,6 @@ const MemberInfo = () => {
   const {
     register,
     formState: { errors },
-    getValues,
     setValue,
   } = form;
 
@@ -86,6 +87,7 @@ const MemberInfo = () => {
     try {
       const response = await modificationUserInfoAPI(formData);
       console.log(response, '회원정보 수정 성공');
+      setIsEditable(false);
     } catch (error) {
       console.log('회원 정보 수정 실패', error);
     }
@@ -116,12 +118,15 @@ const MemberInfo = () => {
   const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
+      setIsLoading(true); // 이미지 업로드 시작 시 로딩 상태를 true로 설정
       try {
         const resizedFile = await resizeFile(file);
         setProfileImage(resizedFile);
         setPreviewImageUrl(URL.createObjectURL(resizedFile));
       } catch (error) {
         console.error("이미지 크기조정 실패", error);
+      } finally {
+        setIsLoading(false); // 업로드 완료 또는 실패 시 로딩 상태를 false로 설정
       }
     } else {
       setProfileImage(null);
@@ -153,6 +158,7 @@ const MemberInfo = () => {
 
   return (
     <>
+      {isLoading && <ImageLoading />} {/* 로딩 상태가 true일 때만 로딩 스피너를 보여줌 */}
       <WithdrawalModal
         isOpen={isModalOpen}
         onClose={closeModal}
