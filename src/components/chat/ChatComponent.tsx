@@ -79,8 +79,8 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
     },
     enabled: !!chatRoomId,
   });
-  console.log('-----------------', chatData);
-  console.log('채팅룸 정보', chatRoomList);
+  // console.log('-----------------', chatData);
+  // console.log('채팅룸 정보', chatRoomList);
 
   const chatMessages = chatData?.messages;
   const chatRoomInfo = chatData;
@@ -122,7 +122,7 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
         },
       }),
     onSuccess: () => {
-      console.log('삭제성공');
+      // console.log('삭제성공');
       queryClient.invalidateQueries({ queryKey: ['chatList'] });
       window.location.reload(); // 페이지 전체를 새로 고침
     },
@@ -158,8 +158,8 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
     }
   }, [chatRoomInfo, productDetails]); // chatRoomInfo 또는 productDetails가 변경될 때마다 실행
 
-  console.log('chatMessages', chatMessages);
-  console.log('실시간.', messages);
+  // console.log('chatMessages', chatMessages);
+  // console.log('실시간.', messages);
   if (isChatMessageLoading) return <div>Loading...</div>;
   if (chatMessageError) return <div>Error: {chatMessageError.message}</div>;
   if (!chatRoomId || (chatMessages && chatMessages.length === 0))
@@ -189,7 +189,7 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
     // setProductId(uuid);
     // setBorrwerId(borrwerId);
   };
-  console.log('matchingProduct', matchingProduct);
+  // console.log('matchingProduct', matchingProduct);
 
   const logInUser = userData.email;
   const lender = matchingProduct && matchingProduct.lender.email;
@@ -284,22 +284,22 @@ const ChatComponent = ({ sendMessage, webSocketRef }: ChatProps) => {
               <div>
                 {logInUser === lender
                   ? chatData.rental_history && (
-                      <CommonButton
-                        className="bg-mainBlack text-mainWhite  w-32 h-9 flex text-sm justify-center items-center rounded-md p-1 sm:w-24 cursor-pointer 
+                    <CommonButton
+                      className="bg-mainBlack text-mainWhite  w-32 h-9 flex text-sm justify-center items-center rounded-md p-1 sm:w-24 cursor-pointer 
               "
-                        onClick={() => handleOpenAcceptModal()}
-                      >
-                        수락하기
-                      </CommonButton>
-                    )
+                      onClick={() => handleOpenAcceptModal()}
+                    >
+                      수락하기
+                    </CommonButton>
+                  )
                   : !chatData.rental_history && (
-                      <CommonButton
-                        className="bg-mainBlack text-mainWhite w-32 h-9 flex text-sm justify-center items-center mb-2 rounded-md p-1 sm:w-24 cursor-pointer "
-                        onClick={() => handleOpenModal(matchingProduct.uuid, userData.pk)} //상품 아이디랑 빌리는 사람 Pk
-                      >
-                        대여 신청하기
-                      </CommonButton>
-                    )}
+                    <CommonButton
+                      className="bg-mainBlack text-mainWhite w-32 h-9 flex text-sm justify-center items-center mb-2 rounded-md p-1 sm:w-24 cursor-pointer "
+                      onClick={() => handleOpenModal(matchingProduct.uuid, userData.pk)} //상품 아이디랑 빌리는 사람 Pk
+                    >
+                      대여 신청하기
+                    </CommonButton>
+                  )}
               </div>
             </div>
           </div>

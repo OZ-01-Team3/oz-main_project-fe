@@ -19,17 +19,17 @@ const Main = () => {
   const { willSelectedProductId, setSelectedProductId, setWillSelectedProductId } = useProductIdStore();
   const { setDetailModalOpen, detailModalOpen, setStyleModalOpen, styleModalOpen } = useModalOpenStore();
   const { isLoggedIn } = useContext(UserContext);
-  useEffect(() => {}, [isLoggedIn]);
+  useEffect(() => { }, [isLoggedIn]);
   let selectedStyle = [];
   try {
     selectedStyle = JSON.parse(String(localStorage.getItem('style')));
 
     if (selectedStyle === null) {
-      console.log('로컬에 style 없음');
+      // console.log('로컬에 style 없음');
       selectedStyle = [];
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 
   // 모달 라우팅 위한 useEffect

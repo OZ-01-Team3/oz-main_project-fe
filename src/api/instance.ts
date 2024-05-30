@@ -48,7 +48,7 @@ instance.interceptors.request.use(
 
     const csrfToken = getCookieValue('csrftoken');
     config.headers['X-CSRFToken'] = csrfToken;
-    console.log('csrf', csrfToken);
+    // console.log('csrf', csrfToken);
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
       config.withCredentials = true;

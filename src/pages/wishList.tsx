@@ -30,7 +30,7 @@ const WishList = () => {
     fetchWishList();
   }, []);
 
-  console.log(products);
+  // console.log(products);
 
   return (
     <>

@@ -13,7 +13,7 @@ export interface SearchProps {
 }
 const SearchBar = ({ setProducts, setSearch }: SearchProps) => {
   const { isLoggedIn } = useContext(UserContext);
-  console.log('isLoggedIn', isLoggedIn);
+  // console.log('isLoggedIn', isLoggedIn);
   const [query, setQuery] = useState('');
 
   const handleSearch = async () => {

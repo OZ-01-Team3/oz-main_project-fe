@@ -45,7 +45,7 @@ const productRegistrationSchema = zod.object({
 
 const today = new Date();
 export const defaultDate = today.toISOString().substring(0, 10);
-console.log('오늘 날짜', defaultDate);
+// console.log('오늘 날짜', defaultDate);
 
 const ProductRegistration = () => {
   const [productNameLength, setProductNameLength] = useState<number>(0);
@@ -69,7 +69,7 @@ const ProductRegistration = () => {
   const registeredImages = (location.state as locationState[]).map(item => {
     return item.file;
   });
-  console.log(registeredImages);
+  // console.log(registeredImages);
   const handleProductNameMaxLength: ChangeEventHandler<HTMLInputElement> = e => {
     const value = e.target.value;
     if (value.length <= 30) {
@@ -107,21 +107,21 @@ const ProductRegistration = () => {
   const handleGetCategories = async () => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/`);
-      console.log(response, '상품 카테고리 가져오기 성공');
-      console.log(response.data);
+      // console.log(response, '상품 카테고리 가져오기 성공');
+      // console.log(response.data);
       setCategories(response.data);
     } catch (error) {
-      console.log(error);
+      console.error("상품 카테고리 가져오기 실패", error);
     }
   };
   const handleGetStyle = async () => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/styles/`);
-      console.log(response, '상품 스타일 가져오기 성공');
-      console.log(response.data);
+      // console.log(response, '상품 스타일 가져오기 성공');
+      // console.log(response.data);
       setStyleTag(response.data);
     } catch (error) {
-      console.log(error);
+      console.error("상품 스타일 가져오기 실패", error);
     }
   };
   const handleTagClick = (tagId: string) => {
@@ -133,7 +133,7 @@ const ProductRegistration = () => {
       }
     });
   };
-  console.log('selectedTags', selectedTags);
+  // console.log('selectedTags', selectedTags);
   const handleClickReg = form.handleSubmit(async data => {
     try {
       const formData = new FormData();
@@ -151,24 +151,24 @@ const ProductRegistration = () => {
       // registeredImages 파일을 formData에 추가
       registeredImages.forEach(image => {
         formData.append(`image`, image);
-        console.log(image);
+        // console.log(image);
       });
       selectedTags.forEach(tagId => {
         formData.append('styles', String(tagId));
-        console.log(tagId);
+        // console.log(tagId);
       });
       for (const pair of formData.entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`);
+        // console.log(`${pair[0]}: ${pair[1]}`);
       }
       const response = await instance.post(VITE_BASE_REQUEST_URL + productRequests.products, formData);
-      console.log('상품 등록 성공', response);
+      // console.log('상품 등록 성공', response);
       toast.success('상품이 성공적으로 등록되었습니다!');
       navigate('/');
     } catch (error) {
-      console.log(error);
+      console.error("상품등록 에러", error);
       toast.error('상품등록에 실패하였습니다');
     }
-    console.log(data);
+    // console.log(data);
   });
   return (
     <div className="lg:w-[700px] w-[900px] md:w-[500px] sm:w-[350px] sm:text-sm m-auto ">

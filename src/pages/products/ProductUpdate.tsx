@@ -50,17 +50,17 @@ const ProductUpdate = () => {
     handleGetCategories();
     handleGetStyle();
   }, []);
-  console.log(selectedTags);
+  // console.log(selectedTags);
 
-  console.log('스타일초기값', location.state.styles);
+  // console.log('스타일초기값', location.state.styles);
 
   const prevProductInformation = location.state;
-  console.log('기존정보+사진수정정보', prevProductInformation);
-  console.log('전체사진', prevProductInformation.images);
+  // console.log('기존정보+사진수정정보', prevProductInformation);
+  // console.log('전체사진', prevProductInformation.images);
 
   // File 형식이 있으면,File 반환, 아니면 imageUrl반환.
   const images = prevProductInformation.images.map(item => item.file || item.image || item.imageUrl);
-  console.log('보내는 Images(기존+새롭게추가)', images);
+  // console.log('보내는 Images(기존+새롭게추가)', images);
 
   const handleProductNameMaxLength: ChangeEventHandler<HTMLInputElement> = e => {
     const value = e.target.value;
@@ -101,20 +101,20 @@ const ProductUpdate = () => {
   const handleGetCategories = async () => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/`);
-      console.log(response, '상품 카테고리 가져오기 성공');
+      // console.log(response, '상품 카테고리 가져오기 성공');
       setCategories(response.data);
     } catch (error) {
-      console.log(error);
+      console.error("상품 카테고리 조회 실패", error);
     }
   };
   const handleGetStyle = async () => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/styles/`);
-      console.log(response, '상품 스타일 가져오기 성공');
-      console.log(response.data);
+      // console.log(response, '상품 스타일 가져오기 성공');
+      // console.log(response.data);
       setStyleTag(response.data);
     } catch (error) {
-      console.log(error);
+      console.error("상품 스타일 조회 실패", error);
     }
   };
   const formData = new FormData();
@@ -137,7 +137,7 @@ const ProductUpdate = () => {
       }
       selectedTags.forEach(tagId => {
         formData.append('styles', String(tagId));
-        console.log(tagId);
+        // console.log(tagId);
       });
       images.forEach((image: File | string) => {
         formData.append(`image`, image);
@@ -148,17 +148,17 @@ const ProductUpdate = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log('상품수정 보낸 값', response);
+      // console.log('상품수정 보낸 값', response);
       toast.success('상품정보가 수정되었습니다.');
       navigate('/all');
     } catch (error) {
-      console.log(error);
+      console.error("상품정보 수정 실패", error);
       toast.error('상품정보 수정에 실패했습니다.');
       for (const pair of formData.entries()) {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
     }
-    console.log(data);
+    // console.log(data);
   });
   const handleTagClick = (tagId: string) => {
     setSelectedTags(prev => {
@@ -180,11 +180,11 @@ const ProductUpdate = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(response);
+      // console.log(response);
       toast.success('상품이 성공적으로 삭제되었습니다.');
       navigate('/all');
     } catch (error) {
-      console.log(error);
+      console.error("상품 삭제 실패", error);
       toast.error('상품 삭제에 실패했습니다.');
     }
   };

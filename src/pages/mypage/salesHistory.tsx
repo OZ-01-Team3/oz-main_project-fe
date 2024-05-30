@@ -26,7 +26,7 @@ const SalesHistory = () => {
 
   const fetchSalesProduct = async () => {
     const response = await instance.get('/products/rental_history/lending');
-    console.log(response.data);
+    // console.log(response.data);
     setSalesHistorys(response.data);
   };
 
@@ -34,19 +34,19 @@ const SalesHistory = () => {
     e.stopPropagation();
     try {
       const response = await instance.patch(`/products/rental_history/${historyId}/`, { status: 'RETURNED' });
-      console.log('반납 성공', response.data);
+      // console.log('반납 성공', response.data);
       setSalesHistorys(prevHistorys =>
         prevHistorys.map(history => (history.id === historyId ? { ...history, ...response.data } : history))
       );
     } catch (error) {
-      console.log('반납 실패', error);
+      console.error('반납 실패', error);
     }
   };
 
   useEffect(() => {
     fetchSalesProduct();
   }, []);
-  useEffect(() => {}, [salesHistorys]);
+  useEffect(() => { }, [salesHistorys]);
 
   return (
     <>

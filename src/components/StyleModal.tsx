@@ -17,11 +17,11 @@ const StyleModal = () => {
   const handleGetStyle = async () => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/styles/`);
-      console.log(response, '상품 스타일 가져오기 성공');
-      console.log(response.data);
+      // console.log(response, '상품 스타일 가져오기 성공');
+      // console.log(response.data);
       setStyleTag(response.data);
     } catch (error) {
-      console.log(error);
+      console.error("상품 스타일 태그 가져오기 실패", error);
     }
   };
   // 태그 선택하면 배열에 담아주기
@@ -69,12 +69,12 @@ const StyleModal = () => {
       // 바깥영역
       <div
         className="flex w-ful h-screen fixed inset-0 z-50 bg-modalBg justify-center items-center "
-        // ref={outerBoxRef}
-        // onClick={e => {
-        //   if (e.target === outerBoxRef.current) {
-        //     handleCloseModal();
-        //   }
-        // }}
+      // ref={outerBoxRef}
+      // onClick={e => {
+      //   if (e.target === outerBoxRef.current) {
+      //     handleCloseModal();
+      //   }
+      // }}
       >
         {/* 모달 */}
         <div className="flex flex-col justify-center pl-10 pr-10 bg-mainWhite h-96   text-mainBlack w-modalWidth pt-5 rounded-xl">

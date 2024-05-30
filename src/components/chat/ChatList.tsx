@@ -25,7 +25,7 @@ const ChatList = ({ chatId, id, user, content, time, profile, product, notificat
 
   const handleClickChatRoom = () => {
     setChatRoomId(chatId);
-    console.log('채팅룸 아이디', chatId);
+    // console.log('채팅룸 아이디', chatId);
   };
 
   useEffect(() => {

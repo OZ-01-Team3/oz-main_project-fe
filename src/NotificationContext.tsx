@@ -40,7 +40,7 @@ export const NotificationProvider = ({ children }: PropsWithChildren) => {
         useNotificationStore.getState().addListNotification(data);
       }
 
-      console.log('새 알림.', data);
+      // console.log('새 알림.', data);
     };
 
     setWebSocketState(webSocket);

@@ -69,7 +69,7 @@ const SignUp = () => {
       const response = await sendCodeAPI(
         email,
       );
-      console.log(response, '인증번호 전송 성공');
+      // console.log(response, '인증번호 전송 성공');
       toast.success('인증번호가 전송되었습니다');
       setAuthCodeSent(true); // 인증코드 전송 완료 상태로 설정
       setEmailVerified(false);
@@ -105,7 +105,7 @@ const SignUp = () => {
         email,
         code,
       );
-      console.log(response, '인증성공');
+      // console.log(response, '인증성공');
       setAuthCodeError(false); // 올바른 인증 코드인 경우 에러 상태 해제
       setEmailVerified(true); // 이메일 인증이 완료됐음을 상태에 설정
       setAuthCodeSent(false);// 인증 성공 시에만 authCodeSent 상태를 설정
@@ -130,7 +130,7 @@ const SignUp = () => {
         nickname: data.nickname,
         phone: data.phone,
       });
-      console.log(response, '회원가입성공');
+      // console.log(response, '회원가입성공');
       navigate('/sign-in', { replace: true })
     } catch (error) {
       //에러처리인데 이미 있는 회원이면.. 무슨코드 내려주는지 모르겟서잉...
@@ -141,7 +141,7 @@ const SignUp = () => {
         console.error('사용자 등록 오류:', error);
       }
     }
-    console.log(data);
+    // console.log(data);
   });
 
   return (

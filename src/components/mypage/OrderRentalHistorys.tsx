@@ -73,7 +73,7 @@ const OrderRentalHistorys = () => {
 
   const fetchSalesProduct = async () => {
     const response = await instance.get('/products/rental_history/borrow');
-    console.log('응답으로 들어온 데이터 : ', response.data);
+    // console.log('응답으로 들어온 데이터 : ', response.data);
     setRentalHistorys(response.data);
   };
 
@@ -81,7 +81,7 @@ const OrderRentalHistorys = () => {
     fetchSalesProduct();
   }, []);
 
-  console.log('rentalHistorys', rentalHistorys);
+  // console.log('rentalHistorys', rentalHistorys);
 
   return (
     <>
