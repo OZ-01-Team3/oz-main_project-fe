@@ -28,7 +28,9 @@ body {
   color: #fdfcf7;
   -ms-overflow-style: none; /* IE and Edge */
 }
-
+textarea {
+  resize: none;
+}
 body::-webkit-scrollbar {
   scrollbar-width: none; /* Firefox */
 }

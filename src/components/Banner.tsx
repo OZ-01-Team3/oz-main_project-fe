@@ -1,7 +1,7 @@
 const Banner = () => {
   return (
     <div className="bg-customGray w-full h-60 sm:h-44 ">
-      <img src="../../public/images/mainbanner.png" className="w-full  h-full object-cover" />
+      <img src="/images/mainbanner.png" className="w-full  h-full object-cover" />
     </div>
   );
 };

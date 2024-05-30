@@ -85,8 +85,16 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
     if (prevPath === '/mypage/sales-history') {
       navigate('/mypage/sales-history', { replace: true });
     }
+    if (prevPath === '/mypage/my-closet') {
+      navigate('/mypage/my-closet', { replace: true });
+    }
+    if (prevPath === '/mypage/order-history') {
+      navigate('/mypage/order-history', { replace: true });
+    }
+    if (prevPath === '/mypage/sales-history') {
+      navigate('/mypage/sales-history', { replace: true });
+    }
   };
-
 
   // 채팅방 생성
   const handleCreateChatRoom = useMutation<NewChatRoomData, AxiosError, NewChatRoomData>({
@@ -109,7 +117,6 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
       // // queryClient.invalidateQueries({ queryKey: ['chatList'] });
     },
   });
-
 
   // 함수 호출 시 데이터 전달
   const createChatRoom = () => {
@@ -163,7 +170,7 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
                 navigate('/sign-in');
                 return;
               }
-              createChatRoom()
+              createChatRoom();
             }}
           >
             1:1 채팅
