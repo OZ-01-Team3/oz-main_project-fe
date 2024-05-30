@@ -30,15 +30,14 @@ const productRegistrationSchema = zod.object({
   region: zod.string().min(1, '거래지역을 입력해주세요'),
 });
 const ProductUpdate = () => {
-  const [productNameLength, setProductNameLength] = useState<number>(0);
-  const [categories, setCategories] = useState<category[]>([]);
-
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [styleTag, setStyleTag] = useState<category[]>([]);
-
   // img-reg 에서 보낸 정보 가져오기
   const location = useLocation();
   const navigate = useNavigate();
+  const [productNameLength, setProductNameLength] = useState<number>(0);
+  const [categories, setCategories] = useState<category[]>([]);
+
+  const [selectedTags, setSelectedTags] = useState<string[]>([location.state.styles]);
+  const [styleTag, setStyleTag] = useState<category[]>([]);
 
   // 이미지 등록안한상태로 url로 접송했을 때 틩기도록
   useEffect(() => {
@@ -50,6 +49,9 @@ const ProductUpdate = () => {
     handleGetCategories();
     handleGetStyle();
   }, []);
+  console.log(selectedTags);
+
+  console.log('스타일초기값', location.state.styles);
 
   const prevProductInformation = location.state;
   console.log('기존정보+사진수정정보', prevProductInformation);
@@ -395,7 +397,7 @@ const ProductUpdate = () => {
                 {styleTag.map(tag => (
                   <div
                     key={tag.id}
-                    className={`flex flex-col border text-sm my-1 border-mainBlack bg-mainWhite text-mainBlack rounded-full pt-1 pb-1 pl-3 pr-3 w-20 mr-1 text-center hover:cursor-pointer hover:scale-105 ${selectedTags.includes(tag.name) ? 'bg-blue-100' : ''}`}
+                    className={`flex flex-col border text-sm my-1 border-mainBlack bg-mainWhite text-mainBlack rounded-full pt-1 pb-1 pl-3 pr-3 w-20 mr-1 text-center hover:cursor-pointer hover:scale-105 ${selectedTags.includes(tag.name) ? 'bg-sky-100' : ''}`}
                     onClick={() => handleTagClick(tag.name)}
                   >
                     <span>{tag.name}</span>

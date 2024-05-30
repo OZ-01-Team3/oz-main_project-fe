@@ -377,7 +377,7 @@ const ProductRegistration = () => {
                 {styleTag.map(tag => (
                   <div
                     key={tag.id}
-                    className={`flex flex-col border text-sm my-1 border-mainBlack bg-mainWhite text-mainBlack rounded-full pt-1 pb-1 pl-3 pr-3 w-20 mr-1 text-center hover:cursor-pointer hover:scale-105 ${selectedTags.includes(tag.name) ? 'bg-blue-100' : ''}`}
+                    className={`flex flex-col border text-sm my-1 border-mainBlack bg-mainWhite text-mainBlack rounded-full pt-1 pb-1 pl-3 pr-3 w-20 mr-1 text-center hover:cursor-pointer hover:scale-105 ${selectedTags.includes(tag.name) ? 'bg-sky-100' : ''}`}
                     onClick={() => handleTagClick(tag.name)}
                   >
                     <span>{tag.name}</span>
