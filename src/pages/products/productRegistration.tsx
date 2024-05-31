@@ -109,9 +109,10 @@ const ProductRegistration = () => {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/`);
       // console.log(response, '상품 카테고리 가져오기 성공');
       // console.log(response.data);
-      setCategories(response.data);
+      // setCategories(response.data);
+      setCategories([{ id: 0, name: '' }, ...response.data]);
     } catch (error) {
-      console.error("상품 카테고리 가져오기 실패", error);
+      console.error('상품 카테고리 가져오기 실패', error);
     }
   };
   const handleGetStyle = async () => {
@@ -121,7 +122,7 @@ const ProductRegistration = () => {
       // console.log(response.data);
       setStyleTag(response.data);
     } catch (error) {
-      console.error("상품 스타일 가져오기 실패", error);
+      console.error('상품 스타일 가져오기 실패', error);
     }
   };
   const handleTagClick = (tagId: string) => {
@@ -165,7 +166,7 @@ const ProductRegistration = () => {
       toast.success('상품이 성공적으로 등록되었습니다!');
       navigate('/');
     } catch (error) {
-      console.error("상품등록 에러", error);
+      console.error('상품등록 에러', error);
       toast.error('상품등록에 실패하였습니다');
     }
     // console.log(data);
@@ -435,4 +436,3 @@ const ProductRegistration = () => {
 };
 
 export default ProductRegistration;
-
