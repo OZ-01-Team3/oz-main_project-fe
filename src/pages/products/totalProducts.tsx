@@ -63,20 +63,20 @@ const TotalProducts = () => {
   const handleGetStyles = async () => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/styles/`);
-      console.log(response, '상품 스타일 가져오기 성공');
+      // console.log(response, '상품 스타일 가져오기 성공');
       setStyleTag([{ id: 0, name: '전체' }, ...response.data]); //'전체' 추가
     } catch (error) {
-      console.log(error);
+      console.error("상품 스타일 가져오기 실패", error);
     }
   };
   // 카테고리 가져오기
   const handleGetCategories = async () => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/`);
-      console.log(response, '상품 카테고리 가져오기 성공');
+      // console.log(response, '상품 카테고리 가져오기 성공');
       setCategories([{ id: 0, name: '전체' }, ...response.data]); //'전체' 추가
     } catch (error) {
-      console.log(error);
+      console.error("상품 카테고리 가져오기 실패", error);
     }
   };
   // 처음에 전체상품 불러오기
@@ -101,11 +101,11 @@ const TotalProducts = () => {
         query = query.slice(0, -1);
       }
       const response = await instance.get(query);
-      console.log(`상품정렬성공!`, response.data);
+      // console.log(`상품정렬성공!`, response.data);
       setProducts(response.data.results);
-      console.log('query', query);
+      // console.log('query', query);
     } catch (error) {
-      console.log(error);
+      console.error("상품정렬 실패", error);
     }
   };
 
@@ -113,11 +113,11 @@ const TotalProducts = () => {
   const fetchProducts = async (page: number) => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `${productRequests.products}?page=${page}`);
-      console.log(page);
+      // console.log(page);
       setProducts(response.data.results);
       const totalProducts = response.data.count;
       setTotalPages(Math.ceil(totalProducts / 24));
-      console.log(Math.ceil(totalProducts / 24));
+      // console.log(Math.ceil(totalProducts / 24));
     } catch (error) {
       console.error('상품 불러오기 실패:', error);
     }

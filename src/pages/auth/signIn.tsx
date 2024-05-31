@@ -69,7 +69,7 @@ const SignIn = () => {
       cookies.set('accessToken', response.data.access);
       cookies.set('refreshToken', response.data.refresh);
       setIsLoggedIn(true);
-      console.log(response, '로그인 성공');
+      // console.log(response, '로그인 성공');
       navigate('/', { replace: true });
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 400) {

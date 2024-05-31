@@ -23,9 +23,9 @@ const ImageUpdate = () => {
 
   const fetchProductImage = async (id: number) => {
     const response = await instance.get(`/products/${id}/`);
-    console.log('상품정보 가져오기 성공', response);
+    // console.log('상품정보 가져오기 성공', response);
     setPrevProductInformation(response.data);
-    console.log(prevProductInformation);
+    // console.log(prevProductInformation);
 
     const prevFileImages = response.data.images.map((image: { image: string }, index: number) => ({
       id: index,
@@ -120,7 +120,7 @@ const ImageUpdate = () => {
       // 새롭게 fileList에 있는 각 파일을 FormData에 추가
       fileList.forEach(item => {
         formData.append('file', item.file); // 'images'는 서버에서 받는 필드명으로 수정해야함
-        console.log(item.file);
+        // console.log(item.file);
       });
 
       //** 등록한 이미지 product-reg로 보내기 */

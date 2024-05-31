@@ -46,14 +46,14 @@ const ChatAcceptModal = ({ setAcceptModalOpen, productInfo }: SetModalProps) => 
   //대여확정
   const handleAcceptRental = async () => {
     try {
-      const response = await instance.patch(`/products/rental_history/${rentalId}/`, {
+      await instance.patch(`/products/rental_history/${rentalId}/`, {
         status: 'ACCEPT',
       });
-      console.log(response);
+      // console.log(response);
       handleCloseModal();
       alert('대여가 확정되었는대용');
     } catch (error) {
-      console.log(error);
+      console.error("대여 확정 실패", error);
     }
   };
 

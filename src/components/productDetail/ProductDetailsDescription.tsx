@@ -37,7 +37,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
   const { userData } = useContext(UserContext);
   const navigate = useNavigate();
   const { setDetailModalOpen } = useModalOpenStore();
-  console.log(userData);
+  // console.log(userData);
   const logInUser = userData.email; //로그인한 유저
   const productRegUser = productDetails.lender.email; //상품 등록한 유저
   const productPk = productDetails.lender.pk; //상품 등록한 유저
@@ -55,7 +55,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
       return instance.post(VITE_BASE_REQUEST_URL + chatRequests.chat, newChatRoomData);
     },
     onSuccess: () => {
-      console.log('채팅방 생성성공');
+      // console.log('채팅방 생성성공');
       navigate(`/chat`);
       queryClient.invalidateQueries({ queryKey: ['chatList'] });
     },
@@ -70,7 +70,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
       // // queryClient.invalidateQueries({ queryKey: ['chatList'] });
     },
   });
-  console.log(productRegistered.profile_img);
+  // console.log(productRegistered.profile_img);
 
   // 함수 호출 시 데이터 전달
   const createChatRoom = () => {
@@ -81,7 +81,7 @@ const ProductDetailsDescription = ({ productDetails }: ProductDetailsDescription
     handleCreateChatRoom.mutate(newChatRoomData);
   };
 
-  console.log(productDetail, '-상품정보데이터');
+  // console.log(productDetail, '-상품정보데이터');
 
   const paragraphs = productDetails.description.split('\n');
 

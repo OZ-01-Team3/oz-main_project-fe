@@ -13,10 +13,10 @@ const ChatRentalModal = ({ setRentalModalOpen, productInfo }: SetModalProps) => 
   const [returnDate, setReturnDate] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const { borrwerId, productId } = useRentalStore();
-  console.log('빌리는 사람', borrwerId);
-  console.log('상품아이디', productId);
-  console.log('대여날짜', rentalDate);
-  console.log('반납날짜', returnDate);
+  // console.log('빌리는 사람', borrwerId);
+  // console.log('상품아이디', productId);
+  // console.log('대여날짜', rentalDate);
+  // console.log('반납날짜', returnDate);
   // 체크박스 체크했는지 안했는지 알아보는 상태
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -31,18 +31,18 @@ const ChatRentalModal = ({ setRentalModalOpen, productInfo }: SetModalProps) => 
         status: 'REQUEST',
         product: productId,
       });
-      console.log(response);
+      // console.log(response);
       setRentalModalOpen(false);
 
       alert('상품 대여가 접수되었습니다');
     } catch (error) {
-      console.log('상품대여신청 오류', error);
+      console.error('상품대여신청 오류', error);
     }
   };
   // 오늘 날짜(오늘 날짜 이전으로는 대여 못하도록)
   const today = new Date();
   const defaultDate = today.toISOString().substring(0, 10);
-  console.log('오늘 날짜', defaultDate);
+  // console.log('오늘 날짜', defaultDate);
   return (
     // 공통적인 모달 내용 합쳐놓은 컴포넌트
     <ChatModal

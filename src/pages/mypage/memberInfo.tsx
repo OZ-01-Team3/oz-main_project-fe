@@ -86,10 +86,10 @@ const MemberInfo = () => {
 
     try {
       const response = await modificationUserInfoAPI(formData);
-      console.log(response, '회원정보 수정 성공');
+      // console.log(response, '회원정보 수정 성공');
       setIsEditable(false);
     } catch (error) {
-      console.log('회원 정보 수정 실패', error);
+      console.error('회원 정보 수정 실패', error);
     }
   });
 

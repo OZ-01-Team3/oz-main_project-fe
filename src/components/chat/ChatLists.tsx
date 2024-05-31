@@ -41,7 +41,7 @@ const ChatLists = () => {
       try {
         const response = await chatListAPI();
         let chatList = response.data;
-        console.log("최근메세지 확인용", response.data)
+        // console.log("최근메세지 확인용", response.data)
         chatList = chatList.sort((a, b) => {
           const dateA = new Date(a.last_message?.created_at || 0);
           const dateB = new Date(b.last_message?.created_at || 0);

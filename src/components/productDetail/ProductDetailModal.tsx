@@ -39,7 +39,7 @@ export const initialProduct: product = {
 // 상품클릭 시 나오는 모달
 const ProductDetailModal = () => {
   const { productId } = useParams(); // url에서 productId받아오기
-  console.log('useParamsProductId', productId);
+  // console.log('useParamsProductId', productId);
 
   const navigate = useNavigate();
   const { setDetailModalOpen } = useModalOpenStore();
@@ -57,7 +57,7 @@ const ProductDetailModal = () => {
   const handlePrevImage = () => {
     setCurrentImageIndex(prevIndex => (prevIndex - 1 + productDetails.images.length) % productDetails.images.length);
   };
-  console.log(currentImageIndex);
+  // console.log(currentImageIndex);
   const filterStyleTag = productDetails.styles.slice(0, 3);
   //  아이템을 선택해서 모달이 띄워지는게 아니라, 새로고침시 띄워질 경우,
   //  현재 경로에 따라서 all 이면 all 로 돌아오고 메인이면 메인으로 돌아가도록
@@ -65,7 +65,7 @@ const ProductDetailModal = () => {
   useEffect(() => {
     if (!selectedProductId) {
       setWillSelectedProductId(productId);
-      console.log(productId);
+      // console.log(productId);
       setDetailModalOpen(true);
 
       if (prevPath === '/') {
@@ -105,9 +105,9 @@ const ProductDetailModal = () => {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/products/${selectedProductId}/`);
       setProductDetails(response.data);
       setCurrentImageIndex(0);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
-      console.log(error);
+      console.error("상품 디테일 불러오기 실패", error);
     }
   };
   // 바깥이랑 x 눌렀을때 모달 닫히도록

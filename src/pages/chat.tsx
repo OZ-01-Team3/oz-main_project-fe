@@ -30,7 +30,7 @@ class ChatSocket {
       const data = JSON.parse(event.data)
       // setMessage((prev) => [...prev, data]);
       useMessageStore.getState().addMessage(data)
-      console.log("온메세지에서 실시간 메세지 받았읍니다.", data)
+      // console.log("온메세지에서 실시간 메세지 받았읍니다.", data)
     }
   }
   close() {
@@ -86,7 +86,7 @@ const Chat = () => {
 
 
     webSocketRef.current?.sendMessage({ text, image, sender });
-    console.log("메세지 전송:", text, "사진:", image, "보내는 사람", sender)
+    // console.log("메세지 전송:", text, "사진:", image, "보내는 사람", sender)
   }
 
 

@@ -14,7 +14,7 @@ export const CreateProductAPI = (data: FormData) =>
 export const fetchProducts = async (page: number) => {
   try {
     const response = await instance.get(`${productRequests.products}?page=${page}`);
-    console.log('상품 불러오기 성공!', response);
+    // console.log('상품 불러오기 성공!', response);
     return response.data;
   } catch (error) {
     console.error('상품 불러오기 실패', error);

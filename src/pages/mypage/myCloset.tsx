@@ -23,9 +23,9 @@ const MyClosetPage = () => {
   }, []);
   const fetchSalesProduct = async () => {
     const response = await instance.get('/mypage/products/');
-    console.log(response.data);
+    // console.log(response.data);
     setSalesProducts(response.data.results);
-    console.log('salesProducts', salesProducts);
+    // console.log('salesProducts', salesProducts);
   };
   return (
     <>

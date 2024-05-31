@@ -55,7 +55,7 @@ const Products = ({ products }: ProductProps) => {
       document.body.style.overflow = '';
     }
   }, [detailModalOpen]);
-  useEffect(() => {}, [isLiked]);
+  useEffect(() => { }, [isLiked]);
   // 아이디 받아서 일치하면 isFavorite 바꿔주기
   const toggleFavorite = async (id: string) => {
     const selectedProductIndex = products.findIndex(product => product.uuid === id);
@@ -66,36 +66,36 @@ const Products = ({ products }: ProductProps) => {
     try {
       //클릭한 상품의 is_liked 가 True 이면 delete 요청
       if (selectedProduct.is_liked) {
-        console.log('시작 selectedProduct.is_liked', selectedProduct && selectedProduct.is_liked);
+        // console.log('시작 selectedProduct.is_liked', selectedProduct && selectedProduct.is_liked);
         try {
           const response = await instance.delete(`likes/${id}/`);
-          console.log('좋아요삭제', response);
+          // console.log('좋아요삭제', response);
           selectedProduct.is_liked = false;
 
           queryClient.invalidateQueries({ queryKey: ['products'], type: 'active' });
           setIsLiked(prev => !prev);
-          console.log('끝 selectedProduct.is_liked', selectedProduct && selectedProduct.is_liked);
+          // console.log('끝 selectedProduct.is_liked', selectedProduct && selectedProduct.is_liked);
 
-          console.log(products);
+          // console.log(products);
         } catch (e) {
-          console.log('좋아요 삭제 에러', e);
+          console.error('좋아요 삭제 에러', e);
         }
       } else if (!selectedProduct.is_liked) {
-        console.log('시작 selectedProduct.is_liked', selectedProduct && selectedProduct.is_liked);
+        // console.log('시작 selectedProduct.is_liked', selectedProduct && selectedProduct.is_liked);
         //클릭한 상품의 is_liked 가 False 이면 좋아요 요청
         try {
           const response = await instance.post(`likes/`, { product_id: id });
           selectedProduct.is_liked = true;
-          console.log('좋아요등록', response);
-          console.log('끝 selectedProduct.is_liked', selectedProduct && selectedProduct.is_liked);
+          // console.log('좋아요등록', response);
+          // console.log('끝 selectedProduct.is_liked', selectedProduct && selectedProduct.is_liked);
           queryClient.refetchQueries({ queryKey: ['products'], type: 'active' });
           setIsLiked(prev => !prev);
         } catch (e) {
-          console.log('좋아요 등록 에러', e);
+          console.error('좋아요 등록 에러', e);
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   // 로그인 여부에 따라서 즐겨찾기 기능 구분
