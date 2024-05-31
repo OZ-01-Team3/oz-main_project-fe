@@ -73,7 +73,7 @@ const TotalProducts = () => {
   const handleGetCategories = async () => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/`);
-      console.log(response, '상품 카테고리 가져오기 성공');
+      // console.log(response, '상품 카테고리 가져오기 성공');
       setCategories([{ id: 0, name: '전체' }, ...response.data]); //'전체' 추가
     } catch (error) {
       console.error("상품 카테고리 가져오기 실패", error);

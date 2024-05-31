@@ -102,7 +102,7 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
       return instance.post(VITE_BASE_REQUEST_URL + chatRequests.chat, newChatRoomData);
     },
     onSuccess: () => {
-      console.log('채팅방 생성성공');
+      // console.log('채팅방 생성성공');
       navigate(`/chat`);
       queryClient.invalidateQueries({ queryKey: ['chatList'] });
     },
