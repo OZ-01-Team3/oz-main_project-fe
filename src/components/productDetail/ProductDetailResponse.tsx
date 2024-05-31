@@ -147,8 +147,12 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
             className="bg-mainBlack w-full text-mainWhite p-3  "
             onClick={() => {
               if (logInUser === '') {
+                setDetailModalOpen(false);
                 toast.info('로그인이 필요한 기능입니다');
-                navigate('/sign-in');
+                setTimeout(() => {
+                  navigate('/sign-in');
+                }, 100);
+
                 return;
               }
               //바로 navigate 하면 모달이 안닫혀서 overflow:hidden 속성이 남아있어서 setTimeout 썻읍니다.
@@ -166,8 +170,13 @@ const ProductDetailResponse = ({ productDetails }: ProductDetailResponseProps) =
             onClick={() => {
               setDetailModalOpen(false);
               if (logInUser === '') {
+                setDetailModalOpen(false);
                 toast.info('로그인이 필요한 기능입니다');
-                navigate('/sign-in');
+
+                // setTimeout(() => {
+                //   navigate('/sign-in');
+                // }, 100);
+
                 return;
               }
               createChatRoom();

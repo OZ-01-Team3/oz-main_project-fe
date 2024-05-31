@@ -102,9 +102,9 @@ const ProductUpdate = () => {
     try {
       const response = await axios.get(VITE_BASE_REQUEST_URL + `/categories/`);
       // console.log(response, '상품 카테고리 가져오기 성공');
-      setCategories(response.data);
+      setCategories([{ id: 0, name: '' }, ...response.data]);
     } catch (error) {
-      console.error("상품 카테고리 조회 실패", error);
+      console.error('상품 카테고리 조회 실패', error);
     }
   };
   const handleGetStyle = async () => {
@@ -114,7 +114,7 @@ const ProductUpdate = () => {
       // console.log(response.data);
       setStyleTag(response.data);
     } catch (error) {
-      console.error("상품 스타일 조회 실패", error);
+      console.error('상품 스타일 조회 실패', error);
     }
   };
   const formData = new FormData();
@@ -152,7 +152,7 @@ const ProductUpdate = () => {
       toast.success('상품정보가 수정되었습니다.');
       navigate('/all');
     } catch (error) {
-      console.error("상품정보 수정 실패", error);
+      console.error('상품정보 수정 실패', error);
       toast.error('상품정보 수정에 실패했습니다.');
       for (const pair of formData.entries()) {
         console.log(`${pair[0]}: ${pair[1]}`);
@@ -184,7 +184,7 @@ const ProductUpdate = () => {
       toast.success('상품이 성공적으로 삭제되었습니다.');
       navigate('/all');
     } catch (error) {
-      console.error("상품 삭제 실패", error);
+      console.error('상품 삭제 실패', error);
       toast.error('상품 삭제에 실패했습니다.');
     }
   };
