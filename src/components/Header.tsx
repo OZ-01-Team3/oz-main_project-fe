@@ -44,7 +44,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      await logoutAPI;
+      await logoutAPI();
       const allCookies = cookies.getAll(); // 모든 쿠키 가져오기
       Object.keys(allCookies).forEach(cookieName => cookies.remove(cookieName, { path: '/' })); // 모든 쿠키 이름을 순회하며 삭제
       setIsLoggedIn(false);
