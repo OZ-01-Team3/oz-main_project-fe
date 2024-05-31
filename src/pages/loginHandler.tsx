@@ -1,3 +1,4 @@
+import instance from '@/api/instance';
 import Loading from '@/components/Loading';
 import axios from 'axios';
 import { useEffect } from 'react';
@@ -12,13 +13,10 @@ const LoginHandler = () => {
 
   const kakaoLogin = async () => {
     try {
-      const response = await axios.post(`${VITE_BASE_REQUEST_URL}/users/login/social/kakao/`, {
-        code: code
-      }, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
+      const response = await instance.post(`${VITE_BASE_REQUEST_URL}/users/login/social/kakao/`, 
+        {
+          code: code
         }
-      }
       );
       cookies.set("accessToken", response.data.access, { path: '/', secure: true, })
       cookies.set("refreshToken", response.data.refresh, { path: '/', secure: true, })
@@ -30,14 +28,11 @@ const LoginHandler = () => {
 
   const naverLogin = async () => {
     try {
-      const response = await axios.post(`${VITE_BASE_REQUEST_URL}/users/login/social/naver/`, {
-        code: code,
-        state: VITE_NAVER_STATE
-      }, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
+      const response = await instance.post(`${VITE_BASE_REQUEST_URL}/users/login/social/naver/`, 
+        {
+          code: code,
+          state: VITE_NAVER_STATE
         }
-      }
       );
       cookies.set("accessToken", response.data.access, { path: '/', secure: true, })
       cookies.set("refreshToken", response.data.refresh, { path: '/', secure: true, })
@@ -49,15 +44,14 @@ const LoginHandler = () => {
 
   const googleLogin = async () => {
     try {
-      const response = await axios.post(`${VITE_BASE_REQUEST_URL}/users/login/social/google/`, {
-        code: code,
-      }, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
+      const response = await instance.post(`${VITE_BASE_REQUEST_URL}/users/login/social/google/`, 
+        {
+          code: code,
         }
-      }
       );
-
+      if (response.headers['set-cookie']){
+        console.log(response.headers['set-cookie'])
+      }
       cookies.set("accessToken", response.data.access, { path: '/', secure: true, })
       cookies.set("refreshToken", response.data.refresh, { path: '/', secure: true, })
       window.location.href = "/"
