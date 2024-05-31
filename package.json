@@ -64,6 +64,5 @@
     "workerDirectory": [
       "public"
     ]
-  },
-  "proxy": "https://api.coatycloset.store/"
+  }
 }
